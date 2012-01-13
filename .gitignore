@@ -1,0 +1,7 @@
+.classpath
+.project
+.tmp*
+.settings/
+target/
+source/script/*
+*/build/*
