@@ -1,0 +1,26 @@
+{
+ "name": "libvirt",
+ "typeId" : "TypeId",
+ "description": "Libvirt Hypervisor",
+ "version": "1.0.0",
+ "settings": {
+ "validate_firmware" : "true",
+ "connection_mode":"always",
+ "reconnection_delay":"5"
+ },
+ "modules":[
+          {"name" : "executions", "moduleId":"testId", "settings": {
+ "validate_firmware" : "true",
+ "connection_mode":"always",
+ "reconnection_delay":"5"
+ }},
+          {"name" : "remoteShell", "moduleId":"testId", "settings": {
+ "validate_firmware" : "true",
+ "connection_mode":"always",
+ "reconnection_delay":"5"
+ }}, 
+          {"name" : "simulator","moduleId":"testId", "settings": {
+ "simulation_file" : "simulator/simulator.json"
+ }} 
+    ]
+}

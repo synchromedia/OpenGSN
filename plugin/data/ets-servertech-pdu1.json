@@ -1,0 +1,25 @@
+{
+ "name": "ets-servertech-pdu1",
+ "typeId" : "ServertechCWG",
+ "description": "ETS's Servertech PDU",
+ "settings": {
+   "reconnection_delay":"10",
+   "refresh_execution":"Refresh",
+   "polling_interval":"180"
+ },
+ "model" : {
+   "location": "1100, rue Notre-Dame Ouest, Montreal, Qc, Canada, H3C 1K3"
+ },
+ "modules":[
+   {"name" : "remoteShell", 
+    "moduleId":"testId", 
+    "settings": {
+      "username": "admn",
+      "password": "admn",
+      "host" : "10.20.100.5",
+      "port" : "23",
+      "transport" : "telnet",
+      "prompts" : "Username:, Password:, Switched CDU:"}
+   } 
+ ]
+}

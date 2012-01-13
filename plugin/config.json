@@ -1,0 +1,5 @@
+{
+	"name": "Inocybe Platform Manager",
+        "source-dir": "source",
+        "build-dir": "build"
+}

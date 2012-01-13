@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="IControllerService" targetNamespace="http://controller.greenstarnetwork.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://controller.greenstarnetwork.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://controller.greenstarnetwork.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://controller.greenstarnetwork.com/">
+  <xs:element name="connect" type="tns:connect"/>
+  <xs:element name="connectResponse" type="tns:connectResponse"/>
+  <xs:element name="executePlan" type="tns:executePlan"/>
+  <xs:element name="executePlanResponse" type="tns:executePlanResponse"/>
+  <xs:element name="generateHostList" type="tns:generateHostList"/>
+  <xs:element name="generateHostListResponse" type="tns:generateHostListResponse"/>
+  <xs:element name="generatePlan" type="tns:generatePlan"/>
+  <xs:element name="generatePlanResponse" type="tns:generatePlanResponse"/>
+  <xs:element name="getHostList" type="tns:getHostList"/>
+  <xs:element name="getHostListResponse" type="tns:getHostListResponse"/>
+  <xs:element name="getLinkTable" type="tns:getLinkTable"/>
+  <xs:element name="getLinkTableResponse" type="tns:getLinkTableResponse"/>
+  <xs:element name="getLogContent" type="tns:getLogContent"/>
+  <xs:element name="getLogContentResponse" type="tns:getLogContentResponse"/>
+  <xs:element name="getLogFiles" type="tns:getLogFiles"/>
+  <xs:element name="getLogFilesResponse" type="tns:getLogFilesResponse"/>
+  <xs:element name="getMigrationPlan" type="tns:getMigrationPlan"/>
+  <xs:element name="getMigrationPlanResponse" type="tns:getMigrationPlanResponse"/>
+  <xs:element name="getMode" type="tns:getMode"/>
+  <xs:element name="getModeResponse" type="tns:getModeResponse"/>
+  <xs:element name="getResourcesFromCloud" type="tns:getResourcesFromCloud"/>
+  <xs:element name="getResourcesFromCloudResponse" type="tns:getResourcesFromCloudResponse"/>
+  <xs:element name="setMode" type="tns:setMode"/>
+  <xs:element name="setModeResponse" type="tns:setModeResponse"/>
+  <xs:complexType name="setMode">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="setModeResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getMode">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getModeResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getMigrationPlan">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getMigrationPlanResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getLinkTable">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getLinkTableResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="connect">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="connectResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="generatePlan">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="generatePlanResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="generateHostList">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:int"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="generateHostListResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getResourcesFromCloud">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getResourcesFromCloudResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getHostList">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getHostListResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getLogFiles">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getLogFilesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getLogContent">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getLogContentResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="executePlan">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="executePlanResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ControllerException">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:element name="ControllerException" type="tns:ControllerException"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getLogFiles">
+    <wsdl:part name="parameters" element="tns:getLogFiles">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMigrationPlan">
+    <wsdl:part name="parameters" element="tns:getMigrationPlan">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateHostListResponse">
+    <wsdl:part name="parameters" element="tns:generateHostListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLogContent">
+    <wsdl:part name="parameters" element="tns:getLogContent">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLinkTableResponse">
+    <wsdl:part name="parameters" element="tns:getLinkTableResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setMode">
+    <wsdl:part name="parameters" element="tns:setMode">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executePlan">
+    <wsdl:part name="parameters" element="tns:executePlan">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourcesFromCloudResponse">
+    <wsdl:part name="parameters" element="tns:getResourcesFromCloudResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getModeResponse">
+    <wsdl:part name="parameters" element="tns:getModeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ControllerException">
+    <wsdl:part name="ControllerException" element="tns:ControllerException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="connectResponse">
+    <wsdl:part name="parameters" element="tns:connectResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executePlanResponse">
+    <wsdl:part name="parameters" element="tns:executePlanResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePlanResponse">
+    <wsdl:part name="parameters" element="tns:generatePlanResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMode">
+    <wsdl:part name="parameters" element="tns:getMode">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getHostListResponse">
+    <wsdl:part name="parameters" element="tns:getHostListResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLinkTable">
+    <wsdl:part name="parameters" element="tns:getLinkTable">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMigrationPlanResponse">
+    <wsdl:part name="parameters" element="tns:getMigrationPlanResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="connect">
+    <wsdl:part name="parameters" element="tns:connect">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourcesFromCloud">
+    <wsdl:part name="parameters" element="tns:getResourcesFromCloud">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setModeResponse">
+    <wsdl:part name="parameters" element="tns:setModeResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateHostList">
+    <wsdl:part name="parameters" element="tns:generateHostList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLogFilesResponse">
+    <wsdl:part name="parameters" element="tns:getLogFilesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getHostList">
+    <wsdl:part name="parameters" element="tns:getHostList">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePlan">
+    <wsdl:part name="parameters" element="tns:generatePlan">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getLogContentResponse">
+    <wsdl:part name="parameters" element="tns:getLogContentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IController">
+    <wsdl:operation name="setMode">
+      <wsdl:input name="setMode" message="tns:setMode">
+    </wsdl:input>
+      <wsdl:output name="setModeResponse" message="tns:setModeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMode">
+      <wsdl:input name="getMode" message="tns:getMode">
+    </wsdl:input>
+      <wsdl:output name="getModeResponse" message="tns:getModeResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMigrationPlan">
+      <wsdl:input name="getMigrationPlan" message="tns:getMigrationPlan">
+    </wsdl:input>
+      <wsdl:output name="getMigrationPlanResponse" message="tns:getMigrationPlanResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLinkTable">
+      <wsdl:input name="getLinkTable" message="tns:getLinkTable">
+    </wsdl:input>
+      <wsdl:output name="getLinkTableResponse" message="tns:getLinkTableResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="connect">
+      <wsdl:input name="connect" message="tns:connect">
+    </wsdl:input>
+      <wsdl:output name="connectResponse" message="tns:connectResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generatePlan">
+      <wsdl:input name="generatePlan" message="tns:generatePlan">
+    </wsdl:input>
+      <wsdl:output name="generatePlanResponse" message="tns:generatePlanResponse">
+    </wsdl:output>
+      <wsdl:fault name="ControllerException" message="tns:ControllerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateHostList">
+      <wsdl:input name="generateHostList" message="tns:generateHostList">
+    </wsdl:input>
+      <wsdl:output name="generateHostListResponse" message="tns:generateHostListResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResourcesFromCloud">
+      <wsdl:input name="getResourcesFromCloud" message="tns:getResourcesFromCloud">
+    </wsdl:input>
+      <wsdl:output name="getResourcesFromCloudResponse" message="tns:getResourcesFromCloudResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getHostList">
+      <wsdl:input name="getHostList" message="tns:getHostList">
+    </wsdl:input>
+      <wsdl:output name="getHostListResponse" message="tns:getHostListResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLogFiles">
+      <wsdl:input name="getLogFiles" message="tns:getLogFiles">
+    </wsdl:input>
+      <wsdl:output name="getLogFilesResponse" message="tns:getLogFilesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLogContent">
+      <wsdl:input name="getLogContent" message="tns:getLogContent">
+    </wsdl:input>
+      <wsdl:output name="getLogContentResponse" message="tns:getLogContentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="executePlan">
+      <wsdl:input name="executePlan" message="tns:executePlan">
+    </wsdl:input>
+      <wsdl:output name="executePlanResponse" message="tns:executePlanResponse">
+    </wsdl:output>
+      <wsdl:fault name="ControllerException" message="tns:ControllerException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IControllerServiceSoapBinding" type="tns:IController">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="setMode">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setMode">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setModeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMigrationPlan">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getMigrationPlan">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getMigrationPlanResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMode">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getMode">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getModeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="connect">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="connect">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="connectResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLinkTable">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getLinkTable">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getLinkTableResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generateHostList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateHostList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateHostListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="generatePlan">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePlan">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePlanResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ControllerException">
+        <soap:fault name="ControllerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getResourcesFromCloud">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getResourcesFromCloud">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResourcesFromCloudResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getHostList">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getHostList">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getHostListResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLogFiles">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getLogFiles">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getLogFilesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getLogContent">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getLogContent">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getLogContentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="executePlan">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="executePlan">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="executePlanResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ControllerException">
+        <soap:fault name="ControllerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IControllerService">
+    <wsdl:port name="IControllerPort" binding="tns:IControllerServiceSoapBinding">
+      <soap:address location="http://localhost:9090/IControllerPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

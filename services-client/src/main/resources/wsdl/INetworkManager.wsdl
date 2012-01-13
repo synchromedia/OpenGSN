@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="INetworkManagerService" targetNamespace="http://networkmanager.services.greenstarnetwork.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://networkmanager.services.greenstarnetwork.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://networkmanager.services.greenstarnetwork.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://networkmanager.services.greenstarnetwork.com/">
+<xs:element name="assignVMAddress" type="tns:assignVMAddress"/>
+<xs:element name="assignVMAddressResponse" type="tns:assignVMAddressResponse"/>
+<xs:element name="executeCommand" type="tns:executeCommand"/>
+<xs:element name="executeCommandResponse" type="tns:executeCommandResponse"/>
+<xs:element name="releaseAssignment" type="tns:releaseAssignment"/>
+<xs:element name="releaseAssignmentResponse" type="tns:releaseAssignmentResponse"/>
+<xs:element name="retrieveVMAddress" type="tns:retrieveVMAddress"/>
+<xs:element name="retrieveVMAddressResponse" type="tns:retrieveVMAddressResponse"/>
+<xs:element name="vmNetAddress" type="tns:vmNetAddress"/>
+<xs:complexType name="retrieveVMAddress">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="retrieveVMAddressResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:vmNetAddress"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="vmNetAddress">
+<xs:sequence>
+<xs:element name="assigned" type="xs:boolean"/>
+<xs:element minOccurs="0" name="ip" type="xs:string"/>
+<xs:element minOccurs="0" name="mac" type="xs:string"/>
+<xs:element minOccurs="0" name="name" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="executeCommand">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="tns:networkManagerRequest"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="networkManagerRequest">
+<xs:sequence>
+<xs:element name="arguments">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="entry">
+<xs:complexType>
+<xs:sequence>
+<xs:element minOccurs="0" name="key" type="xs:string"/>
+<xs:element minOccurs="0" name="value" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+<xs:element minOccurs="0" name="commandId" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="executeCommandResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:networkManagerResponse"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="networkManagerResponse">
+<xs:sequence>
+<xs:element name="error" type="xs:boolean"/>
+<xs:element minOccurs="0" name="message" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="releaseAssignment">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="releaseAssignmentResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="assignVMAddress">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="assignVMAddressResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="tns:vmNetAddress"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="NetworkManagerException">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="NetworkManagerException" type="tns:NetworkManagerException"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="retrieveVMAddress">
+    <wsdl:part name="parameters" element="tns:retrieveVMAddress">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="releaseAssignment">
+    <wsdl:part name="parameters" element="tns:releaseAssignment">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executeCommandResponse">
+    <wsdl:part name="parameters" element="tns:executeCommandResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="assignVMAddressResponse">
+    <wsdl:part name="parameters" element="tns:assignVMAddressResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="assignVMAddress">
+    <wsdl:part name="parameters" element="tns:assignVMAddress">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="NetworkManagerException">
+    <wsdl:part name="NetworkManagerException" element="tns:NetworkManagerException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="retrieveVMAddressResponse">
+    <wsdl:part name="parameters" element="tns:retrieveVMAddressResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executeCommand">
+    <wsdl:part name="parameters" element="tns:executeCommand">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="releaseAssignmentResponse">
+    <wsdl:part name="parameters" element="tns:releaseAssignmentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="INetworkManager">
+    <wsdl:operation name="retrieveVMAddress">
+      <wsdl:input name="retrieveVMAddress" message="tns:retrieveVMAddress">
+    </wsdl:input>
+      <wsdl:output name="retrieveVMAddressResponse" message="tns:retrieveVMAddressResponse">
+    </wsdl:output>
+      <wsdl:fault name="NetworkManagerException" message="tns:NetworkManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="executeCommand">
+      <wsdl:input name="executeCommand" message="tns:executeCommand">
+    </wsdl:input>
+      <wsdl:output name="executeCommandResponse" message="tns:executeCommandResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="releaseAssignment">
+      <wsdl:input name="releaseAssignment" message="tns:releaseAssignment">
+    </wsdl:input>
+      <wsdl:output name="releaseAssignmentResponse" message="tns:releaseAssignmentResponse">
+    </wsdl:output>
+      <wsdl:fault name="NetworkManagerException" message="tns:NetworkManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="assignVMAddress">
+      <wsdl:input name="assignVMAddress" message="tns:assignVMAddress">
+    </wsdl:input>
+      <wsdl:output name="assignVMAddressResponse" message="tns:assignVMAddressResponse">
+    </wsdl:output>
+      <wsdl:fault name="NetworkManagerException" message="tns:NetworkManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="INetworkManagerServiceSoapBinding" type="tns:INetworkManager">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="executeCommand">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="executeCommand">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="executeCommandResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="retrieveVMAddress">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="retrieveVMAddress">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="retrieveVMAddressResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NetworkManagerException">
+        <soap:fault name="NetworkManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="releaseAssignment">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="releaseAssignment">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="releaseAssignmentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NetworkManagerException">
+        <soap:fault name="NetworkManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="assignVMAddress">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="assignVMAddress">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="assignVMAddressResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="NetworkManagerException">
+        <soap:fault name="NetworkManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="INetworkManagerService">
+    <wsdl:port name="INetworkManagerPort" binding="tns:INetworkManagerServiceSoapBinding">
+      <soap:address location="http://localhost:9090/INetworkManagerPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

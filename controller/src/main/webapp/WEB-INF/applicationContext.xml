@@ -1,0 +1,83 @@
+<!--
+
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<!-- Load the service.properties file -->
+	<context:property-placeholder location="classpath:WEB-INF/service.properties" />
+
+
+	<!-- Controller Service -->
+
+	<!-- <bean id="controllerProvider" class="com.greenstarnetwork.controller.ControllerProvider"/>--> 
+	<bean id="mockControllerProvider" class="com.greenstarnetwork.controller.MockControllerProvider"/> 
+	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
+	<bean name="controllerService"
+		class="com.greenstarnetwork.controller.Controller">
+		<constructor-arg>
+			<ref bean="mockControllerProvider" />
+		</constructor-arg>
+	</bean>
+
+	<!-- Define the JAX-WS Endpoint from the previous bean -->
+	<jaxws:endpoint id="ControllerEndpoint"
+		implementorClass="com.greenstarnetwork.controller.Controller"
+		implementor="#controllerService" address="/Controller" />
+
+	<!--  Configure the Cloud Manager Client -->
+	<jaxws:client id="cloudManagerClient"
+		serviceClass="com.greenstarnetwork.services.cloudmanager.ICloudManager"
+		address="http://${service.location}:${service.port}/services/CloudManager">
+
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+		</jaxws:outInterceptors>
+		<jaxws:handlers>
+		</jaxws:handlers>
+	</jaxws:client>
+
+	<!--  Configure the Facility Manager Client -->
+	<jaxws:client id="facilityManagerClient"
+		serviceClass="com.greenstarnetwork.services.facilitymanager.IFacilityManager"
+		address="http://${service.location}:${service.port}/services/FacilityManager">
+		
+		<jaxws:inInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
+		</jaxws:inInterceptors>
+		<jaxws:outInterceptors>
+			<bean class="org.apache.cxf.interceptor.LoggingOutInterceptor" />
+		</jaxws:outInterceptors>
+		<jaxws:handlers>
+		</jaxws:handlers>
+	</jaxws:client>
+</beans>

@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ICloudManagerService" targetNamespace="http://cloudmanager.services.greenstarnetwork.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://cloudmanager.services.greenstarnetwork.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://cloudmanager.services.greenstarnetwork.com/" elementFormDefault="unqualified" targetNamespace="http://cloudmanager.services.greenstarnetwork.com/" version="1.0">
+<xs:element name="createInstance" type="tns:createInstance"/>
+<xs:element name="createInstanceInHost" type="tns:createInstanceInHost"/>
+<xs:element name="createInstanceInHostResponse" type="tns:createInstanceInHostResponse"/>
+<xs:element name="createInstanceResponse" type="tns:createInstanceResponse"/>
+<xs:element name="describeHost" type="tns:describeHost"/>
+<xs:element name="describeHostResponse" type="tns:describeHostResponse"/>
+<xs:element name="describeHosts" type="tns:describeHosts"/>
+<xs:element name="describeHostsResponse" type="tns:describeHostsResponse"/>
+<xs:element name="destroyInstance" type="tns:destroyInstance"/>
+<xs:element name="destroyInstanceResponse" type="tns:destroyInstanceResponse"/>
+<xs:element name="executeAction" type="tns:executeAction"/>
+<xs:element name="executeActionResponse" type="tns:executeActionResponse"/>
+<xs:element name="hostQuery" type="tns:hostQuery"/>
+<xs:element name="hostQueryResponse" type="tns:hostQueryResponse"/>
+<xs:element name="migrateInstance" type="tns:migrateInstance"/>
+<xs:element name="migrateInstanceResponse" type="tns:migrateInstanceResponse"/>
+<xs:element name="overrideHostPriorities" type="tns:overrideHostPriorities"/>
+<xs:element name="overrideHostPrioritiesResponse" type="tns:overrideHostPrioritiesResponse"/>
+<xs:element name="rebootInstance" type="tns:rebootInstance"/>
+<xs:element name="rebootInstanceResponse" type="tns:rebootInstanceResponse"/>
+<xs:element name="setInstanceIPAddress" type="tns:setInstanceIPAddress"/>
+<xs:element name="setInstanceIPAddressResponse" type="tns:setInstanceIPAddressResponse"/>
+<xs:element name="shutdownInstance" type="tns:shutdownInstance"/>
+<xs:element name="shutdownInstanceResponse" type="tns:shutdownInstanceResponse"/>
+<xs:element name="startInstance" type="tns:startInstance"/>
+<xs:element name="startInstanceResponse" type="tns:startInstanceResponse"/>
+<xs:element name="stopInstance" type="tns:stopInstance"/>
+<xs:element name="stopInstanceResponse" type="tns:stopInstanceResponse"/>
+<xs:complexType name="executeAction">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="executeActionResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="createInstanceInHost">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+<xs:element minOccurs="0" name="arg3" type="xs:string"/>
+<xs:element minOccurs="0" name="arg4" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="createInstanceInHostResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="stopInstance">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="stopInstanceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="createInstance">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+<xs:element minOccurs="0" name="arg3" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="createInstanceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="rebootInstance">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="rebootInstanceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="setInstanceIPAddress">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="setInstanceIPAddressResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="destroyInstance">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="destroyInstanceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="hostQuery">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+<xs:element minOccurs="0" name="arg3" type="xs:string"/>
+<xs:element minOccurs="0" name="arg4" type="xs:string"/>
+<xs:element minOccurs="0" name="arg5" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="hostQueryResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="shutdownInstance">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="shutdownInstanceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="startInstance">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="startInstanceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="overrideHostPriorities">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="tns:OverrideMapType"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="OverrideMapType">
+<xs:sequence>
+<xs:element minOccurs="0" name="prioritiesList">
+<xs:complexType>
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="priorities" type="tns:idPriority"/>
+</xs:sequence>
+</xs:complexType>
+</xs:element>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="idPriority">
+<xs:sequence>
+<xs:element minOccurs="0" name="id" type="xs:string"/>
+<xs:element minOccurs="0" name="priority" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="overrideHostPrioritiesResponse">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="describeHost">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="describeHostResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="migrateInstance">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="migrateInstanceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="describeHosts">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="describeHostsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="migrateInstance">
+    <wsdl:part name="parameters" element="tns:migrateInstance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hostQuery">
+    <wsdl:part name="parameters" element="tns:hostQuery">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="startInstanceResponse">
+    <wsdl:part name="parameters" element="tns:startInstanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createInstanceResponse">
+    <wsdl:part name="parameters" element="tns:createInstanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="hostQueryResponse">
+    <wsdl:part name="parameters" element="tns:hostQueryResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stopInstance">
+    <wsdl:part name="parameters" element="tns:stopInstance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createInstance">
+    <wsdl:part name="parameters" element="tns:createInstance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stopInstanceResponse">
+    <wsdl:part name="parameters" element="tns:stopInstanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="destroyInstanceResponse">
+    <wsdl:part name="parameters" element="tns:destroyInstanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="shutdownInstance">
+    <wsdl:part name="parameters" element="tns:shutdownInstance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="startInstance">
+    <wsdl:part name="parameters" element="tns:startInstance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createInstanceInHostResponse">
+    <wsdl:part name="parameters" element="tns:createInstanceInHostResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="describeHostsResponse">
+    <wsdl:part name="parameters" element="tns:describeHostsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="describeHostResponse">
+    <wsdl:part name="parameters" element="tns:describeHostResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="rebootInstance">
+    <wsdl:part name="parameters" element="tns:rebootInstance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="describeHost">
+    <wsdl:part name="parameters" element="tns:describeHost">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="overrideHostPriorities">
+    <wsdl:part name="parameters" element="tns:overrideHostPriorities">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="shutdownInstanceResponse">
+    <wsdl:part name="parameters" element="tns:shutdownInstanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executeActionResponse">
+    <wsdl:part name="parameters" element="tns:executeActionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setInstanceIPAddress">
+    <wsdl:part name="parameters" element="tns:setInstanceIPAddress">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="overrideHostPrioritiesResponse">
+    <wsdl:part name="parameters" element="tns:overrideHostPrioritiesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="destroyInstance">
+    <wsdl:part name="parameters" element="tns:destroyInstance">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executeAction">
+    <wsdl:part name="parameters" element="tns:executeAction">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="describeHosts">
+    <wsdl:part name="parameters" element="tns:describeHosts">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createInstanceInHost">
+    <wsdl:part name="parameters" element="tns:createInstanceInHost">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="setInstanceIPAddressResponse">
+    <wsdl:part name="parameters" element="tns:setInstanceIPAddressResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="migrateInstanceResponse">
+    <wsdl:part name="parameters" element="tns:migrateInstanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="rebootInstanceResponse">
+    <wsdl:part name="parameters" element="tns:rebootInstanceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ICloudManager">
+    <wsdl:operation name="executeAction">
+      <wsdl:input name="executeAction" message="tns:executeAction">
+    </wsdl:input>
+      <wsdl:output name="executeActionResponse" message="tns:executeActionResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createInstanceInHost">
+      <wsdl:input name="createInstanceInHost" message="tns:createInstanceInHost">
+    </wsdl:input>
+      <wsdl:output name="createInstanceInHostResponse" message="tns:createInstanceInHostResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="stopInstance">
+      <wsdl:input name="stopInstance" message="tns:stopInstance">
+    </wsdl:input>
+      <wsdl:output name="stopInstanceResponse" message="tns:stopInstanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createInstance">
+      <wsdl:input name="createInstance" message="tns:createInstance">
+    </wsdl:input>
+      <wsdl:output name="createInstanceResponse" message="tns:createInstanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rebootInstance">
+      <wsdl:input name="rebootInstance" message="tns:rebootInstance">
+    </wsdl:input>
+      <wsdl:output name="rebootInstanceResponse" message="tns:rebootInstanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setInstanceIPAddress">
+      <wsdl:input name="setInstanceIPAddress" message="tns:setInstanceIPAddress">
+    </wsdl:input>
+      <wsdl:output name="setInstanceIPAddressResponse" message="tns:setInstanceIPAddressResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="destroyInstance">
+      <wsdl:input name="destroyInstance" message="tns:destroyInstance">
+    </wsdl:input>
+      <wsdl:output name="destroyInstanceResponse" message="tns:destroyInstanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hostQuery">
+      <wsdl:input name="hostQuery" message="tns:hostQuery">
+    </wsdl:input>
+      <wsdl:output name="hostQueryResponse" message="tns:hostQueryResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="shutdownInstance">
+      <wsdl:input name="shutdownInstance" message="tns:shutdownInstance">
+    </wsdl:input>
+      <wsdl:output name="shutdownInstanceResponse" message="tns:shutdownInstanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="startInstance">
+      <wsdl:input name="startInstance" message="tns:startInstance">
+    </wsdl:input>
+      <wsdl:output name="startInstanceResponse" message="tns:startInstanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="overrideHostPriorities">
+      <wsdl:input name="overrideHostPriorities" message="tns:overrideHostPriorities">
+    </wsdl:input>
+      <wsdl:output name="overrideHostPrioritiesResponse" message="tns:overrideHostPrioritiesResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="describeHost">
+      <wsdl:input name="describeHost" message="tns:describeHost">
+    </wsdl:input>
+      <wsdl:output name="describeHostResponse" message="tns:describeHostResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="migrateInstance">
+      <wsdl:input name="migrateInstance" message="tns:migrateInstance">
+    </wsdl:input>
+      <wsdl:output name="migrateInstanceResponse" message="tns:migrateInstanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="describeHosts">
+      <wsdl:input name="describeHosts" message="tns:describeHosts">
+    </wsdl:input>
+      <wsdl:output name="describeHostsResponse" message="tns:describeHostsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ICloudManagerServiceSoapBinding" type="tns:ICloudManager">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="executeAction">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="executeAction">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="executeActionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createInstanceInHost">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createInstanceInHost">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createInstanceInHostResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="createInstance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createInstance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createInstanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="stopInstance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="stopInstance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="stopInstanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="rebootInstance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="rebootInstance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="rebootInstanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="setInstanceIPAddress">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="setInstanceIPAddress">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="setInstanceIPAddressResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="destroyInstance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="destroyInstance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="destroyInstanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="hostQuery">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="hostQuery">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="hostQueryResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="shutdownInstance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="shutdownInstance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="shutdownInstanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="startInstance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="startInstance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="startInstanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="overrideHostPriorities">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="overrideHostPriorities">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="overrideHostPrioritiesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="describeHost">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="describeHost">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="describeHostResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="migrateInstance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="migrateInstance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="migrateInstanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="describeHosts">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="describeHosts">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="describeHostsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ICloudManagerService">
+    <wsdl:port name="ICloudManagerPort" binding="tns:ICloudManagerServiceSoapBinding">
+      <soap:address location="http://localhost:9090/ICloudManagerPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

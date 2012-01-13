@@ -1,8 +1,0 @@
- virsh -c qemu:///system list --all
-Connecting to uri: qemu:///system
- Id Name                 State
-----------------------------------
-  5 InstanceCRC110214_server91032_1297722587004 running
-  - Instance110214_server91032_1297700647050 shut off
-
-[user@server~]$ 

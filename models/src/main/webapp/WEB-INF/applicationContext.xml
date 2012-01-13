@@ -1,0 +1,116 @@
+<!--
+
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-extension-soap.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+    <!--  Load the service.properties file  -->
+	<context:property-placeholder location="classpath:WEB-INF/service.properties" />
+
+	<!-- Cloud Manager -->
+	<bean id="networkManagerTemplate" class="org.springframework.amqp.core.AmqpTemplate"/>
+	<bean id="iaasTemplate" class="org.springframework.amqp.core.AmqpTemplate"/>
+	<bean id="defaultCloudManager"
+		class="com.greenstarnetwork.services.cloudmanager.DefaultCloudManagerProvider">
+ 		<constructor-arg ref="networkManagerTemplate"/>
+		<constructor-arg ref="iaasTemplate"/>
+		<constructor-arg type="java.lang.String" value="${db.url}"/>
+	</bean>
+
+	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
+	<bean name="cloudManagerService"
+		class="com.greenstarnetwork.services.cloudmanager.CloudManagerService">
+		<constructor-arg>
+			<ref bean="defaultCloudManager" />
+		</constructor-arg>
+	</bean>
+
+	<!-- Define the JAX-WS Endpoint from the previous bean -->
+	<jaxws:endpoint id="CloudManagerEndpoint"
+		implementorClass="com.greenstarnetwork.services.cloudmanager.CloudManagerService"
+		implementor="#cloudManagerService" address="/CloudManager" />
+
+
+	<!-- Network Manager -->
+
+	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
+	<bean name="networkManagerService"
+		class="com.greenstarnetwork.services.networkmanager.NetworkManager">
+		<property name="ipTablePath" value="${netman.iptable}"/>
+	</bean>
+
+	<!-- Define the JAX-WS Endpoint from the previous bean -->
+	<jaxws:endpoint id="NetworkManagerEndpoint"
+		implementorClass="com.greenstarnetwork.services.networkmanager.NetworkManager"
+		implementor="#networkManagerService" address="/NetworkManager" />
+
+	<!-- Facility Manager -->
+	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
+	<bean name="facilityManagerService"
+		class="com.greenstarnetwork.services.facilitymanager.FacilityManager">
+	</bean>
+
+	<!-- Define the JAX-WS Endpoint from the previous bean -->
+	<jaxws:endpoint id="FacilityManagerEndpoint"
+		implementorClass="com.greenstarnetwork.services.facilitymanager.FacilityManager"
+		implementor="#facilityManagerService" address="/FacilityManager" />
+
+
+	<!-- RabbitMQ Configuration -->
+	<rabbit:connection-factory id="connectionFactory" host="iaas2.badlab.crc.ca"/>
+	<rabbit:admin connection-factory="connectionFactory" />
+	
+	<rabbit:template id="networkManagerTemplate" connection-factory="connectionFactory" />
+	<rabbit:template id="cloudManagerTemplate" connection-factory="connectionFactory" />
+	<rabbit:template id="facilityManagerTemplate" connection-factory="connectionFactory" />
+	<rabbit:template id="iaasTemplate" connection-factory="connectionFactory" />	
+	
+	<rabbit:queue name="cloudMgr" />
+	<rabbit:queue name="netMgr" />
+	<rabbit:queue name="facMgr" />
+	
+	<rabbit:listener-container
+		connection-factory="connectionFactory">
+		<rabbit:listener queues="cloudMgr" ref="cloudManagerListener"
+			method="onMessage" />
+		<rabbit:listener queues="netMgr" ref="networkManagerListener"
+			method="onMessage" />
+		<rabbit:listener queues="facMgr" ref="facilityManagerListener"
+			method="onMessage" />
+	</rabbit:listener-container>
+	
+	<bean id="cloudManagerListener"
+		class="com.greenstarnetwork.services.cloudmanager.messages.CloudManagerListener" />
+	<bean id="networkManagerListener"
+		class="com.greenstarnetwork.services.networkmanager.messages.NetworkManagerListener" />
+	<bean id="facilityManagerListener"
+		class="com.greenstarnetwork.services.facilitymanager.messages.FacilityManagerListener" />
+	
+</beans>

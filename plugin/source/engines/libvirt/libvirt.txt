@@ -1,0 +1,200 @@
+====
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+Libvirt Implementation Notes
+
+
+NOTE: All VM Templates on GSN must have the apci packages installed or else they will not 
+shutdown properly. Sudo apt-get install acpi acpi-support
+
+
+Libvirt:
+
+virsh define
+
+    * When a VM is created with define, you can use shutdown/start to shutdown and start 
+    	the VM. But after you migrate a VM, shutdown undefines it...
+    * When you migrate a VM away, you have to undefine it on the old host
+    * WE SHOULD NOT USE THIS COMMAND
+
+
+
+virsh create
+
+    * creates the Vm from xml file and starts it.
+    * by creating VMs this way, shutdown will shutodwn gracefully and undefine it.
+    * migrate will undefine the VM in the old host.
+    * USE THIS TO CREATE VMs
+
+
+virsh shutdown
+
+    * If a VM was create via virsh create, shutdown will perform gracefully and will 
+    undefine the VM.
+    * If the VM was created via virsh define, shutdown will only work gracefully if 
+    the VM hasn’t been migrated. If it has, shutdown will undefine the VM. 
+
+virsh undefine
+
+    * Will remove the VM from the host completely
+    * Note VM must be shutoff before the action will work.
+    * Note We don’t need to use this because shutdown will undefine for us
+
+
+
+Virsh destroy
+
+    * a cold shutdown.
+          o If the VM was created with virsh create, the VM will be undefined
+          o If the Vm was created with virsh define, the VM will be shutdown only.
+
+
+
+virsh dominfo
+
+    * list the VM information for that VM
+
+
+
+virsh list --all
+
+    * List all of the VMs that are on the Host and their current state
+
+
+VM Synchronization Problem:
+When a VM is shutdown, it is undefined from the host. This means that libvirt has no notion 
+of that VM. If you wanted to start that VM again, you couldn’t because it no longer exists. 
+Also, if you re-deployed the Libvirt Resource, you would not know about the “shutdown” VMs 
+because they are not part of the virsh list --all command.
+
+Solution(s)
+
+The virsh list command will be used to synchronize the running VMs on the host and will 
+filter out any VMs that are "shutdown". It is up to the service (Cloud Manager) to know 
+that a VM is currently shut down and when the user wishes to start it again, will specific 
+which host to put it on.
+
+
+IAAS GSN Actions
+
+CreateAction
+Arguments:
+
+    * vmName, templateName, memory, numCPUs, mac, ipAddress
+
+Sequence
+
+   1. CopyTemplate- Copy the given template.
+   2. CreateXML - create the XMl config file that contains the VM's context
+   3. CreateVM - virsh create <vm xml file>. This will create and start the VM from the xml file.
+   4. DomInfo - virsh dominfo <vm>.  query the Vm to populate the model
+
+ShutdownVM
+
+   1. ShutdownVMCommand - virsh shutdown <VM> - This will shutdown and undefine the vm.
+         - remove the VM from the model
+  
+StartVMAction
+
+   1. CreateVM - virsh create <vm xml file> - create and start the VM. We need to use create here because a VM is undefined when it’s shutdown.
+         1. Update the state in the model
+   2. DomInfo - virsh dominfo <vm> update the model with the VM information
+
+
+RebootVM
+
+   1. ShutdownVMCommand - virsh shutdown, <VM> - this will gracefully shutdown and undefine the VM
+   2. StartVMCommand - virsh  create <vm xml file>.  create and start the VM
+
+
+
+Suspend
+
+   1. SuspendVMCommand - virsh suspend <vm>
+
+Resume
+
+   1. ResumeCommand - virsh resume <vm>
+
+DeleteVM
+
+   1. DestroyVMCommand - virsh destroy (will ungracefully shutdown the VM and undefine it).
+       - Remove the VM from the model
+
+Migrate
+
+   1. MigrateVMCommand - virsh migrate <vm>.  The VM will be moved to the new host and undefined at the old host.
+   2. VMInfoCommand (source Host)- run virsh dominfo on the old host. If the VM is still there, it means the migration 
+      failed and should be tried again (up to max retry).  If it is not there, we assume the migration was a success
+      
+   1. VMInfoCommand (dest Host) - virsh domInfo on the new host and populate the VM model on the new host with the VM
+          o Note- this command has to come from the cloud manager and isn’t actually part of the same Migration Action. 
+             it’s just listed here to show the full migration process
+
+NonLiveMigration
+
+   1. ShutdownVM
+ 
+   2. StartVM- on the new server side
+
+
+InitModel
+Used to initialize the Engine and also as a refresh.
+Note that it is possible to have VMs on the host before the Host resource is create so any information such as IPs and MACs that are in the IaaS model but not in the virsh domInfo command will have to be provided or retrieved by another command.
+
+Arguments
+
+Sequence
+
+   1. NodeInfoCommand
+   2. HostRunningInfoCommand
+   3. ListVMsCommand.
+         1. virsh list to populate the model with VMs that are not shutdown.
+   4. Call GetMACCommand on all VMs to get the Macs for them all.
+   5. Loop over VMs in model and run VMInfoCommandComand on all of them.
+   6. Read the VM information from the VMs file to get the VMs that are shutdown 
+
+
+
+Note: need to receive additional actions from the Cloud manager to populate fields that are not part of the libvirt responses. So for each VM after the refreshAction is done, the Cloud Manager must call:
+
+    * SetIPAddressCommand. Cloud manager must provide the IP
+
+
+
+HostInfoAction
+
+   1. NodeInfoCommand
+   2. HostRunningInfoCommand
+
+
+
+SetVMIPAction
+
+   1. SetVMIPCommand. -  Should this be part fo the CreateVM action? As a create parameter you can just put it in the model and you don’t need the command at all.
+
+
+
+HostStatisticalAction
+
+   1. HostRunningInfoCommand
+
+
+
+
+NOTE: All actions that only have one command are not needed. You can run the command directly.

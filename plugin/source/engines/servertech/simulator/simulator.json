@@ -1,0 +1,14 @@
+{ 
+  "simulations":
+  [{"string":"Off", 
+    "response":"simulator/responses/Off.txt"},
+   {"string":"On", 
+    "response":"simulator/responses/On.txt"},
+   {"string":"IStat",
+    "response":"simulator/responses/InfeedStatus.txt"},
+   {"string":"OStat",
+    "response":"simulator/responses/OutletStatus.txt"},
+   {"string":"Status",
+    "response":"simulator/responses/OutletState.txt"}
+  ]
+} 

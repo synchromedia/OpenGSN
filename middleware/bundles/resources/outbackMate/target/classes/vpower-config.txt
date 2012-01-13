@@ -1,4 +1,0 @@
-gmt=-4
-pdu-alias=ETS-PDU1
-switch-to-grid-low=10
-switch-to-grid-high=11

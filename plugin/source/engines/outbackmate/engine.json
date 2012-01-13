@@ -1,0 +1,34 @@
+{
+ "name": "OutbackMate",
+ "typeId" : "TypeId",
+ "description": "Outback Mate Inverter",
+ "version": "1.0.0",
+ "settings": {
+ "validate_firmware" : "true",
+ "connection_mode":"always",
+ "reconnection_delay":"5"
+ },
+ "modules":[
+   {"name" : "executions", 
+    "moduleId":"testId", 
+    "settings": {
+      "validate_firmware" : "true",
+      "connection_mode":"always",
+      "reconnection_delay":"5"}
+   },
+   {"name" : "remoteShell", 
+    "moduleId":"testId", 
+    "settings": {
+      "validate_firmware" : "true",
+      "connection_mode":"always",
+      "reconnection_delay":"10",
+      "auto_reconnect":"true"}
+    }, 
+   {"name" : "simulator",
+    "moduleId":"testId", 
+    "enabled":"true", 
+    "settings": {
+      "simulation_file" : "simulator/simulator.json"}
+   } 
+ ]
+}

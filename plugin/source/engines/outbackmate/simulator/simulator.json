@@ -1,0 +1,6 @@
+{ 
+  "simulations":
+  [{"regex":".*", 
+    "response":"simulator/responses/powerstate.txt"}
+  ]
+} 

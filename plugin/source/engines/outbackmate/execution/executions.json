@@ -1,0 +1,7 @@
+{ 
+"executions":
+[{"id":"GetPowerState", 
+  "description":"Set an outlet on or off", 
+  "behavior" : "behaviors/GetPowerState.js"}
+]
+} 

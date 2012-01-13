@@ -1,0 +1,8 @@
+{
+  "name":"",
+  "moduleType":"http://www.iaasframework.com/",
+  "settings": {
+  "autoretry": "true",
+  "executions_file":"executions.json"
+  }
+}

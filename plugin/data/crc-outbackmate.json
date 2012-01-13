@@ -1,0 +1,23 @@
+{
+ "name": "crc-outbackmate",
+ "typeId" : "OutbackMate",
+ "description": "CRC's Outback Mate SPS",
+ "settings": {
+   "reconnection_delay":"10",
+   "refresh_execution":"Refresh",
+   "polling_interval":"180"
+ },
+ "model" : {
+   "location": "3701, avenue Carling, Ottawa, Ontario,Canada, K2H 8S2"
+ },
+ "modules":[
+   {"name" : "remoteShell", 
+    "moduleId":"testId", 
+    "settings": {
+      "host" : "142.92.72.102",
+      "transport" : "telnet",
+      "lines" : "10",
+      "port" : "10001"}
+   } 
+ ]
+}

@@ -1,0 +1,43 @@
+====
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+show externalsensor4
+/system1/externalsensor4
+ Properties:
+  SystemCreationClassName is CIM_ComputerSystem
+  SystemName is Management
+  CreationClassName is Raritan_CIMExternal
+  DeviceID is unknown
+  Name is CRC SPN Enclosure Temp Sensor(199.0.32)
+  SensorType is 2 (Temperature)
+  OtherSensorTypeDescription is 
+  CurrentState is OK
+  PossibleStates is [OK,Lower Non-Critical,Lower Critical,Lower Non-Recoverable,Upper Non-Critical,Upper Critical,Upper Non-Recoverable]
+  BaseUnits is 2 (Degrees C)
+  UnitModifier is -1
+  RateUnits is 0 (None)
+  CurrentReading is 19.000000
+  NominalReading is 2
+  Status is Sensor is available
+
+ Associations:
+  CIM_SystemDevice => /system1
+  CIM_ConcreteDependency => /system2
+
+ Verbs: cd help set show
+clp:system1-> 
