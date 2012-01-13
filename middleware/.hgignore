@@ -1,0 +1,43 @@
+syntax: glob
+runner
+syntax: glob
+target
+syntax: glob
+MANIFEST.MF
+syntax: glob
+build.properties
+syntax: glob
+.metadata
+syntax: glob
+.project
+syntax: glob
+.settings
+syntax:glob
+.classpath
+syntax: glob
+eclipse_config
+syntax: glob
+eclipse-classes
+syntax: glob
+bin
+syntax: glob
+activemq-data
+syntax:glob
+generated-sources
+syntax:glob
+Controller.log
+syntax:glob
+Facility.log
+
+syntax: regexp
+^runner$
+syntax: regexp
+^eclipse_config$
+syntax: regexp
+.*orig
+syntax: regexp
+.*~
+syntax: regexp
+.*swp
+
+

@@ -1,0 +1,139 @@
+<?xml version="1.0"?>
+<!--
+
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!--
+This ant script is to automate the task of uploading and deploying the GSN 
+bundles to the various infrastructure containers. The script will pick the 
+bundles from the IAAS_HOME location on the local machine and put them on 
+the IAAS_HOME location on the remote machine
+
+
+To run the scripts, you must change the propery values below to match your 
+local and remote environments.
+
+You must also add the the following jars to the class path of ant:
+	ant-contrib-1.0b3.jar
+	jsch-0.1.36.jar
+
+They are both located in the lib folder of this project. To add them to ant's
+class path, If you're running this script from eclipse, Open the External
+Tools Dialog and add those 2 jars from the classpath tab for this build script.
+The "Open External Tools Dialog" can be found from the Run menu, or the eclipse 
+toolbar. 
+	NOTE: It's easier to run a target first (any target) and a new ant build
+will be created in the external tools dialog. Otherwise, you'll have to create
+a new one.
+-->
+
+<project name="Remote Service Deploy" default="usage" basedir=".">
+	<description>
+        Targets to automate uploading and deploying the services
+    </description>
+
+	<!-- This field must be set for each host -->
+	<property name="remoteHost" value="localhost" />
+	
+	<!-- No need to change these properties unless you're doing some custom things -->
+	<property environment="env"/>
+	<property name="localIaasDir" value="${env.IAAS_HOME}"/>
+	<property name="remoteIaasDir" value="${env.IAAS_HOME}"/>
+	<property name="karafPID" value="476"/>
+
+
+	<!--  Taskdef to be able to use if/unless statements -->
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+
+	<target name="usage" description="list the targets available in this script">
+		<exec executable="ant">
+			<arg value="-p" />
+		</exec>
+	</target>
+
+	<target name="login" description="asks for login information that is used by the other tasks">
+		<if>
+			<and>
+				<isset property="username" />
+				<isset property="password" />
+			</and>
+			<then>
+				<!-- <echo>Already have Login Info</echo> -->
+			</then>
+			<else>
+				<input message="Enter username:" addproperty="username" />
+				<input message="Enter password" addproperty="password" />
+			</else>
+		</if>
+	</target>
+
+	<!-- Karaf Targets -->
+	<target name="karafStop" depends="login" description="stop karaf">
+		<sshexec host="${remoteHost}" username="${username}" password="${password}" trust="true" command=" ${remoteIaasDir}/bin/stop ${karafPID}" />
+	</target>
+
+	<target name="karafStart" depends="login" description="start karaf">
+		<sshexec host="${remoteHost}" username="${username}" password="${password}" trust="true" command="${remoteIaasDir}/bin/start ${karafPID}" />
+	</target>
+
+	<target name="karafRestart" depends="login" description="restart karaf">
+		<sshexec host="${remoteHost}" username="${username}" password="${password}" trust="true" command=" ${remoteIaasDir}/bin/stop ${karafPID}" />
+		<sshexec host="${remoteHost}" username="${username}" password="${password}" trust="true" command=" ${remoteIaasDir}/bin/start ${karafPID}" />
+	</target>
+
+
+	<!-- Master targets that do the work -->
+
+	<target name="uploadFile" depends="login" description="upload a file">
+		<scp todir="${username}:${password}@${remoteHost}:${remoteDir}" sftp="true" trust="true" verbose="true" file="${localFile}">
+		</scp>
+	</target>
+
+	<target name="uploadDir" depends="login" description="upload a directory">				
+		<scp todir="${username}:${password}@${remoteHost}:${remoteDir}" sftp="true" trust="true" verbose="true">
+			<fileset dir="${localDir}" />
+		</scp>
+	</target>
+
+
+	<!-- All GSN Bundles -->	
+	<target name="UploadAllBundles">
+		<property name="localDir" value="${localIaasDir}/system/com/greenstarnetwork/" />
+		<property name="remoteDir" value="${remoteIaasDir}/system/com/greenstarnetwork/" />
+		<antcall target="uploadDir" />
+	</target>
+	
+	<target name="UploadAll+Restart">
+		<antcall target="UploadAllBundles" />
+		<antcall target="karafRestart" />
+	</target>
+
+	<!-- Upload config files -->
+	<target name="uploadGSNConfigs" description="Upload the config files to the $IAAS_HOME/gsn folder">
+		<property name="localDir" value="${localIaasDir}/gsn/" />
+		<property name="remoteDir" value="${remoteIaasDir}/gsn/" />
+		<antcall target="uploadDir" />
+	</target>
+
+	<target name="UploadDomainFile" description="Upload the GSN Domain file">
+		<property name="localFile" value="${localIaasDir}/gsn/domains.xml" />
+		<property name="remoteDir" value="${remoteIaasDir}/gsn/" />
+		<antcall target="uploadFile" />
+	</target>
+	
+</project>

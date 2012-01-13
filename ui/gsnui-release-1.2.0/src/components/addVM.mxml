@@ -1,0 +1,384 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Copyright 2009-2011 École de technologie supérieure, Communication Research Centre Canada, Inocybe Technologies Inc. and 6837247 CANADA Inc.
+//
+// 
+//
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
+//
+//http://www.apache.org/licenses/LICENSE-2.0
+//
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" verticalAlign="top" borderStyle="solid" styleName="title1" 
+		 xmlns:actionwsport="services.actionsetcapabilitysoapendpoint.*" width="100%" creationComplete="init()">
+	
+	<mx:Style source="../style/gsn.css"/>
+
+	<mx:Script>
+		<![CDATA[
+			import actionscript.Host;
+			import actionscript.VM;
+			import actionscript.errors.*;
+			
+			import mx.controls.Alert;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			import mx.validators.Validator;
+			
+			private var engine:String;
+			
+			private function init():void{
+				
+				autoDeploy();
+				
+				initWS();
+				
+				comboHostName.selectedIndex = 0;
+				var name:String = comboHostName.selectedLabel;
+				
+				for(var i:int=0;i<this.parentApplication.listHost.length;i++){
+					if(name == this.parentApplication.listHost[i].name){
+						location.text = this.parentApplication.listHost[i].location;
+						cpu.text = this.parentApplication.listHost[i].cpu;
+						speed.text = this.parentApplication.listHost[i].speed;
+						nbreCpu.text = this.parentApplication.listHost[i].nbreCpu;
+						memory.text = this.parentApplication.listHost[i].totalMemory;
+						freeMemory.text = this.parentApplication.listHost[i].freeMemory;
+						return;
+					}
+				}
+			
+			}
+			
+			public function initWS():void{
+				if(cloudManagerService.wsdl == null){
+				cloudManagerService.wsdl = this.parentApplication.cloudManagerWSDL;
+				cloudManagerService.loadWSDL();
+				}
+			}
+			
+			protected function buttonAdVM_clickHandler(event:MouseEvent):void
+			{
+				
+				var validators:Array = Validator.validateAll([valNameValue]);
+				if(!validators.length){
+					
+					if (this.nameValue.text.search("_") != -1 ){
+						Alert.show("The VM name must not contains '_' character.","Message");
+						return;
+					}
+					
+					var name:String = nameValue.text;
+					var cpu:String=cpuValue.selectedLabel;
+					var memory:String=memoryValue.selectedLabel;
+					var template:String = platform.selectedItem.name;
+					
+					try{
+						DataValidator.validateVMname(name,this.parentApplication.vmComp.listMachines);
+						if(this.currentState == ""){
+							engine = comboHostName.selectedItem.resourceId;
+							cloudManagerService.createInstanceInHost(engine,name,memory,cpu,template);
+						}else{
+							cloudManagerService.createInstance(name,memory,cpu,template);
+						}
+						disableForm();
+					}catch (error:FatalError){
+						showFatalError(error);
+					}catch(error:Error ){
+					
+						Alert.show("Encountered an unknown error during the virtual machine creation!");
+					} 
+				}else{
+					Alert.show("Required fields are not all filled.","Message");
+				}				
+				
+			}
+			
+			private function createInstanceInHostListener(event:ResultEvent):void{
+				
+				try{
+			
+					var res:String = event.result as String;
+					var vmName:String;
+					if( res.split(" ")[0] == "VM:" && res.split(" ")[4] == "created!"){
+						
+						vmName = res.split(" ")[1];
+						
+						var machine:VM = new VM();
+						machine.resourceId = engine;
+						machine.name = vmName;
+						machine.displayedName = vmName.split('_')[0];
+						machine.os = platform.selectedLabel;
+						machine.status = "STARTED";
+						var host:Host = this.parentApplication.getHost(engine);
+						if(host != null){
+							machine.hostIp = host.ip;
+							machine.hostName = host.name;
+						}
+						machine.vmIp = res.split(" ")[3];
+						machine.location = location.text;
+						machine.vcpu = cpuValue.selectedLabel;
+						machine.memory = memoryValue.selectedLabel + " KB";
+						
+						machine.greenPercent = 100;
+						for(var i:int=0;i<this.parentApplication.sites.length;i++){
+							if( this.parentApplication.sites.getItemAt(i).location == machine.location){
+								machine.greenPercent = int(this.parentApplication.sites.getItemAt(i).greenPower);
+							}
+						}
+						
+						this.parentApplication.addVM(machine);
+						if(this.parentApplication.vmComp != null){
+							this.parentApplication.vmComp.addVM(machine);
+						}
+						//Update Dashboard Power Chart
+						this.parentApplication.dashboardComp.updatePowerChart();
+						
+						//Update Dashboard Google markers
+						this.parentApplication.dashboardComp.updateMap();
+						
+						//Update the VM table in the host view
+						if(this.parentApplication.hostComp != null){
+							this.parentApplication.hostComp.updateVM();
+						}
+						
+						cleanForm();
+						enableForm();
+						Alert.show("The virtual machine has been created successfully");
+					
+					}else if( res.split(" ")[0] == "VM:" && res.split(" ")[4] == "failed!"){
+						cleanForm();
+						enableForm();
+						vmName = res.split(" ")[1];
+						Alert.show("The creation of the VM: "+vmName.split('_')[0]+" failed.");
+					}else{
+						cleanForm();
+						enableForm();
+						Alert.show("An error occured during the virtual machine creation!");
+					}
+				}catch(e:Error){
+					cleanForm();
+					enableForm();
+					Alert.show("An error occured during the virtual machine creation!");
+				}
+			}
+			
+			private function createInstanceListener(event:ResultEvent):void{
+				
+				try{
+					
+					var res:String = event.result as String;
+					var vmName:String;
+					var resourceId:String;
+					if( res.split(" ")[0] == "VM:" && res.split(" ")[4] == "created!;"){
+						
+						resourceId = res.split(" ")[7];
+						vmName = res.split(" ")[1];
+						
+						var machine:VM = new VM();
+						machine.resourceId = resourceId;
+						machine.name = vmName;
+						machine.displayedName = vmName.split('_')[0];
+						machine.os = platform.selectedLabel;
+						machine.status = "STARTED";
+						var host:Host = this.parentApplication.getHost(resourceId);
+						if(host != null){
+							machine.hostIp = host.ip;
+							machine.hostName = host.name;
+						}
+						machine.vmIp = res.split(" ")[3];
+						machine.location = location.text;
+						machine.vcpu = cpuValue.selectedLabel;
+						machine.memory = memoryValue.selectedLabel + " KB";
+						
+						machine.greenPercent = 100;
+						for(var i:int=0;i<this.parentApplication.sites.length;i++){
+							if( this.parentApplication.sites.getItemAt(i).location == machine.location){
+								machine.greenPercent = int(this.parentApplication.sites.getItemAt(i).greenPower);
+							}
+						}
+						
+						this.parentApplication.addVM(machine);
+						if(this.parentApplication.vmComp != null){
+							this.parentApplication.vmComp.addVM(machine);
+						}
+						//Update Dashboard Power Chart
+						this.parentApplication.dashboardComp.updatePowerChart();
+						
+						//Update Dashboard Google markers
+						this.parentApplication.dashboardComp.updateMap();
+						
+						//Update the VM table in the host view
+						if(this.parentApplication.hostComp != null){
+							this.parentApplication.hostComp.updateVM();
+						}
+						
+						cleanForm();
+						enableForm();
+						Alert.show("The virtual machine has been created successfully");
+						
+					}else if( res.split(" ")[0] == "VM:" && res.split(" ")[4] == "failed!"){
+						cleanForm();
+						enableForm();
+						vmName = res.split(" ")[1];
+						Alert.show("The creation of the VM: "+vmName.split('_')[0]+" failed.");
+					}else{
+						cleanForm();
+						enableForm();
+						Alert.show("An error occured during the virtual machine creation!");
+					}
+				}catch(e:Error){
+					cleanForm();
+					enableForm();
+					Alert.show("An error occured during the virtual machine creation!");
+				}
+			}
+			
+			private function enableForm():void{
+				addMachineForm.enabled = true;
+				addBtn.enabled = true;
+				cancelBtn.enabled = true;
+			}
+			
+			private function disableForm():void{
+				addMachineForm.enabled = false;
+				addBtn.enabled = false;
+				cancelBtn.enabled = false;
+			}
+			
+			private function cleanForm():void{
+				nameValue.text = "";
+				cpuValue.selectedIndex = 0;
+				memoryValue.selectedIndex = 0;
+			}
+			
+			public function showFatalError(error:FatalError):void
+			{
+				var message:String = error.message + "\n\n";
+				var title:String = error.getTitle();
+				if (error.id==1000){
+					nameValue.setStyle("color", 0xFF0000);			
+				}
+				if (error.id==1001){
+					memoryValue.setStyle("color", 0xFF0000);
+				}
+				if (error.id==1002){
+					cpuValue.setStyle("color", 0xFF0000);
+				}
+				Alert.show(message + " " + title);
+			}
+			
+			private function updateHostField(event:Event):void{
+				var name:String = event.currentTarget.selectedLabel;
+				
+				for(var i:int=0;i<this.parentApplication.listHost.length;i++){
+					if(name == this.parentApplication.listHost[i].name){
+						location.text = this.parentApplication.listHost[i].location;
+						cpu.text = this.parentApplication.listHost[i].cpu;
+						speed.text = this.parentApplication.listHost[i].speed;
+						nbreCpu.text = this.parentApplication.listHost[i].nbreCpu;
+						memory.text = this.parentApplication.listHost[i].totalMemory;
+						freeMemory.text = this.parentApplication.listHost[i].freeMemory;
+						return;
+					}
+				}
+			}
+			
+			private function autoDeploy():void{
+				if(autoDeployBox.selected){
+					this.currentState = "autoDeploy";
+				}else{
+					this.currentState = "";
+				}
+			}
+			
+			
+			private function faultHandler(event:FaultEvent):void{
+				//Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail);
+			}
+			
+			private function clearForm():void{
+				nameValue.text = '';
+			}
+			
+			
+		]]>
+	</mx:Script>
+	<mx:states>
+		<mx:State name="autoDeploy">
+			<mx:RemoveChild target="{formitem1}"/>
+			<mx:RemoveChild target="{formitem2}"/>
+			<mx:RemoveChild target="{formitem3}"/>
+			<mx:RemoveChild target="{formitem4}"/>
+			<mx:RemoveChild target="{formitem5}"/>
+			<mx:RemoveChild target="{formitem6}"/>
+			<mx:RemoveChild target="{formitem7}"/>
+		</mx:State>
+	</mx:states>
+
+	
+	<mx:WebService id="cloudManagerService" fault="faultHandler(event)" showBusyCursor="true">
+		<mx:operation name="createInstance" resultFormat="object" result="createInstanceListener(event)" />
+		<mx:operation name="createInstanceInHost" resultFormat="object" result="createInstanceInHostListener(event)" />
+	</mx:WebService>
+	
+	<mx:StringValidator id="valNameValue" source="{nameValue}" property="text" required="true" 
+						requiredFieldError="This field is required."
+						trigger="{addBtn}" triggerEvent="click"/>
+	
+	<mx:Label text="Add a new virtual machine" styleName="titleOne" paddingTop="10" paddingLeft="10"/>
+	
+	<mx:Form id="addMachineForm">
+			<mx:FormItem label="Auto deploy VM" labelStyleName="formLabel" id="formitem8">
+					<mx:CheckBox click="autoDeploy()" id="autoDeployBox" selected="true"/>
+			</mx:FormItem>
+			<mx:FormItem label="Host name" required="true" labelStyleName="formLabel" id="formitem1">
+					<mx:ComboBox id="comboHostName" dataProvider="{this.parentApplication.listHost}" labelField="name" change="updateHostField(event)"/>
+			</mx:FormItem>
+			<mx:FormItem label="Location" labelStyleName="formLabel" id="formitem2">
+					<mx:Label id="location"/>
+			</mx:FormItem>
+			<mx:FormItem label="CPU" labelStyleName="formLabel" id="formitem3">
+					<mx:Label id="cpu"/>
+			</mx:FormItem>
+			<mx:FormItem label="CPU Number" labelStyleName="formLabel" id="formitem4">
+					<mx:Label id="nbreCpu"/>
+			</mx:FormItem>
+			<mx:FormItem label="CPU Speed" labelStyleName="formLabel" id="formitem5">
+					<mx:Label id="speed"/>
+			</mx:FormItem>
+			<mx:FormItem label="Total Memory" labelStyleName="formLabel" id="formitem6">
+					<mx:Label id="memory"/>
+			</mx:FormItem>
+			<mx:FormItem label="Free Memory" labelStyleName="formLabel" id="formitem7">
+					<mx:Label id="freeMemory"/>
+			</mx:FormItem>
+			<mx:FormItem label="Platform" required="true" labelStyleName="formLabel">	
+			<mx:ComboBox id="platform" dataProvider="{this.parentApplication.templates}" labelField="displayName" />
+			</mx:FormItem>
+			<mx:FormItem label="VM Name" required="true" labelStyleName="formLabel">
+				<mx:TextInput id="nameValue"/>
+			</mx:FormItem>
+			<mx:FormItem label="CPU" required="true" labelStyleName="formLabel">
+				<mx:ComboBox id="cpuValue" dataProvider="{['1','2','3','4']}"/>
+			</mx:FormItem>
+			<mx:FormItem label="Memory (KB)" required="true" labelStyleName="formLabel">	
+				<mx:ComboBox id="memoryValue" dataProvider="{['128000','256000','512000','1024000','2048000']}"/>
+			</mx:FormItem>
+	</mx:Form>
+	<mx:HBox horizontalAlign="left" paddingLeft="20">
+		<mx:Button label="Add the new machine" icon="@Embed(source='Assets/images/add.png')" click="buttonAdVM_clickHandler(event)" id="addBtn"/>
+		<mx:Button label="Cancel" icon="@Embed(source='Assets/images/delete2.png')" id="cancelBtn" click="clearForm()"/>
+	</mx:HBox>
+	<mx:Spacer height="10"/>
+	
+</mx:VBox>

@@ -1,0 +1,30 @@
+[user@server ~]$echo '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<domain id="777" type="qemu">
+    <name>vm1</name>
+    <memory>131072</memory>
+    <vcpu>1</vcpu>
+    <os>
+        <type machine="pc" arch="i686">hvm</type>
+        <boot dev="cdrom"/>
+    </os>
+    <clock offset="utc"/>
+    <on_poweroff>destroy</on_poweroff>
+    <on_reboot>destroy</on_reboot>
+    <on_crash>destroy</on_crash>
+    <devices>
+        <emulator>/usr/bin/qemu</emulator>
+        <disk dev="disk" type="file">
+            <source file="/home/vmm/vmtempl.qcow2"/>
+            <target bus="ide" dev="hda"/>
+        </disk>
+    </devices>
+    <interface type="network">
+        <source network="default"/>
+    </interface>
+    <input bus="ps2" type="mouse"/>
+    <graphics listen="127.0.0.1" port="5900" type="vnc"/>
+</domain>' > /tmp/test.xml ; virsh create /tmp/test/xml 
+Connecting to uri: qemu:///system
+Domain vm1 created from /tmp/test.xml
+
+[user@server ~]

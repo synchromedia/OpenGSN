@@ -1,0 +1,189 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Copyright 2009-2011 École de technologie supérieure, Communication Research Centre Canada, Inocybe Technologies Inc. and 6837247 CANADA Inc.
+//
+// 
+//
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
+//
+//http://www.apache.org/licenses/LICENSE-2.0
+//
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Canvas xmlns:mx="http://www.adobe.com/2006/mxml">
+	
+	<maps:Map xmlns:maps="com.google.maps.*" id="googleMap" mapevent_mapready="onMapReady(event)" width="100%" height="100%" 
+			  key="{this.parentApplication.googleMapKey}" horizontalCenter="0" verticalCenter="0"/> 
+	
+	<mx:Script> 
+		<![CDATA[ 
+			import actionscript.CustomGeocoder;
+			import actionscript.CustomGeocoderEvent;
+			
+			import com.google.maps.LatLng;
+			import com.google.maps.Map;
+			import com.google.maps.MapEvent;
+			import com.google.maps.MapType;
+			import com.google.maps.controls.ControlPosition;
+			import com.google.maps.controls.MapTypeControl;
+			import com.google.maps.controls.ZoomControl;
+			import com.google.maps.controls.ZoomControlOptions;
+			import com.google.maps.interfaces.IOverlay;
+			import com.google.maps.overlays.Marker;
+			import com.google.maps.overlays.MarkerOptions;
+			import com.google.maps.services.ClientGeocoder;
+			import com.google.maps.services.GeocodingEvent;
+			import com.google.maps.styles.FillStyle;
+			import com.google.maps.styles.StrokeStyle;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Image;
+			
+			private var isMapReady:Boolean = false;
+			
+			private var customGeocoder:CustomGeocoder;
+			
+			//Montreal Location used for the global view
+			public var latitude:Number = 45.30;
+			public var longitude:Number = -73.35;
+			public var zoomLevel:Number = 2;
+			
+			//Markers need to be initialized once the data will be available in the model
+			public var oldMarkers:ArrayCollection = new ArrayCollection();
+			
+			[Embed(source="Assets/images/hydroIcon.png")]
+			private var hydroFacilityIcon:Class;
+			[Embed(source="Assets/images/hydroVMIcon.png")]
+			private var hydroFacilityWithVMIcon:Class;
+			[Embed(source="Assets/images/solarIcon.png")]
+			private var solarFacilityIcon:Class;
+			[Embed(source="Assets/images/solarVMIcon.png")]
+			private var solarFacilityWithVMIcon:Class;
+			[Embed(source="Assets/images/windIcon.png")]
+			private var windFacilityIcon:Class;
+			[Embed(source="Assets/images/windVMIcon.png")]
+			private var windFacilityWithVMIcon:Class;
+			
+			private function onMapReady(event:Event):void {
+				
+				isMapReady = true;
+				
+				//Parameters: location, a zoom level, and the type of map
+				googleMap.setCenter(new LatLng(latitude,longitude), zoomLevel, MapType.NORMAL_MAP_TYPE);
+				
+				//Add zoom control to the map
+				var topRight:ControlPosition =  new ControlPosition(ControlPosition.ANCHOR_TOP_RIGHT, 5, 5); 
+				var myZoomControl:ZoomControl = new ZoomControl(new ZoomControlOptions({position: topRight})); 
+				googleMap.addControl(myZoomControl);
+				
+				//Geocode facilities
+				if(this.parentApplication.sites != null){
+					for(var i:int=0;i<this.parentApplication.sites.length;i++){
+						var location:String = this.parentApplication.sites.getItemAt(i).location;
+						customGeocoder = new CustomGeocoder("Facility", this.parentApplication.sites.getItemAt(i).powerSourceType, hasVMStarted(location));
+						customGeocoder.addEventListener("ON_NEW_GEOCODE_POINT", newGeocodePoint);
+						customGeocoder.geocode( location );
+					}
+				}
+				
+				
+			}
+			
+			//Update the Map markers after modifying them
+			public function updateMap():void {
+				if(isMapReady){
+					//Parameters: location, a zoom level, and the type of map
+					googleMap.setCenter(new LatLng(latitude,longitude), zoomLevel, MapType.NORMAL_MAP_TYPE);
+					
+					for(var i:int=0;i<oldMarkers.length;i++ ){
+						googleMap.removeOverlay( oldMarkers.getItemAt(i) as IOverlay );
+					}
+					oldMarkers.removeAll();
+					
+					//Geocode facilities
+					if(this.parentApplication.sites != null){
+						for(i=0;i<this.parentApplication.sites.length;i++){
+							var location:String = this.parentApplication.sites.getItemAt(i).location;
+							customGeocoder = new CustomGeocoder("Facility", this.parentApplication.sites.getItemAt(i).powerSourceType, hasVMStarted(location));
+							customGeocoder.addEventListener("ON_NEW_GEOCODE_POINT", newGeocodePoint);
+							customGeocoder.geocode( location );
+						}
+					}
+					
+				}
+				
+			} 
+			
+			private function newGeocodePoint( event:CustomGeocoderEvent ) : void
+			{
+				var img:Bitmap;
+				
+				if(event.typePoint == "Facility" && event.powerType == "HYDRO" && event.hasVMStarted){
+					img = new hydroFacilityWithVMIcon();
+					img.scaleX = 0.2;
+					img.scaleY = 0.2;
+				}else if(event.typePoint == "Facility" && event.powerType == "HYDRO" && !event.hasVMStarted){
+					img = new hydroFacilityIcon();
+					img.scaleX = 0.2;
+					img.scaleY = 0.2;
+				}else if(event.typePoint == "Facility" && event.powerType == "SOLAR" && event.hasVMStarted){
+					img = new solarFacilityWithVMIcon();
+					img.scaleX = 0.2;
+					img.scaleY = 0.2;
+				}else if(event.typePoint == "Facility" && event.powerType == "SOLAR" && !event.hasVMStarted){
+					img = new solarFacilityIcon();
+					img.scaleX = 0.2;
+					img.scaleY = 0.2;
+				}else if(event.typePoint == "Facility" && event.powerType == "WIND" && event.hasVMStarted){
+					img = new windFacilityWithVMIcon();
+					img.scaleX = 0.2;
+					img.scaleY = 0.2;
+				}else if(event.typePoint == "Facility" && event.powerType == "WIND" && !event.hasVMStarted){
+					img = new windFacilityIcon();
+					img.scaleX = 0.2;
+					img.scaleY = 0.2;
+				}
+				
+				var marker:Marker = new Marker( 
+					event.point, 
+					new MarkerOptions ({
+						icon: img,
+						hasShadow: false,
+						iconAlignment: MarkerOptions.ALIGN_BOTTOM
+						//iconOffset: 100
+					})); 
+				googleMap.addOverlay(marker);
+				oldMarkers.addItem(marker);
+				
+			}
+			
+			private function hasVMStarted(location:String):Boolean{
+				if(this.parentApplication.listHost != null){
+					for(var i:int=0;i<this.parentApplication.listHost.length;i++){
+						if(this.parentApplication.listHost.getItemAt(i).location == location){
+							for(var j:int=0;j<this.parentApplication.listHost.getItemAt(i).vmList.length;j++){
+								if(this.parentApplication.listHost.getItemAt(i).vmList.getItemAt(j).status == "STARTED" ){
+									return true;
+								}
+							}
+						}
+					}
+				}else{
+					return false;
+				}
+				return false;
+			}
+
+			
+		]]> 
+	</mx:Script> 
+
+</mx:Canvas>

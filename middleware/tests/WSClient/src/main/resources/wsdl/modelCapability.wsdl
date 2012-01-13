@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ModelCapabilitySOAPEndpointService" targetNamespace="http://soapendpoint.model.capabilities.iaasframework.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://soapendpoint.model.capabilities.iaasframework.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://soapendpoint.model.capabilities.iaasframework.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://soapendpoint.model.capabilities.iaasframework.com/">
+  <xs:element name="getResourceModel" type="tns:getResourceModel"/>
+  <xs:element name="getResourceModelResponse" type="tns:getResourceModelResponse"/>
+  <xs:complexType name="getResourceModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getResourceModelResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="information">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+      <xs:element minOccurs="0" name="version" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="capabilityDescriptor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="capabilityInformation" type="tns:information"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="capabilityProperty" type="tns:capabilityProperty"/>
+      <xs:element minOccurs="0" name="enabled" type="xs:boolean"/>
+      <xs:element name="id" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="capabilityProperty">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="value" type="xs:string"/>
+  </xs:complexType>
+  <xs:element name="ModelException" type="tns:ModelException"/>
+  <xs:complexType name="ModelException">
+    <xs:sequence>
+      <xs:element name="capabilityDescriptor" nillable="true" type="tns:capabilityDescriptor"/>
+      <xs:element name="resourceInformation" nillable="true" type="tns:information"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="ModelException">
+    <wsdl:part name="ModelException" element="tns:ModelException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourceModelResponse">
+    <wsdl:part name="parameters" element="tns:getResourceModelResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourceModel">
+    <wsdl:part name="parameters" element="tns:getResourceModel">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IModelCapabilitySOAPEndpoint">
+    <wsdl:operation name="getResourceModel">
+      <wsdl:input name="getResourceModel" message="tns:getResourceModel">
+    </wsdl:input>
+      <wsdl:output name="getResourceModelResponse" message="tns:getResourceModelResponse">
+    </wsdl:output>
+      <wsdl:fault name="ModelException" message="tns:ModelException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ModelCapabilitySOAPEndpointServiceSoapBinding" type="tns:IModelCapabilitySOAPEndpoint">
+    <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getResourceModel">
+      <soap12:operation soapAction="" style="document"/>
+      <wsdl:input name="getResourceModel">
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResourceModelResponse">
+        <soap12:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ModelException">
+        <soap12:fault name="ModelException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ModelCapabilitySOAPEndpointService">
+    <wsdl:port name="ModelCapabilitySOAPEndpointPort" binding="tns:ModelCapabilitySOAPEndpointServiceSoapBinding">
+      <soap12:address location="http://localhost:9090/ModelCapabilitySOAPEndpointPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

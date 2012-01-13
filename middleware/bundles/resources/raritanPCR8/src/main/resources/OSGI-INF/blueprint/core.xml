@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+	<bean id="RaritanPCR8VirtualTransportProvider"
+		class="com.greenstarnetwork.resources.raritanPCR8.core.VirtualTransportProvider" />
+
+	<!-- Register an IVirtualTransportProvider as an OSGi Service -->
+	<service ref="RaritanPCR8VirtualTransportProvider"
+		interface="com.iaasframework.transports.virtual.IVirtualTransportProvider">
+		<service-properties>
+			<entry key="transport.virtualTransportProvider" value="RaritanPCR8" />
+		</service-properties>
+	</service>
+
+	<bean id="RaritanPCR8CommandFactory"
+		class="com.greenstarnetwork.resources.raritanPCR8.core.RaritanCommandFactory">
+	</bean>
+
+	<!-- Register a command set as an OSGi Service -->
+	<service ref="RaritanPCR8CommandFactory"
+		interface="com.iaasframework.capabilities.commandset.ICommandFactory">
+		<service-properties>
+			<entry key="commandSet.name" value="RaritanPCR8" />
+			<entry key="commandSet.version" value="1.0.0" />
+		</service-properties>
+	</service>
+
+	<bean id="RaritanPCR8ActionFactory"
+		class="com.greenstarnetwork.resources.raritanPCR8.core.RaritanActionFactory">
+	</bean>
+
+	<!--  register the actionset with the osgi registry -->
+	<service ref="RaritanPCR8ActionFactory"
+		interface="com.iaasframework.capabilities.actionset.IActionFactory">
+		<service-properties>
+			<entry key="actionSet.name" value="RaritanPCR8" />
+			<entry key="actionSet.version" value="1.0.0" />
+		</service-properties>
+	</service>
+
+	<!--  Get the CapabilityFactories from the OSGI Repository -->
+	<reference id="actionsetCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=ActionSet)(capability.version=1.0.0))" />
+
+	<reference id="commandsetCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=CommandSet)(capability.version=1.0.0))" />
+
+	<reference id="protocolCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=protocol)(capability.version=1.0.0))" />
+
+	<reference id="modelCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=Model)(capability.version=1.0.0))" />
+		
+			<reference id="ArchiveCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=Archive)(capability.version=1.0.1-SNAPSHOT))" />
+
+
+  <reference id="pollerCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=Poller)(capability.version=1.0.0))" />
+		
+    <!--  Resource bootstrapper factory class -->
+	<bean id="RaritanBootstrapperFactory" class="com.greenstarnetwork.resources.raritanPCR8.core.RaritanBootstrapperFactory" />
+
+	<!-- Engine Repository -->
+	<bean id="RaritanPCR8EngineRepository" class="com.iaasframework.resources.core.ResourceRepository"  init-method="init">
+		<argument value="RaritanPCR8" />
+		<property name="capabilityFactories">
+			<map>
+				<entry key="ActionSet" value-ref="actionsetCapabilityFactory" />
+				<entry key="CommandSet" value-ref="commandsetCapabilityFactory" />
+				<entry key="protocol" value-ref="protocolCapabilityFactory" />
+				<entry key="Model" value-ref="modelCapabilityFactory" />
+				<entry key="Archive" value-ref="ArchiveCapabilityFactory" />
+				<entry key="Poller" value-ref="pollerCapabilityFactory" />
+			</map>
+		</property>
+		<property name="resourceBootstrapperFactory" ref="RaritanBootstrapperFactory"/>
+		<!--  Persistence unit must be the last property, because it will cause the descriptor repository 
+			to be initialized -->
+		<property name="persistenceUnit" value="ResourceCore"/>			
+	</bean>
+
+	<!--  register the repostiory with the OSGI registry -->
+	<service ref="RaritanPCR8EngineRepository"
+		interface="com.iaasframework.resources.core.IResourceRepository">
+		<service-properties>
+			<entry key="type" value="RaritanPCR8" />
+			<entry key="version" value="1.0.0" />
+		</service-properties>
+	</service>
+</blueprint>

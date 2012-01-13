@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><project>
+	<description>Eaton PowerWare PDU Resource</description>
+  <packaging>bundle</packaging>
+ 	<parent>
+		<artifactId>resources</artifactId>
+		<groupId>com.greenstarnetwork</groupId>
+		<version>1.2.0</version>
+	</parent>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.greenstarnetwork.resources</groupId>
+  <artifactId>com.greenstarnetwork.resources.eatonPW</artifactId>
+  <name>GreenStar Network :: Resources :: Eaton PowerWare</name>
+  <version>1.2.0</version>
+
+	<dependencies>
+    	<dependency>
+      		<groupId>com.iaasframework.core</groupId>
+      		<artifactId>com.iaasframework.core.resourcecore</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.capabilities</groupId>
+      		<artifactId>com.iaasframework.capabilities.model</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.capabilities</groupId>
+      		<artifactId>com.iaasframework.capabilities.commandset</artifactId>
+   		</dependency>
+  		<dependency>
+  			<groupId>com.iaasframework.capabilities</groupId>
+  			<artifactId>com.iaasframework.capabilities.actionset</artifactId>
+  		</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.capabilities</groupId>
+      		<artifactId>com.iaasframework.capabilities.protocol</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.protocols</groupId>
+      		<artifactId>com.iaasframework.protocols.cli</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.transports</groupId>
+      		<artifactId>com.iaasframework.transports.virtual</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.greenstarnetwork.models</groupId>
+      		<artifactId>com.greenstarnetwork.models.pdu</artifactId>
+      		<version>${project.version}</version>
+    	</dependency>
+		<dependency>
+			<groupId>com.greenstarnetwork.models</groupId>
+			<artifactId>com.greenstarnetwork.models.facilityModel</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+
+                <resources>
+                        <resource>
+                                <directory>src/main/resources</directory>
+                        </resource>
+                </resources>
+
+	<plugins>
+		<plugin>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>maven-bundle-plugin</artifactId>
+			<version>${felix.plugin.version}</version>
+			<configuration>
+				<instructions>
+					<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+					<Bundle-Version>${pom.version}</Bundle-Version>
+					<Import-Package>!${bundle.namespace}.*,
+					org.slf4j;version="${slf4j.version}",
+					com.iaasframework.resources.core,
+					com.iaasframework.resources.core.capability,
+					com.iaasframework.resources.core.descriptor,
+					com.iaasframework.capabilities.commandset,
+					com.iaasframework.capabilities.protocol,
+					com.iaasframework.capabilities.model,
+					com.iaasframework.protocols.cli,
+					com.greenstarnetwork.models.pdu,
+					com.greenstarnetwork.models.facilityModel,
+					com.greenstarnetwork.capabilities.archive,
+					*</Import-Package>
+					<Export-Package>com.greenstarnetwork.resources.eatonPW.actionset*;version="${pom.version}",
+					com.greenstarnetwork.resources.eatonPW.commandset*;version="${pom.version}",
+					com.greenstarnetwork.resources.eatonPW.core*;version="${pom.version}"
+					</Export-Package>
+				</instructions>
+			</configuration>
+		</plugin>
+                        
+	</plugins>
+
+	</build>
+
+</project>

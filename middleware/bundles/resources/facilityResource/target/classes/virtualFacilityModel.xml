@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<facilityModel>
+<climate>
+ <alarms>
+       <alarm>LOW TEMPERATURE</alarm>
+       <description>the current Temperature (0.000000C) is less than threshold (14.0C)</description>
+       <id>/system1/ntempsensor5</id>
+       <time>2011-03-18T16:22:31.001-04:00</time>
+   </alarms>
+   <host>10.20.100.6</host>
+   <humidityLowerThreshold>10.0</humidityLowerThreshold>
+   <humidityUpperThreshold>90.0</humidityUpperThreshold>
+   <humidityelement>
+       <currentState>OK</currentState>
+       <humidity>26.000000</humidity>
+       <ID>/system1/nsensor1</ID>
+       <name>Env Humidity 1(207.0.32)</name>
+   </humidityelement>
+   <humidityelement>
+       <currentState>OK</currentState>
+       <humidity>22.000000</humidity>
+       <ID>/system1/nsensor2</ID>
+       <name>Env Humidity 2(206.0.32)</name>
+   </humidityelement>
+   <port>22</port>
+   <temperatureLowerThreshold>14.0</temperatureLowerThreshold>
+   <temperatureUpperThreshold>35.0</temperatureUpperThreshold>
+   <temperatureelement>
+       <currentState>OK</currentState>
+       <ID>/system1/ntempsensor2</ID>
+       <name>Env Temp 1(199.0.32)</name>
+       <temperature>27.000000</temperature>
+   </temperatureelement>
+   <temperatureelement>
+       <currentState>OK</currentState>
+       <ID>/system1/ntempsensor3</ID>
+       <name>Env Temp 2(198.0.32)</name>
+       <temperature>28.500000</temperature>
+   </temperatureelement>
+</climate>
+</facilityModel>
+

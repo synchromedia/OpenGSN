@@ -1,0 +1,75 @@
+====
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+{
+  "status": "ONSOLAR",
+  "residualCapacity": 60.0,
+  "randomSerieId": 4,
+  "averageCurrentAmps": 0.0,
+  "peakCurrentAmps": 0.0,
+  "productionSinceStart": 0.0,
+  "consumptionSinceStart": 0.0,
+  "hostList": {
+    "hosts": [
+      {
+        "energy_priority": 2.0,
+        "lifetime": 1000000.0,
+        "hostModel": {
+          "address": "10.0.0.1",
+          "totalMemory": "48000",
+          "cpu": "32",
+          "VMList": [
+            {
+              "name": "5c85573d-78e1-4c7f-8ae9-16b12b34e581",
+              "memory": "1024",
+              "vcpu": "4",
+              "ip": "10.0.0.2"
+            },
+            {
+              "name": "e2fbb0b3-98ad-4334-9ca3-4d0c1bff3a7e",
+              "memory": "512",
+              "vcpu": "2",
+              "ip": "10.0.0.3"
+            },
+            {
+              "name": "ff632a4c-b754-4291-8d4a-bf424e702149",
+              "memory": "1024",
+              "vcpu": "3",
+              "ip": "10.0.0.4"
+            },
+            {
+              "name": "c196a3f3-a917-416e-a360-04510856e127",
+              "memory": "768",
+              "vcpu": "2",
+              "ip": "10.0.0.5"
+            }
+          ]
+        },
+        "resourceID": "CRC-gsn"
+      }
+    ]
+  },
+  "facilityId": "CRC",
+  "staticCurrent": 1.5,
+  "voltage": 120.0,
+  "timeZone": "America/New_York",
+  "startTime": 1295280501172,
+  "currentTime": 1295280501172,
+  "remainingHours": 0.0,
+  "remainingMaxLoadHours": 0.0
+}

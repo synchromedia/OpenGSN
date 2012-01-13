@@ -1,0 +1,25 @@
+OStat
+
+   Outlet   Outlet                    Outlet     Load      Voltage   Power
+   ID       Name                      Status     (Amps)    (Volts)   (Watts)
+
+   .A1      TowerA_Outlet1            On         0.00      206.0     0       
+   .A2      TowerA_Outlet2            On         0.31      206.0     30      
+   .A3      TowerA_Outlet3            On         0.60      206.0     99      
+   .A4      TowerA_Outlet4            On         0.00      206.0     0       
+   .A5      TowerA_Outlet5            On         0.00      206.0     0       
+   .A6      TowerA_Outlet6            On         0.00      206.0     0       
+   .A7      TowerA_Outlet7            On         0.00      206.0     0       
+   .A8      TowerA_Outlet8            On         0.00      206.0     0       
+   .A9      TowerA_Outlet9            On         0.00      205.8     0       
+   .A10     TowerA_Outlet10           On         0.00      205.8     0       
+   .A11     TowerA_Outlet11           On         0.00      205.8     0       
+   .A12     TowerA_Outlet12           On         0.67      205.8     121     
+   .A13     TowerA_Outlet13           On         0.42      205.8     55      
+   .A14     TowerA_Outlet14           On         0.40      205.8     51      
+   .A15     TowerA_Outlet15           On         0.45      205.8     60      
+   .A16     TowerA_Outlet16           On         0.00      205.8     0       
+
+   Command successful
+
+Switched CDU:

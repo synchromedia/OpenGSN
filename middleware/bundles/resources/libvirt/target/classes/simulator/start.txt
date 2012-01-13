@@ -1,0 +1,4 @@
+virsh start vm1748
+error: Domain is already active
+
+[user@server ~]$ 

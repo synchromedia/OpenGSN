@@ -1,0 +1,9 @@
+IStat
+   Input    Input                      Input      Load       Voltage   Power
+   Feed ID  Feed Name                  Status     (Amps)     (Volts)   (Watts)
+
+   .AA      TowerA_InfeedA             On         2.54       208.0     528   
+
+   Command successful
+
+Switched CDU:

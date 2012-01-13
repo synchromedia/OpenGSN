@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+	<bean id="vmmTransportProvider"
+		class="com.greenstarnetwork.resources.libvirt.core.VirtualTransportProvider" />
+
+	<!-- Register an IVirtualTransportProvider as an OSGi Service -->
+	<service ref="vmmTransportProvider"
+		interface="com.iaasframework.transports.virtual.IVirtualTransportProvider">
+		<service-properties>
+			<entry key="transport.virtualTransportProvider" value="vmmEngine"/>
+		</service-properties>
+	</service>
+
+	<bean id="vmmCommandFactory" 
+		class="com.greenstarnetwork.resources.libvirt.core.vmmCommandFactory">
+	</bean>
+
+	<!-- Register an vmm command set as an OSGi Service -->
+	<service ref="vmmCommandFactory"
+		interface="com.iaasframework.capabilities.commandset.ICommandFactory">
+		<service-properties>
+		    <entry key="commandSet.name" value="vmmEngine"/>
+			<entry key="commandSet.version" value="1.0.0"/>
+		</service-properties>
+	</service>
+
+	<bean id="vmmActionFactory" 
+		class="com.greenstarnetwork.resources.libvirt.core.vmmActionFactory">
+	</bean>
+
+	<!--  register the actionset and commandset with the osgi registry -->
+	<service ref="vmmActionFactory"
+		interface="com.iaasframework.capabilities.actionset.IActionFactory">
+		<service-properties>
+			<entry key="actionSet.name" value="vmmEngine" />
+			<entry key="actionSet.version" value="1.0.0" />
+		</service-properties>
+	</service>
+
+	<!--  Get the CapabilityFactories from the OSGI Repository -->
+	<reference id="actionsetCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=ActionSet)(capability.version=1.0.0))" />
+		
+	<reference id="commandsetCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=CommandSet)(capability.version=1.0.0))" />
+		
+	<reference id="protocolCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=protocol)(capability.version=1.0.0))" />
+
+	<reference id="modelCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=Model)(capability.version=1.0.0))" />
+	
+	<reference id="pollerCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=Poller)(capability.version=1.0.0))" />
+
+	<reference id="ArchiveCapabilityFactory"
+		interface="com.iaasframework.resources.core.capability.ICapabilityFactory"
+		filter="(&amp;(capability=Archive)(capability.version=1.0.1-SNAPSHOT))" />
+		
+    <!--  Resource bootstrapper factory class -->
+	<bean id="vmmBootstrapperFactory" class="com.greenstarnetwork.resources.libvirt.core.vmmBootstrapperFactory" />
+
+	<!-- Engine Repository -->
+	<bean id="vmmEngineRepository"
+		class="com.iaasframework.resources.core.ResourceRepository" init-method="init">
+		<argument value="vmmEngine"/>
+		<property name="capabilityFactories">
+			<map>
+				<entry key="ActionSet" value-ref="actionsetCapabilityFactory" />
+				<entry key="CommandSet" value-ref="commandsetCapabilityFactory" />
+				<entry key="protocol" value-ref="protocolCapabilityFactory" />
+				<entry key="Model" value-ref="modelCapabilityFactory" />
+				<entry key="Poller" value-ref="pollerCapabilityFactory" />
+		     	<entry key="Archive" value-ref="ArchiveCapabilityFactory" />
+			</map>
+		</property>
+		<property name="resourceBootstrapperFactory" ref="vmmBootstrapperFactory"/>
+		<!--  Persistence unit must be the last property, because it will cause the descriptor repository 
+			to be initialized -->
+		<property name="persistenceUnit" value="ResourceCore"/>			
+	</bean>
+
+	<!-- Register vmmEngineRepository as an OSGi Service -->
+	<service ref="vmmEngineRepository" interface="com.iaasframework.resources.core.IResourceRepository">
+		<service-properties>
+			<entry key="type" value="vmmEngine"/>
+			<entry key="version" value="1.0.0"/>
+		</service-properties>
+	</service>
+
+</blueprint>

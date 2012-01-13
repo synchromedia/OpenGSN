@@ -1,0 +1,214 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>com.greenstarnetwork</groupId>
+		  <artifactId>services</artifactId>
+		  <version>1.2.0</version>
+	</parent>
+
+	<groupId>com.greenstarnetwork.services</groupId>
+	<artifactId>com.greenstarnetwork.services.facilityManager</artifactId>
+	<version>1.2.0</version>
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>GreenStar Network :: Services :: Facility Manager</name>
+
+	<description>GreenStar Network Facility Manager Service</description>
+
+	<packaging>bundle</packaging>
+
+
+	<dependencies>
+		<dependency>
+     		<groupId>com.iaasframework.core</groupId>
+     		<artifactId>com.iaasframework.core.resources.manager.soapendpoint</artifactId>
+     		<version>${iaas.version}</version>
+     	</dependency>
+     	<dependency>
+     		<groupId>com.iaasframework.capabilities</groupId>
+			<artifactId>com.iaasframework.capabilities.actionset.soapendpoint</artifactId>
+     		<version>${iaas.version}</version>
+     	</dependency>
+     	<dependency>
+     		 <groupId>com.iaasframework.capabilities</groupId>
+		 	 <artifactId>com.iaasframework.capabilities.model.soapendpoint</artifactId>
+     		<version>${iaas.version}</version>
+     	</dependency>
+     	<dependency>
+	     	  <groupId>com.iaasframework.core</groupId>
+		  	  <artifactId>com.iaasframework.core.resourcecore</artifactId>
+     	</dependency>
+     	<dependency>
+	     	  <groupId>com.iaasframework.capabilities</groupId>
+		  	  <artifactId>com.iaasframework.capabilities.actionset</artifactId>
+     	</dependency>
+     	<dependency>
+	     	  <groupId>com.iaasframework.capabilities</groupId>
+		  	  <artifactId>com.iaasframework.capabilities.model</artifactId>
+     	</dependency>
+     	<dependency>
+	     	  <groupId>com.greenstarnetwork.models</groupId>
+		  	  <artifactId>com.greenstarnetwork.models.facilityModel</artifactId>
+     		<version>${project.version}</version>
+     	</dependency>
+		<dependency>
+			<groupId>org.apache.karaf.shell</groupId>
+			<artifactId>org.apache.karaf.shell.console</artifactId>
+			<version>${karaf.version}</version>
+		</dependency>
+		
+	    <dependency>
+		   	<groupId>org.apache.cxf</groupId>
+		   	<artifactId>cxf-rt-frontend-jaxws</artifactId>
+		   	<version>${cxf.java2ws.plugin.version}</version>
+		</dependency>
+		<dependency>
+   			<groupId>org.apache.cxf</groupId>
+   			<artifactId>cxf-rt-transports-http</artifactId>
+		   	<version>${cxf.java2ws.plugin.version}</version>
+		</dependency>
+		<dependency>
+         	<groupId>org.apache.cxf</groupId>
+         	<artifactId>cxf-rt-transports-http-jetty</artifactId>
+		   	<version>${cxf.java2ws.plugin.version}</version>
+ 		</dependency>
+ 		<dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-core</artifactId>
+		   	<version>${cxf.java2ws.plugin.version}</version>
+        </dependency>
+ 		<dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-core</artifactId>
+		   	<version>${cxf.java2ws.plugin.version}</version>
+        </dependency>
+
+<dependency>
+<groupId>javax.jms</groupId>
+<artifactId>com.springsource.javax.jms</artifactId>
+<version>1.1.0</version>
+</dependency>
+<dependency>
+    <groupId>org.apache.activemq</groupId>
+  	<artifactId>activemq-all</artifactId>
+  	<version>5.3.0</version>
+</dependency>
+	
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.ops4j</groupId>
+				<artifactId>maven-pax-plugin</artifactId>
+				<version>${pax.logging.version}</version>
+				<!--
+					| enable improved OSGi compilation support for the bundle
+					life-cycle. | to switch back to the standard bundle life-cycle,
+					move this setting | down to the maven-bundle-plugin section
+				-->
+				<extensions>true</extensions>
+			</plugin>
+			<!-- Generates Dynamic WebService Client -->
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<version>${cxf.java2ws.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>generate-sources</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<sourceRoot> ${basedir}/src/generated-sources</sourceRoot>
+							<wsdlOptions>
+								<wsdlOption>
+									<wsdl>${basedir}/src/main/resources/wsdl/resourceManager.wsdl</wsdl>
+									<wsdl>${basedir}/src/main/resources/wsdl/modelCapability.wsdl</wsdl>
+									<wsdl>${basedir}/src/main/resources/wsdl/actionsetCapability.wsdl</wsdl>
+									<wsdl>${basedir}/src/main/resources/wsdl/archiveCapability.wsdl</wsdl>
+								</wsdlOption>
+							</wsdlOptions>
+						</configuration>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.0.0</version>
+				<!--
+					| the following instructions build a simple set of public/private
+					classes into an OSGi bundle
+				-->
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-Version>${pom.version}</Bundle-Version>
+						<!--
+							| assume public classes are in the top package, and private
+							classes are under ".internal"
+						-->
+						<Import-Package>
+							!${bundle.namespace}.*,
+							org.slf4j;version="1.5.6",
+    						org.osgi.service.event,
+    						org.hibernate.proxy,
+    						javassist.util.proxy,
+    						javax.jws;version="1.0",    
+        					javax.wsdl,
+        					META-INF.cxf,
+        					META-INF.cxf.osgi,
+        					org.apache.cxf,
+       						org.apache.cxf.binding,
+        					org.apache.cxf.binding.soap,
+       						org.apache.cxf.binding.soap.spring,
+        					org.apache.cxf.bus,
+        					org.apache.cxf.bus.spring,
+        					org.apache.cxf.bus.resource,
+        					org.apache.cxf.buslifecycle,
+        					org.apache.cxf.catalog, 
+        					org.apache.cxf.configuration.spring,
+        					org.apache.cxf.endpoint,
+  	     					org.apache.cxf.headers,
+        					org.apache.cxf.phase,
+        					org.apache.cxf.resource,
+       						org.apache.cxf.transport,
+        					org.apache.cxf.transport.http,
+        					org.apache.cxf.transport.http_osgi,
+        					org.apache.cxf.transport.http.policy,
+        					org.apache.cxf.workqueue,
+        					org.apache.cxf.wsdl11,
+        					org.springframework.beans.factory.config,
+							javax.jms,
+							org.apache.activemq,
+                            org.osgi.service.command,
+							com.greenstarnetwork.models.facilityModel,
+							*</Import-Package>
+						<Export-Package>
+							com.greenstarnetwork.services.facilityManager*;version="${project.version}",
+							com.greenstarnetwork.services.facilityManager.model*;version="${project.version}",
+							com.greenstarnetwork.services.facilityManager.shell*;version="${project.version}"
+						</Export-Package>
+						<Private-Package>
+							com.iaasframework.core.resources.manager.soapendpoint*;version="${iaas.version}",
+							com.iaasframework.capabilities.actionset.soapendpoint*;version="${iaas.version}",
+							com.iaasframework.capabilities.model.soapendpoint*;version="${iaas.version}",
+							com.greenstarnetwork.capabilities.archivecapability.soapendpoint*;version="${project.version}"
+						</Private-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

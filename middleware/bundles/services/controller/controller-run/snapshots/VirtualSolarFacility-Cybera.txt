@@ -1,0 +1,75 @@
+====
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+{
+  "status": "ONSOLAR",
+  "residualCapacity": 60.0,
+  "randomSerieId": 2,
+  "averageCurrentAmps": 0.0,
+  "peakCurrentAmps": 0.0,
+  "productionSinceStart": 0.0,
+  "consumptionSinceStart": 0.0,
+  "hostList": {
+    "hosts": [
+      {
+        "energy_priority": 2.0,
+        "lifetime": 1000000.0,
+        "hostModel": {
+          "address": "10.0.0.11",
+          "totalMemory": "48000",
+          "cpu": "32",
+          "VMList": [
+            {
+              "name": "08669d3a-272d-4152-8e09-7e99ffa33dad",
+              "memory": "2048",
+              "vcpu": "4",
+              "ip": "10.0.0.12"
+            },
+            {
+              "name": "6ca9e5a2-3148-403a-8cc1-a4608b2599cf",
+              "memory": "512",
+              "vcpu": "2",
+              "ip": "10.0.0.13"
+            },
+            {
+              "name": "5212d7f7-113b-4b74-ad93-6362d8f779f2",
+              "memory": "1024",
+              "vcpu": "3",
+              "ip": "10.0.0.14"
+            },
+            {
+              "name": "4da1af8d-6823-405e-b3d4-96f259cce257",
+              "memory": "768",
+              "vcpu": "2",
+              "ip": "10.0.0.15"
+            }
+          ]
+        },
+        "resourceID": "Calgary-gsn"
+      }
+    ]
+  },
+  "facilityId": "Cybera",
+  "staticCurrent": 1.5,
+  "voltage": 120.0,
+  "timeZone": "America/Edmonton",
+  "startTime": 1295280501173,
+  "currentTime": 1295280501173,
+  "remainingHours": 0.0,
+  "remainingMaxLoadHours": 0.0
+}

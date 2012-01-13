@@ -1,0 +1,210 @@
+====
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+clp:/-> show system1
+/system1
+ Properties:
+  CreationClassName is CIM_PowerStrip
+  Name is BaseSystem
+  powerOnDelay is 2
+  serialNumber is AD18659016
+  modelName is DPXR8-15
+
+ Associations:
+  CIM_SystemComponent => /
+  CIM_ComponentCS => /system2
+  CIM_ElementConformsToProfile => /
+  CIM_SystemDevice => /system1/sensor1
+  CIM_SystemDevice => /system1/sensor2
+  CIM_SystemDevice => /system1/ntempsensor1
+  CIM_SystemDevice => /system1/nvoltsensor1
+  CIM_SystemDevice => /system1/nsensor1
+  CIM_SystemDevice => /system1/nvoltsensor2
+  CIM_SystemDevice => /system1/nsensor2
+  CIM_SystemDevice => /system1/nvoltsensor3
+  CIM_SystemDevice => /system1/ncurrsensor1
+  CIM_SystemDevice => /system1/nsensor3
+  CIM_SystemDevice => /system1/ncurrsensor2
+  CIM_SystemDevice => /system1/nsensor4
+  CIM_SystemDevice => /system1/nsensor5
+  CIM_SystemDevice => /system1/ncurrsensor3
+  CIM_SystemDevice => /system1/nsensor6
+  CIM_SystemDevice => /system1/ncurrsensor4
+  CIM_SystemDevice => /system1/nsensor7
+  CIM_SystemDevice => /system1/nsensor8
+  CIM_SystemDevice => /system1/ncurrsensor5
+  CIM_SystemDevice => /system1/nsensor9
+  CIM_SystemDevice => /system1/ncurrsensor6
+  CIM_SystemDevice => /system1/nsensor10
+  CIM_SystemDevice => /system1/nsensor11
+  CIM_SystemDevice => /system1/ncurrsensor7
+  CIM_SystemDevice => /system1/nsensor12
+  CIM_SystemDevice => /system1/ncurrsensor8
+  CIM_SystemDevice => /system1/nsensor13
+  CIM_SystemDevice => /system1/nsensor14
+  CIM_SystemDevice => /system1/ncurrsensor9
+  CIM_SystemDevice => /system1/nsensor15
+  CIM_SystemDevice => /system1/ncurrsensor10
+  CIM_SystemDevice => /system1/nsensor16
+  CIM_SystemDevice => /system1/nsensor17
+  CIM_SystemDevice => /system1/ncurrsensor11
+  CIM_SystemDevice => /system1/nsensor18
+  CIM_SystemDevice => /system1/ncurrsensor12
+  CIM_SystemDevice => /system1/nsensor19
+  CIM_SystemDevice => /system1/nsensor20
+  CIM_SystemDevice => /system1/ncurrsensor13
+  CIM_SystemDevice => /system1/nsensor21
+  CIM_SystemDevice => /system1/ncurrsensor14
+  CIM_SystemDevice => /system1/nsensor22
+  CIM_SystemDevice => /system1/nsensor23
+  CIM_SystemDevice => /system1/ncurrsensor15
+  CIM_SystemDevice => /system1/nsensor24
+  CIM_SystemDevice => /system1/ncurrsensor16
+  CIM_SystemDevice => /system1/nsensor25
+  CIM_SystemDevice => /system1/nsensor26
+  CIM_SystemDevice => /system1/sensor3
+  CIM_SystemDevice => /system1/ncurrsensor17
+  CIM_SystemDevice => /system1/ncurrsensor18
+  CIM_SystemDevice => /system1/nsensor27
+  CIM_SystemDevice => /system1/nsensor28
+  CIM_SystemDevice => /system1/nsensor29
+  CIM_SystemDevice => /system1/ncurrsensor19
+  CIM_SystemDevice => /system1/externalsensor1
+  CIM_SystemDevice => /system1/externalsensor2
+  CIM_SystemDevice => /system1/externalsensor3
+  CIM_SystemDevice => /system1/externalsensor4
+  CIM_SystemDevice => /system1/externalsensor5
+  CIM_SystemDevice => /system1/externalsensor6
+  CIM_SystemDevice => /system1/externalsensor7
+  CIM_SystemDevice => /system1/externalsensor8
+  CIM_SystemDevice => /system1/externalsensor9
+  CIM_SystemDevice => /system1/externalsensor10
+  CIM_SystemDevice => /system1/externalsensor11
+  CIM_SystemDevice => /system1/externalsensor12
+  CIM_SystemDevice => /system1/externalsensor13
+  CIM_SystemDevice => /system1/externalsensor14
+  CIM_SystemDevice => /system1/externalsensor15
+  CIM_SystemDevice => /system1/externalsensor16
+  CIM_SystemDevice => /system1/outlet1
+  CIM_SystemDevice => /system1/outlet2
+  CIM_SystemDevice => /system1/outlet3
+  CIM_SystemDevice => /system1/outlet4
+  CIM_SystemDevice => /system1/outlet5
+  CIM_SystemDevice => /system1/outlet6
+  CIM_SystemDevice => /system1/outlet7
+  CIM_SystemDevice => /system1/outlet8
+  CIM_SystemDevice => /system1/nsensor30
+  CIM_SystemDevice => /system1/nsensor31
+  CIM_SystemDevice => /system1/nsensor32
+  CIM_SystemDevice => /system1/nsensor33
+  CIM_SystemDevice => /system1/nsensor34
+  CIM_SystemDevice => /system1/nsensor35
+  CIM_SystemDevice => /system1/nsensor36
+  CIM_SystemDevice => /system1/nsensor37
+
+ Verbs: cd help reseT set show
+ Targets:
+/system1/sensor1
+/system1/sensor2
+/system1/ntempsensor1
+/system1/nvoltsensor1
+/system1/nsensor1
+/system1/nvoltsensor2
+/system1/nsensor2
+/system1/nvoltsensor3
+/system1/ncurrsensor1
+/system1/nsensor3
+/system1/ncurrsensor2
+/system1/nsensor4
+/system1/nsensor5
+/system1/ncurrsensor3
+/system1/nsensor6
+/system1/ncurrsensor4
+/system1/nsensor7
+/system1/nsensor8
+/system1/ncurrsensor5
+/system1/nsensor9
+/system1/ncurrsensor6
+/system1/nsensor10
+/system1/nsensor11
+/system1/ncurrsensor7
+/system1/nsensor12
+/system1/ncurrsensor8
+/system1/nsensor13
+/system1/nsensor14
+/system1/ncurrsensor9
+/system1/nsensor15
+/system1/ncurrsensor10
+/system1/nsensor16
+/system1/nsensor17
+/system1/ncurrsensor11
+/system1/nsensor18
+/system1/ncurrsensor12
+/system1/nsensor19
+/system1/nsensor20
+/system1/ncurrsensor13
+/system1/nsensor21
+/system1/ncurrsensor14
+/system1/nsensor22
+/system1/nsensor23
+/system1/ncurrsensor15
+/system1/nsensor24
+/system1/ncurrsensor16
+/system1/nsensor25
+/system1/nsensor26
+/system1/sensor3
+/system1/ncurrsensor17
+/system1/ncurrsensor18
+/system1/nsensor27
+/system1/nsensor28
+/system1/nsensor29
+/system1/ncurrsensor19
+/system1/externalsensor1
+/system1/externalsensor2
+/system1/externalsensor3
+/system1/externalsensor4
+/system1/externalsensor5
+/system1/externalsensor6
+/system1/externalsensor7
+/system1/externalsensor8
+/system1/externalsensor9
+/system1/externalsensor10
+/system1/externalsensor11
+/system1/externalsensor12
+/system1/externalsensor13
+/system1/externalsensor14
+/system1/externalsensor15
+/system1/externalsensor16
+/system1/outlet1
+/system1/outlet2
+/system1/outlet3
+/system1/outlet4
+/system1/outlet5
+/system1/outlet6
+/system1/outlet7
+/system1/outlet8
+/system1/nsensor30
+/system1/nsensor31
+/system1/nsensor32
+/system1/nsensor33
+/system1/nsensor34
+/system1/nsensor35
+/system1/nsensor36
+/system1/nsensor37
+
+clp:/-> 

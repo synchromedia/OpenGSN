@@ -1,0 +1,25 @@
+clp:/-> show /system1/nsensor11
+/system1/nsensor11
+ Properties:
+  SystemCreationClassName is CIM_ComputerSystem
+  SystemName is Management
+  CreationClassName is CIM_NumericSensor
+  DeviceID is 1.0.32
+  Name is R.01 PwrFactor(1.0.32)
+  SensorType is 1 (Other)
+  OtherSensorTypeDescription is Power Factor
+  CurrentState is OK
+  PossibleStates is OK
+  BaseUnits is 1 (Other)
+  UnitModifier is -5
+  RateUnits is 0 (None)
+  CurrentReading is 0.462560
+  NominalReading is 0
+
+ Associations:
+  CIM_SystemDevice => /system1
+  CIM_ConcreteDependency => /system2
+  CIM_AssociatedSensor => /system1/outlet1
+
+ Verbs: cd help reseT set show
+clp:system1->

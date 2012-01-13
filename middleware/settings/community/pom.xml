@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+        <parent>
+		<groupId>com.iaasframework</groupId>
+		<artifactId>base-settings</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.iaasframework</groupId>
+	<artifactId>community-settings</artifactId>
+	<version>1.0.0</version>
+
+	<packaging>pom</packaging>
+
+	<name>IaaS Framework :: POMS :: Community Settings</name>
+
+	<url>http://iaas.framework.com/</url>
+
+	<prerequisites>
+		<maven>2.0.9</maven>
+	</prerequisites>
+
+	<issueManagement>
+		<system>JIRA</system>
+		<url>https://issues.inocybe.ca/</url>
+	</issueManagement>
+
+	<ciManagement>
+		<system>Hudson</system>
+		<url>http://cis.inocybe.ca/</url>
+		<notifiers>
+			<notifier>
+				<address>duke@wakaleo.com</address>
+			</notifier>
+		</notifiers>
+	</ciManagement>
+
+	<mailingLists>
+		<mailingList>
+			<name>IaaS Framework Mailing List</name>
+			<subscribe>dev-subscribe@iaasframework.com</subscribe>
+			<unsubscribe>dev-unsubscribe@iaasframework.com</unsubscribe>
+			<post>dev@iaasframework.com</post>
+			<archive>http://mail-archives.iaasframework.com/dev/</archive>
+		</mailingList>
+	</mailingLists>
+
+	<developers>
+		<developer>
+			<id>scott</id>
+			<name>Scott Campbell</name>
+			<email>scampbell@crc.gc.ca</email>
+			<organization>CRC</organization>
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>mathieu</id>
+			<name>Mathieu Lemay</name>
+			<email>mlemay@inocybe.ca</email>
+			<organization>Inocybe Technologies Inc.</organization>
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+			</roles>
+			<timezone>-5</timezone>
+		</developer>
+		<developer>
+			<id>edugrasa</id>
+			<name>Eduard Grasa</name>
+			<email>eduard.grasa@i2cat.net</email>
+			<organization>Fundacio i2CAT</organization>
+			<roles>
+				<role>Project Manager</role>
+				<role>Architect</role>
+			</roles>
+			<timezone>+1</timezone>
+		</developer>
+	</developers>
+
+  <contributors>
+		<contributor>
+			<name>Ali Lahlou</name>
+		</contributor>
+		<contributor>
+			<name>Kim Nguyen</name>
+		</contributor>
+		<contributor>
+			<name>Abdelhamid Daouadji</name>
+		</contributor>
+		<contributor>
+			<name>Fereydoun Ferrahi</name>
+		</contributor>
+		<contributor>
+			<name>Chris Forges</name>
+		</contributor>
+	</contributors>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<repositories>
+		<repository>
+			<id>public</id>
+			<name>Public Repository Group Proxy Releases</name>
+			<url>http://repository.inocybe.ca/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>public-snapshots</id>
+			<name>Public Repository Snapshot Proxy Releases</name>
+			<url>http://repository.inocybe.ca/content/groups/public-snapshots/</url>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+    		<pluginRepository>
+      			<releases>
+        			<updatePolicy>never</updatePolicy>
+     			</releases>
+      			<snapshots>
+        			<enabled>false</enabled>
+      			</snapshots>
+      			<id>public</id>
+      			<name>Public Repository Group Proxy Releases</name>
+      			<url>http://repository.inocybe.ca/content/groups/public/</url>
+    		</pluginRepository>
+  	</pluginRepositories>
+
+
+	<distributionManagement>
+		<downloadUrl>http://static.iaasframework.com/releases.html</downloadUrl>
+		<site>
+			<id>website</id>
+			<name>IaaS Engines Website</name>
+			<url>scp://www.iaasframework.com/var/www/html/static/iaas/1.0.0/</url>
+		</site>
+
+		<snapshotRepository>
+			<id>iaas-snapshots</id>
+			<name>IaaS Framework Snapshots Repository</name>
+			<url>http://repository.inocybe.ca/content/repositories/iaas-snapshots/</url>
+		</snapshotRepository>
+		<repository>
+			<id>iaas</id>
+			<name>IaaS Framework Releases Repository</name>
+			<url>http://repository.inocybe.ca/content/repositories/iaas/</url>
+		</repository>
+	</distributionManagement>
+</project>

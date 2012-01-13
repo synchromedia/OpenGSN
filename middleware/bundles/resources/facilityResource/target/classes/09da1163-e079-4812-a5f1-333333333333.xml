@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<pduModel>
+	<host>10.20.100.6</host>
+	<inFeeds>
+		<ID>/system1/sensor1</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/sensor2</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor1</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor2</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor3</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor4</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor5</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor6</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor7</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor8</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ntempsensor9</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor1</ID>
+		<name>Env Humidity 1(207.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor2</ID>
+		<name>Env Humidity 2(206.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor3</ID>
+		<name>Env Humidity 3(205.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor4</ID>
+		<name>Env Humidity 4(204.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor5</ID>
+		<name>Env Humidity 5(223.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor6</ID>
+		<name>Env Humidity 6(222.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor7</ID>
+		<name>Env Humidity 7(221.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor8</ID>
+		<name>Env Humidity 8(220.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nvoltsensor1</ID>
+		<name>Board 0 Volt(192.0.32)</name>
+		<status>Off</status>
+		<statusString>Off</statusString>
+		<voltage>215.000000</voltage>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor9</ID>
+		<name>Board 0 Freq(193.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nvoltsensor2</ID>
+		<name>Board 1 Volt(200.0.32)</name>
+		<status>Off</status>
+		<statusString>Off</statusString>
+		<voltage>216.000000</voltage>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor10</ID>
+		<name>Board 1 Freq(201.0.32)</name>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nvoltsensor3</ID>
+		<name>Unit Volt(247.0.32)</name>
+		<status>Off</status>
+		<statusString>Off</statusString>
+		<voltage>215.000000</voltage>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor1</ID>
+		<load>0.467735</load>
+		<name>R.01 Current(0.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor11</ID>
+		<name>R.01 PwrFactor(1.0.32)</name>
+		<power>0.568400</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor2</ID>
+		<load>0.530884</load>
+		<name>R.01 Max Curr(2.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor12</ID>
+		<name>R.01 Act. Power(3.0.32)</name>
+		<power>57.530745</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor13</ID>
+		<name>R.01 Apt. Power(4.0.32)</name>
+		<power>102.517970</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor3</ID>
+		<load>0.372392</load>
+		<name>R.02 Current(8.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor14</ID>
+		<name>R.02 PwrFactor(9.0.32)</name>
+		<power>0.470400</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor4</ID>
+		<load>0.558470</load>
+		<name>R.02 Max Curr(10.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor15</ID>
+		<name>R.02 Act. Power(11.0.32)</name>
+		<power>36.889265</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor16</ID>
+		<name>R.02 Apt. Power(12.0.32)</name>
+		<power>78.523563</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor5</ID>
+		<load>0.433511</load>
+		<name>R.03 Current(16.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor17</ID>
+		<name>R.03 PwrFactor(17.0.32)</name>
+		<power>0.576240</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor6</ID>
+		<load>0.633870</load>
+		<name>R.03 Max Curr(18.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor18</ID>
+		<name>R.03 Act. Power(19.0.32)</name>
+		<power>52.638075</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor19</ID>
+		<name>R.03 Apt. Power(20.0.32)</name>
+		<power>93.799387</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor7</ID>
+		<load>0.178649</load>
+		<name>R.04 Current(24.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor20</ID>
+		<name>R.04 PwrFactor(25.0.32)</name>
+		<power>0.090160</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor8</ID>
+		<load>0.683912</load>
+		<name>R.04 Max Curr(26.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor21</ID>
+		<name>R.04 Act. Power(27.0.32)</name>
+		<power>3.499452</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor22</ID>
+		<name>R.04 Apt. Power(28.0.32)</name>
+		<power>38.565592</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor9</ID>
+		<load>0.178649</load>
+		<name>R.05 Current(32.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor23</ID>
+		<name>R.05 PwrFactor(33.0.32)</name>
+		<power>0.078400</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor10</ID>
+		<load>0.683912</load>
+		<name>R.05 Max Curr(34.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor24</ID>
+		<name>R.05 Act. Power(35.0.32)</name>
+		<power>3.062669</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor25</ID>
+		<name>R.05 Apt. Power(36.0.32)</name>
+		<power>38.565592</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor11</ID>
+		<load>0.492040</load>
+		<name>R.06 Current(40.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor26</ID>
+		<name>R.06 PwrFactor(41.0.32)</name>
+		<power>0.650720</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor12</ID>
+		<load>0.504661</load>
+		<name>R.06 Max Curr(42.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor27</ID>
+		<name>R.06 Act. Power(43.0.32)</name>
+		<power>68.722666</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor28</ID>
+		<name>R.06 Apt. Power(44.0.32)</name>
+		<power>107.176606</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor13</ID>
+		<load>0.000000</load>
+		<name>R.07 Current(48.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor29</ID>
+		<name>R.07 PwrFactor(49.0.32)</name>
+		<power>0.000000</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor14</ID>
+		<load>0.000000</load>
+		<name>R.07 Max Curr(50.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor30</ID>
+		<name>R.07 Act. Power(51.0.32)</name>
+		<power>0.000000</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor31</ID>
+		<name>R.07 Apt. Power(52.0.32)</name>
+		<power>0.000000</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor15</ID>
+		<load>0.000000</load>
+		<name>R.08 Current(56.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor32</ID>
+		<name>R.08 PwrFactor(57.0.32)</name>
+		<power>0.000000</power>
+		<type>Power Factor</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor16</ID>
+		<load>0.000000</load>
+		<name>R.08 Max Curr(58.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor33</ID>
+		<name>R.08 Act. Power(59.0.32)</name>
+		<power>0.000000</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor34</ID>
+		<name>R.08 Apt. Power(60.0.32)</name>
+		<power>0.000000</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/sensor3</ID>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor17</ID>
+		<load>2.084491</load>
+		<name>L1 Current(242.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor18</ID>
+		<load>2.971666</load>
+		<name>L1 Max Curr(243.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor35</ID>
+		<name>Unit RMS Pwr(245.0.32)</name>
+		<power>218.222738</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor36</ID>
+		<name>Unit Aprt. Pwr(246.0.32)</name>
+		<power>444.324233</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/nsensor37</ID>
+		<name>Store Sensor(23.0.32)</name>
+		<power>0.000000</power>
+		<type>PowerUnit</type>
+	</inFeeds>
+	<inFeeds>
+		<ID>/system1/ncurrsensor19</ID>
+		<load>2.084491</load>
+		<name>Board 0 Curr(195.0.32)</name>
+		<type>Current</type>
+	</inFeeds>
+	<location>Montreal, QC, Canada</location>
+	<outlets>
+		<consumer>10.20.100.2</consumer>
+		<ID>/system1/outlet1</ID>
+		<load>0.530884</load>
+		<name>OUTLET1</name>
+		<power>57.530745</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<outlets>
+		<consumer>10.20.100.3</consumer>
+		<ID>/system1/outlet2</ID>
+		<load>0.558470</load>
+		<name>OUTLET2</name>
+		<power>36.889265</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<outlets>
+		<consumer>10.20.100.4</consumer>
+		<ID>/system1/outlet3</ID>
+		<load>0.633870</load>
+		<name>OUTLET3</name>
+		<power>52.638075</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<outlets>
+		<consumer>10.20.100.7</consumer>
+		<ID>/system1/outlet4</ID>
+		<load>0.683912</load>
+		<name>OUTLET4</name>
+		<power>3.499452</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<outlets>
+		<consumer>10.20.100.8</consumer>
+		<ID>/system1/outlet5</ID>
+		<load>0.683912</load>
+		<name>OUTLET5</name>
+		<power>3.062669</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<outlets>
+		<ID>/system1/outlet6</ID>
+		<load>0.504661</load>
+		<name>OUTLET6</name>
+		<power>68.722666</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<outlets>
+		<ID>/system1/outlet7</ID>
+		<load>0.000000</load>
+		<name>OUTLET7</name>
+		<power>0.000000</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<outlets>
+		<ID>/system1/outlet8</ID>
+		<load>0.000000</load>
+		<name>OUTLET8</name>
+		<power>0.000000</power>
+		<status>On</status>
+		<statusString>On</statusString>
+		<voltage>215.000000</voltage>
+	</outlets>
+	<port>22</port>
+</pduModel>

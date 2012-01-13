@@ -1,0 +1,9 @@
+On .A1
+   Outlet   Outlet                    Outlet     Load      Power     Control
+   ID       Name                      Status     (Amps)    (Watts)   State
+
+   .A1      TowerA_Outlet1            On         0.00      0         On        
+
+   Command successful
+
+Switched CDU: 

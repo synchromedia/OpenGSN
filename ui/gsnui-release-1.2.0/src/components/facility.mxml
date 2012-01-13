@@ -1,0 +1,1122 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Copyright 2009-2011 École de technologie supérieure, Communication Research Centre Canada, Inocybe Technologies Inc. and 6837247 CANADA Inc.
+//
+// 
+//
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
+//
+//http://www.apache.org/licenses/LICENSE-2.0
+//
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" paddingLeft="10" paddingTop="10">
+	
+	<mx:Script>
+		<![CDATA[
+			import actionscript.Facility;
+			import actionscript.PDUSources;
+			import actionscript.Pdu;
+			import actionscript.PowerSource;
+			import actionscript.pduOutlet;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.ListEvent;
+			import mx.formatters.NumberFormatter;
+			import mx.managers.CursorManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable] 
+			public var pduArchiveData:ArrayCollection = new ArrayCollection([
+				{date: "2011,0,1,10,0", power: 0}
+			]); 
+			
+			[Bindable] 
+			public var powerArchiveData:ArrayCollection = new ArrayCollection([
+				{ date: "2011,0,1,10,0", chargerCurrent: 0, chargerPVCurrent: 0, InverterOutput: 0}
+			]); 
+			
+			
+			[Bindable] 
+			public var climateArchiveData:ArrayCollection = new ArrayCollection([
+				{ date: "2011,0,1,10,0", temperature: 0, humidity: 0}
+			]);
+			
+			
+			[Bindable]
+			public var throughputProvider:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var listFacility:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var listPdu:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var selectedPDUs:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var listPowerSources:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			public var selectedPowerSources:ArrayCollection = new ArrayCollection();
+			
+			private var pduArchiveService:WebService = new WebService();
+			private var powerArchiveService:WebService = new WebService();
+			private var climateArchiveService:WebService = new WebService();
+			
+			public function update():void{
+				facilityManagerService.listAllPDUs();
+				facilityManagerService.listAllPowerSources();
+				facilityManagerService.listAllFacilities();
+			}
+			
+			private function updateThroughputProvider():void{
+				throughputProvider.removeAll();
+				
+				if(facilityTable.selectedItem != null){
+					var graphs:XMLList = this.parentApplication.zenossGraph.facility.(@resourceName == facilityTable.selectedItem.resourceName);
+					var item:XML;
+					for each(item in graphs.zenossGraph) {
+						var obj:Object = new Object();
+						obj.titre = item.@name.toXMLString();
+						obj.source = item.@address.toXMLString();
+						throughputProvider.addItem(obj);
+					}
+				}
+				
+			}
+			
+			public function loadWsdl():void{
+				facilityManagerService.wsdl = this.parentApplication.facilityManagerWSDL;
+				facilityManagerService.loadWSDL();
+				
+				pduArchiveService.wsdl = facilityManagerService.wsdl;
+				pduArchiveService.loadWSDL();
+				pduArchiveService.addEventListener(FaultEvent.FAULT, faultHandler);
+				pduArchiveService.getArchiveDataByRangDate.addEventListener("result", getPduArchiveDataByRangDateListener);
+				
+				powerArchiveService.wsdl = facilityManagerService.wsdl;
+				powerArchiveService.loadWSDL();
+				powerArchiveService.addEventListener(FaultEvent.FAULT, faultHandler);
+				powerArchiveService.getArchiveDataByRangDate.addEventListener("result", getPowerArchiveDataByRangDateListener);
+				
+				climateArchiveService.wsdl = facilityManagerService.wsdl;
+				climateArchiveService.loadWSDL();
+				climateArchiveService.addEventListener(FaultEvent.FAULT, faultHandler);
+				climateArchiveService.getArchiveDataByRangDate.addEventListener("result", getClimateArchiveDataByRangDateListener);
+			}
+			
+			private function listAllPDUsListener(event:ResultEvent):void {
+				
+				listPdu.removeAll();
+				
+				var tmpArray:ArrayCollection = null;
+				var tmpXML:XML = null;
+				try{
+					tmpArray = (ArrayCollection)(event.result);
+				}catch(e:Error){
+					tmpXML = (XML)(event.result);
+				}
+				
+				if(tmpArray != null){
+					for(var i:int=0;i<tmpArray.length;i++){
+						addPduModel( XML(tmpArray.getItemAt(i)));
+					}
+				}else if(tmpXML != null){
+					addPduModel(tmpXML)
+				}
+				
+			}
+			
+			private function addPduModel(model:XML):void{
+			
+				var pdu:Pdu = new Pdu();
+				pdu.outlets = new ArrayCollection();
+				pdu.ip = model.host;
+				pdu.location = model.location;
+				pdu.name = model.resourceName;
+				pdu.resourceId = model.resourceId;
+				pdu.state = model.resourceState;
+				
+				for each ( var outletElement:XML in model.outlets){
+					var outlet:pduOutlet = new pduOutlet();
+					outlet.name = outletElement.name;
+					outlet.status = outletElement.status;
+					outlet.intensity = outletElement.load;
+					outlet.power = outletElement.power;
+					outlet.id = outletElement.ID;
+					outlet.consumer = outletElement.consumer;
+					if(outlet.consumer == ""){
+						outlet.consumer = "-";
+					}
+					pdu.outlets.addItem(outlet);
+				}
+									
+				this.listPdu.addItem(pdu);
+				
+			}
+			
+			private function getPdu(pduId:String):Pdu{
+				for(var i:int=0;i<this.listPdu.length;i++){
+					var pdu:Pdu = listPdu.getItemAt(i) as Pdu;
+					if(pdu.resourceId == pduId){
+						return pdu;
+					}
+				}
+				return null;
+			}
+			
+			public function updateFacilityPdus():void{
+				
+				var pdu:Pdu;
+				
+				if(pduBox != null && facilityTable.selectedItem != null){
+					selectedPDUs.removeAll();
+					for(var i:int=0;i<Facility(facilityTable.selectedItem).pduList.length;i++){
+						pdu = getPdu( PDUSources(Facility(facilityTable.selectedItem).pduList.getItemAt(i)).pduResourceId );
+						if(pdu != null){
+							selectedPDUs.addItem( pdu );
+						}
+					}
+					pduBox.selectedIndex = 0;
+					if(selectedPDUs.length > 0){
+						pduOutletsTable.dataProvider = pduBox.selectedItem.outlets;
+						updatePduChart(pduBox.selectedItem.resourceId);
+					}else {
+						clearPdus();
+					}
+				}else if(pduBox != null){
+					clearPdus();
+				}
+			}
+			
+			private function clearPdus():void{
+				selectedPDUs.removeAll();
+				var pdu:Pdu = new Pdu();
+				pdu.name = "---";
+				selectedPDUs.addItem( pdu );
+				
+				if(pduBox != null){
+					pduOutletsTable.dataProvider = null;
+					pduArchiveData.removeAll();
+				}
+			}
+			
+			public function updatePdu():void{
+				if(pduBox != null && pduBox.selectedItem != null){
+					pduOutletsTable.dataProvider = pduBox.selectedItem.outlets;
+					updatePduChart(pduBox.selectedItem.resourceId);
+				}
+			}
+			
+			private function getPowerSource(sourceId:String):PowerSource{
+				for(var i:int=0;i<this.listPowerSources.length;i++){
+					var ps:PowerSource = listPowerSources.getItemAt(i) as PowerSource;
+					if(ps.resourceId == sourceId){
+						return ps;
+					}
+				}
+				return null;
+			}
+			
+			private function clearPowerSources():void{
+				
+				selectedPowerSources.removeAll();
+				var ps:PowerSource = new PowerSource();
+				ps.resourceName = "---";
+				selectedPowerSources.addItem(ps);
+				
+				if(powerSourceBox != null){
+					
+					psName.text = "---";
+					psState.text = "---";
+					chargerCurrent.text = "---";
+					chargerPVCurrent.text = "---";
+					chargerPVVoltage.text = "---";
+					invMode.text = "---";
+					invInputVoltage.text = "---";
+					invOutputVoltage.text = "---";
+					invBatteryVoltage.text = "---";
+					
+					powerArchiveData.removeAll();
+					
+				}
+			
+			}
+			
+			public function updateFacilityPowerSources():void{
+				
+				if(powerSourceBox != null && facilityTable.selectedItem != null){
+					
+					selectedPowerSources.removeAll();
+					
+					for(var i:int=0;i<Facility(facilityTable.selectedItem).pduList.length;i++){
+						for(var j:int=0;j<facilityTable.selectedItem.pduList.getItemAt(i).pduSources.length;j++){
+							var ps:PowerSource = getPowerSource(facilityTable.selectedItem.pduList.getItemAt(i).pduSources.getItemAt(j));
+							if(ps != null){
+								selectedPowerSources.addItem( ps );
+							}
+						}
+					}
+					
+					if(selectedPowerSources.length > 0){
+						powerSourceBox.selectedIndex = 0;
+						if(powerSourceBox.selectedItem != null){
+							var pos:PowerSource = powerSourceBox.selectedItem as PowerSource;
+							psName.text = pos.resourceName;
+							psState.text = pos.resourceState;
+							chargerCurrent.text = round(pos.chargerCurrent,1) + " A";
+							chargerPVCurrent.text = round(pos.chargerPVCurrent,1) + " A";
+							chargerPVVoltage.text = round(pos.chargerPVVoltage,1) + " V";
+							invMode.text = pos.invACMode;
+							invInputVoltage.text = round(pos.invACInputVoltage,1) + " V";
+							invOutputVoltage.text = round(pos.invACOutputVoltage,1) + " V";
+							invBatteryVoltage.text = round(pos.invBatteryVoltage,1) + " V";
+							
+							updatePowerChart(pos.resourceId);
+						}
+					}else{
+						clearPowerSources();
+					}
+					
+				}else if(powerSourceBox != null){
+					clearPowerSources();
+				}
+				
+			}
+			
+			private function updatePowerSources():void{
+				if(this.powerSourceBox != null && powerSourceBox.selectedItem != null && powerSourceBox.selectedItem.resourceName != "---"){
+					
+					var pos:PowerSource = powerSourceBox.selectedItem as PowerSource;
+					psName.text = pos.resourceName;
+					psState.text = pos.resourceState;
+					chargerCurrent.text = round(pos.chargerCurrent,1) + " A";
+					chargerPVCurrent.text = round(pos.chargerPVCurrent,1) + " A";
+					chargerPVVoltage.text = round(pos.chargerPVVoltage,1) + " V";
+					invMode.text = pos.invACMode;
+					invInputVoltage.text = round(pos.invACInputVoltage,1) + " V";
+					invOutputVoltage.text = round(pos.invACOutputVoltage,1) + " V";
+					invBatteryVoltage.text = round(pos.invBatteryVoltage,1) + " V";
+					
+					updatePowerChart(pos.resourceId);
+					
+				}else if(powerSourceBox != null){
+					
+					psName.text = "---";
+					psState.text = "---";
+					chargerCurrent.text = "---";
+					chargerPVCurrent.text = "---";
+					chargerPVVoltage.text = "---";
+					invMode.text = "---";
+					invInputVoltage.text = "---";
+					invOutputVoltage.text = "---";
+					invBatteryVoltage.text = "---";
+					
+					powerArchiveData = new ArrayCollection(); 
+					
+				}
+			}
+			
+			private function listAllFacilitiesListener(event:ResultEvent):void{
+				listFacility.removeAll();
+				
+				var tmpArray:ArrayCollection = null;
+				var tmpXML:XML = null;
+				try{
+					tmpArray = (ArrayCollection)(event.result);
+				}catch(e:Error){
+					tmpXML = (XML)(event.result);
+				}
+				
+				if(tmpArray != null){
+					for(var i:int=0;i<tmpArray.length;i++){
+						addFacilityModel( XML(tmpArray.getItemAt(i)));
+					}
+				}else if(tmpXML != null){
+					addFacilityModel(tmpXML);
+				}
+				
+				//Update fields
+				facilityTable.selectedIndex = 0;
+				if(alarms != null){
+					alarms.text = "";
+				}
+				if(ArrayCollection(facilityTable.dataProvider).length > 0){
+					var facility:Facility = ArrayCollection(facilityTable.dataProvider).getItemAt(0) as Facility;
+					facilityName.text = facility.resourceName;
+					facilityLocation.text = facility.location;
+					facilityState.text = facility.resourceState;
+					domainGreenPercentage.text = facility.domainGreenPercentage.toString() + " %";
+					FacilityRemainingPower.text = round(facility.opHourUnderCurrentLoad,1) + " hour(s)";
+					FacilityRemainingPower2.text = round(facility.opHourUnderMaximumLoad,1) + " hour(s)";
+					powerConsumed.text = round(facility.totalConsummingPower,1) + " kW";
+					powerProduced.text = round(facility.totalGeneratingPower,1) + " kW";
+					this.onGrid.text = facility.onGrid;
+					this.batteryChargePercentage.text = facility.batteryChargePercentage.toString() + " %";
+					this.powerSourceType.text = facility.powerSourceType;
+					
+					if(facilityTemperature != null && !isNaN(facility.temperature) ){
+						facilityTemperature.text = round(facility.temperature,1) + " °C";
+					}else if(facilityTemperature != null){
+						facilityTemperature.text = "---";
+					}
+					if(facilityHumidity != null && !isNaN(facility.humidity)){
+						facilityHumidity.text = round(facility.humidity,1);
+					}else if(facilityHumidity != null){
+						facilityHumidity.text = "---";
+					}
+					
+					if(alarms != null){
+						alarms.text = facility.alarms;
+					}
+					updateClimateChart(facility.climateResourceId);
+				}
+				updateFacilityPdus();
+				updateFacilityPowerSources();	
+				updateThroughputProvider();
+				
+				//Update Dashboard Google markers
+				updateDashboardGoogleMarkers(event);
+			}
+			
+			private function updateDashboardGoogleMarkers(event:ResultEvent):void{
+				
+				this.parentApplication.sites.removeAll();
+				
+				var tmpArray:ArrayCollection = null;
+				var tmpXML:XML = null;
+				try{
+					tmpArray = (ArrayCollection)(event.result);
+				}catch(e:Error){
+					tmpXML = (XML)(event.result);
+				}
+				
+				if(tmpArray != null){
+					for(var i:int=0;i<tmpArray.length;i++){
+						this.parentApplication.addSite( XML(tmpArray.getItemAt(i)));
+					}
+				}else if(tmpXML != null){
+					this.parentApplication.addSite(tmpXML);
+				}
+				
+				this.parentApplication.dashboardComp.updateMap();
+			
+			}
+			
+			private function addFacilityModel(model:XML):void{
+				
+				//if( model.initialized != "true"){
+				//	return;
+				//}
+				
+				var facility:Facility = new Facility();
+				facility.resourceId = model.resourceId;
+				facility.resourceName = model.resourceName;
+				facility.resourceState = model.resourceState;
+				facility.domainId = model.domainID;
+				facility.climateResourceId = model.climateResourceID;
+				facility.location = model.location.address;
+				facility.domainGreenPercentage = Number(model.operationalSpecs.domainGreenPercentage);
+				facility.opHourThreshold = Number(model.operationalSpecs.opHourThreshold);
+				facility.opHourUnderCurrentLoad = Number(model.operationalSpecs.opHourUnderCurrentLoad);
+				facility.opHourUnderMaximumLoad = Number(model.operationalSpecs.opHourUnderMaximumLoad);
+				facility.totalConsummingPower = Number(model.operationalSpecs.totalConsummingPower);
+				facility.totalGeneratingPower = Number(model.operationalSpecs.totalGeneratingPower);
+				facility.onGrid = model.operationalSpecs.onGrid;
+				if(facility.onGrid == ""){
+					facility.onGrid = "---";
+				}
+				facility.batteryChargePercentage = Number(model.operationalSpecs.batteryChargePercentage);
+				facility.powerSourceType = model.operationalSpecs.powerSourceType;
+			
+				var tab:XMLList = model.climate.temperatureelement;
+				for each(var item:XML in tab) {
+					if(String(item.name).substr(0,8) == "Env Temp"){
+						facility.temperature = Number(item.temperature);
+						break;
+					}
+				}
+				
+				tab = model.climate.humidityelement;
+				for each(item in tab) {
+					if(String(item.name).substr(0,12) == "Env Humidity"){
+						facility.humidity = Number(item.humidity);
+						break;
+					}
+				}
+				
+				tab = model.powerDistributionList;
+				for each(item in tab) {
+					var pdu:PDUSources = new PDUSources();
+					pdu.pduResourceId = item.resourceID;
+					var tab2:XMLList = item.powerSourceList;
+					for each(var item2:XML in tab2) {
+						pdu.pduSources.addItem(item2.port[0].connectedResourceID[0].toString() );
+					}
+					facility.pduList.addItem(pdu);	
+				}
+				
+				facility.alarms = "";
+				tab = model.alarms;
+				if(tab != null){
+					for each(item in tab) {
+						var alarm:String;
+						alarm = "Alarm: "+ item.alarm + "\n";
+						alarm += "Description: "+ item.description + "\n";
+						alarm += "Time: "+ item.time + "\n\n\n";
+						
+						facility.alarms += alarm;
+					}
+				}
+				listFacility.addItem(facility);
+			}
+			
+			private function facilityTableClick(event:ListEvent):void{
+				if(facilityTable.selectedItem != null){
+					var facility:Facility = facilityTable.selectedItem as Facility;
+					facilityName.text = facility.resourceName;
+					facilityLocation.text = facility.location;
+					facilityState.text = facility.resourceState;
+					domainGreenPercentage.text = facility.domainGreenPercentage.toString() + " %";
+					FacilityRemainingPower.text = round(facility.opHourUnderCurrentLoad,1) + " hour(s)";
+					FacilityRemainingPower2.text = round(facility.opHourUnderMaximumLoad,1) + " hour(s)";
+					powerConsumed.text = round(facility.totalConsummingPower,1) + " kW";
+					powerProduced.text = round(facility.totalGeneratingPower,1) + " kW";
+					this.onGrid.text = facility.onGrid;
+					this.batteryChargePercentage.text = facility.batteryChargePercentage.toString() + " %";
+					this.powerSourceType.text = facility.powerSourceType;
+					if(facilityTemperature != null && !isNaN(facility.temperature) ){
+						facilityTemperature.text = round(facility.temperature,1) + " °C";
+					}else if(facilityTemperature != null){
+						facilityTemperature.text = "---";
+					}
+					if(facilityHumidity != null && !isNaN(facility.humidity)){
+						facilityHumidity.text = round(facility.humidity,1);
+					}else if(facilityHumidity != null){
+						facilityHumidity.text = "---";
+					}
+					if(alarms != null){
+						alarms.text = facility.alarms;
+					}
+					updateClimateChart(facility.climateResourceId);
+					updateFacilityPdus();
+					updateFacilityPowerSources();
+					updateThroughputProvider();
+				}
+			}
+			
+			private function listAllPowerSourcesListener(event:ResultEvent):void{
+			
+				this.listPowerSources.removeAll();
+				
+				var tmpArray:ArrayCollection = null;
+				var tmpXML:XML = null;
+				try{
+					tmpArray = (ArrayCollection)(event.result);
+				}catch(e:Error){
+					tmpXML = (XML)(event.result);
+				}
+				
+				if(tmpArray != null){
+					for(var i:int=0;i<tmpArray.length;i++){
+						addPowerSourceModel( XML(tmpArray.getItemAt(i)));
+					}
+				}else if(tmpXML != null){
+					addPowerSourceModel(tmpXML)
+				}
+				
+			}
+			
+			private function addPowerSourceModel(model:XML):void{
+				
+				var powerSource:PowerSource = new PowerSource();
+				powerSource.resourceId = model.resourceId;
+				powerSource.resourceName = model.resourceName;
+				powerSource.resourceState = model.resourceState;
+				powerSource.host = model.host;
+				powerSource.port = model.port;
+				powerSource.location = model.location;
+				powerSource.chargerCurrent = Number(model.chargerCurrent);
+				powerSource.chargerPVCurrent = Number(model.chargerPVCurrent);
+				powerSource.chargerPVVoltage = Number(model.chargerPVVoltage);
+				powerSource.chargerBatteryVoltage = Number(model.chargerBatteryVoltage);
+				powerSource.invACMode = model.invACMode;
+				powerSource.invACInputVoltage = Number(model.invACInputVoltage);
+				powerSource.invACOutputVoltage = Number(model.invACOutputVoltage);
+				powerSource.invBatteryVoltage = Number(model.invBatteryVoltage);
+				this.listPowerSources.addItem(powerSource);
+				
+			}
+			
+			private function initClimate():void{
+				if(facilityTable.selectedItem != null){
+					var facility:Facility = facilityTable.selectedItem as Facility;
+					if(facilityTemperature != null && !isNaN(facility.temperature) ){
+						facilityTemperature.text = round(facility.temperature,1) + " °C";
+					}else if(facilityTemperature != null){
+						facilityTemperature.text = "---";
+					}
+					if(facilityHumidity != null && !isNaN(facility.humidity)){
+						facilityHumidity.text = round(facility.humidity,1);
+					}else if(facilityHumidity != null){
+						facilityHumidity.text = "---";
+					}
+				}
+			}
+			
+			private function updatePduChart(resourceId:String):void{
+				var date:Date = new Date();
+				var y:String = date.getFullYear().toString();
+				var m:String = Number(date.getMonth() + 1).toString();
+				var d:String = date.getDate().toString();
+				
+				//14 * 24 * 60 * 60 * 1000 = 1209600000 ms in 14 days
+				//5 * 24 * 60 * 60 * 1000 =  432000000 ms in 5 days
+				//2 * 24 * 60 * 60 * 1000 =  172800000 ms in 2 days
+				//1 * 24 * 60 * 60 * 1000 =  86400000 ms in 1 day
+				var backTime:Number = date.getTime() - 432000000;
+				var backDate:Date = new Date();
+				backDate.setTime(backTime);
+				var by:String = backDate.getFullYear().toString();
+				var bm:String = Number(backDate.getMonth() + 1).toString();
+				var bd:String = backDate.getDate().toString();
+				
+				if(m.length == 1){
+					m = "0" + m;
+				}
+				if(d.length == 1){
+					d = "0" + d;
+				}
+				if(bm.length == 1){
+					bm = "0" + bm;
+				}
+				if(bd.length == 1){
+					bd = "0" + bd;
+				}
+				
+				pduArchiveService.getArchiveDataByRangDate(by+bm+bd, y+m+d,resourceId);
+				CursorManager.setBusyCursor();
+			}
+			
+			private function updatePowerChart(resourceId:String):void{
+				var date:Date = new Date();
+				var y:String = date.getFullYear().toString();
+				var m:String = Number(date.getMonth() + 1).toString();
+				var d:String = date.getDate().toString();
+				
+				//14 * 24 * 60 * 60 * 1000 = 1209600000 ms in 14 days
+				//5 * 24 * 60 * 60 * 1000 =  432000000 ms in 5 days
+				//2 * 24 * 60 * 60 * 1000 =  172800000 ms in 2 days
+				//1 * 24 * 60 * 60 * 1000 =  86400000 ms in 1 day
+				var backTime:Number = date.getTime() - 432000000;
+				var backDate:Date = new Date();
+				backDate.setTime(backTime);
+				var by:String = backDate.getFullYear().toString();
+				var bm:String = Number(backDate.getMonth() + 1).toString();
+				var bd:String = backDate.getDate().toString();
+				
+				if(m.length == 1){
+					m = "0" + m;
+				}
+				if(d.length == 1){
+					d = "0" + d;
+				}
+				if(bm.length == 1){
+					bm = "0" + bm;
+				}
+				if(bd.length == 1){
+					bd = "0" + bd;
+				}
+				
+				powerArchiveService.getArchiveDataByRangDate(by+bm+bd, y+m+d,resourceId);
+				CursorManager.setBusyCursor();
+			}
+			
+			private function updateClimateChart(resourceId:String):void{
+				var date:Date = new Date();
+				var y:String = date.getFullYear().toString();
+				var m:String = Number(date.getMonth() + 1).toString();
+				var d:String = date.getDate().toString();
+				
+				//14 * 24 * 60 * 60 * 1000 = 1209600000 ms in 14 days
+				//5 * 24 * 60 * 60 * 1000 =  432000000 ms in 5 days
+				//2 * 24 * 60 * 60 * 1000 =  172800000 ms in 2 days
+				//1 * 24 * 60 * 60 * 1000 =  86400000 ms in 1 day
+				var backTime:Number = date.getTime() - 432000000;
+				var backDate:Date = new Date();
+				backDate.setTime(backTime);
+				var by:String = backDate.getFullYear().toString();
+				var bm:String = Number(backDate.getMonth() + 1).toString();
+				var bd:String = backDate.getDate().toString();
+				
+				if(m.length == 1){
+					m = "0" + m;
+				}
+				if(d.length == 1){
+					d = "0" + d;
+				}
+				if(bm.length == 1){
+					bm = "0" + bm;
+				}
+				if(bd.length == 1){
+					bd = "0" + bd;
+				}
+				
+				climateArchiveService.getArchiveDataByRangDate(by+bm+bd, y+m+d,resourceId);
+				CursorManager.setBusyCursor();
+			}
+			
+			private function getPduArchiveDataByRangDateListener(event:ResultEvent):void{
+				
+				CursorManager.removeBusyCursor();
+				
+				pduArchiveData.removeAll();
+				
+				var checkRes:String = event.result as String;
+				if(checkRes == '<?xml version="1.0" encoding="UTF-8" standalone="no"?> <Archive><Archive> <empty>There is no data</empty> </Archive>' ){
+					return;
+				}else if(checkRes == "No archive"){
+					return;
+				}
+				
+				try {
+					var res:XML = XML(event.result);
+				}catch(error:Error ){
+					Alert.show("The archive response is not well formed.","Message");
+					return;
+				}
+				
+				var y:String;
+				var m:String;
+				var d:String;
+				
+				var list:XMLList; 
+				var list2:XMLList;
+				
+				var tag:XML;
+				var item:XML;
+				var item2:XML;
+				
+				var time:String;
+				var t:String;
+				
+				for each(tag in res.children()) {
+					
+					y = String(tag.name()).substr(0,4);
+					//m = (Number(String(tag.name()).substr(4,2)) - 1 ).toString();
+					m = String(tag.name()).substr(4,2);
+					d = String(tag.name()).substr(6,2);
+					
+					if(m.substr(0,1) == "0" ){
+						m = m.substr(1,1);
+					}
+					if(d.substr(0,1) == "0" ){
+						d = d.substr(1,1);
+					}
+					
+					var dateString:String = y+","+m+","+d+",";
+					
+					if(tag.child("pduModel").length() > 0 ){
+						list = tag.child("pduModel");
+						for each(item in list) {
+							t = item.time;
+							time = dateString + t.split(".")[0] +","+ t.split(".")[1];
+							var pwr:Number = 0;
+							list2 = item.outlets;
+							for each(item2 in list2) {
+								pwr += Number(item2.power);
+							}
+							pduArchiveData.addItem( { date: time, power: pwr} );
+						}	
+					}
+					
+				}
+				
+			}
+			
+			private function getPowerArchiveDataByRangDateListener(event:ResultEvent):void{
+				
+				CursorManager.removeBusyCursor();
+				
+				powerArchiveData.removeAll();
+				
+				var checkRes:String = event.result as String;
+				if(checkRes == '<?xml version="1.0" encoding="UTF-8" standalone="no"?> <Archive><Archive> <empty>There is no data</empty> </Archive>' ){	
+					return;
+				}else if(checkRes == "No archive"){
+					return;
+				}
+				
+				try {
+					var res:XML = XML(event.result);
+				}catch(error:Error ){
+					Alert.show("The archive response is not well formed.","Message");
+					return;
+				}
+				
+				var y:String;
+				var m:String;
+				var d:String;
+				
+				var list:XMLList; 
+				var list2:XMLList;
+				
+				var tag:XML;
+				var item:XML;
+				var item2:XML;
+				
+				var time:String;
+				var t:String;
+				
+				for each(tag in res.children()) {
+					
+					y = String(tag.name()).substr(0,4);
+					//m = (Number(String(tag.name()).substr(4,2)) - 1 ).toString();
+					m = String(tag.name()).substr(4,2);
+					d = String(tag.name()).substr(6,2);
+					
+					if(m.substr(0,1) == "0" ){
+						m = m.substr(1,1);
+					}
+					if(d.substr(0,1) == "0" ){
+						d = d.substr(1,1);
+					}
+					
+					var dateString:String = y+","+m+","+d+",";
+					
+					if(tag.child("powerSourceModel").length() > 0 ){
+						list = tag.child("powerSourceModel");
+						for each(item in list) {
+							t = item.time;
+							time = dateString + t.split(".")[0] +","+ t.split(".")[1];
+							var current:Number = Number(item.chargerCurrent[0]);
+							var pvCurrent:Number = Number(item.chargerPVCurrent[0]);
+							var output:Number = Number(item.invACOutputVoltage[0]);
+							powerArchiveData.addItem( { date: time, chargerCurrent: current, chargerPVCurrent: pvCurrent, InverterOutput: output} );
+						}	
+					}
+					
+				}
+				
+			}
+			
+			private function getClimateArchiveDataByRangDateListener(event:ResultEvent):void{
+				
+				CursorManager.removeBusyCursor();
+				
+				climateArchiveData.removeAll();
+				
+				var checkRes:String = event.result as String;
+				if(checkRes == '<?xml version="1.0" encoding="UTF-8" standalone="no"?> <Archive><Archive> <empty>There is no data</empty> </Archive>' ){
+					return;
+				}else if(checkRes == "No archive"){
+					return;
+				}
+				
+				try {
+					var res:XML = XML(event.result);
+				}catch(error:Error ){
+					Alert.show("The archive response is not well formed.","Message");
+					return;
+				}
+				
+				var y:String;
+				var m:String;
+				var d:String;
+				
+				var list:XMLList; 
+				var list2:XMLList;
+				
+				var tag:XML;
+				var item:XML;
+				var item2:XML;
+				
+				var time:String;
+				var t:String;
+				
+				for each(tag in res.children()) {
+					
+					y = String(tag.name()).substr(0,4);
+					//m = (Number(String(tag.name()).substr(4,2)) - 1 ).toString();
+					m = String(tag.name()).substr(4,2);
+					d = String(tag.name()).substr(6,2);
+					
+					if(m.substr(0,1) == "0" ){
+						m = m.substr(1,1);
+					}
+					if(d.substr(0,1) == "0" ){
+						d = d.substr(1,1);
+					}
+					
+					var dateString:String = y+","+m+","+d+",";
+					
+					//Update Climate chart
+					if(tag.child("climate").length() > 0 ){
+						list = tag.child("climate");
+						for each(item in list) {
+							t = item.time;
+							time = dateString + t.split(".")[0] +","+ t.split(".")[1];
+							var temp:Number;
+							var humidity:Number;
+							
+							list2 = item.temperatureelement;
+							for each(item2 in list2) {
+								if(String(item2.name).substr(0,8) == "Env Temp"){
+									temp = Number(item2.temperature);
+									break;
+								}
+							}
+							
+							list2 = item.humidityelement;
+							for each(item2 in list2) {
+								if(String(item2.name).substr(0,12) == "Env Humidity"){
+									humidity = Number(item2.humidity);
+									break;
+								}
+							}
+							climateArchiveData.addItem({ date: time, temperature: temp, humidity: humidity});
+						}	
+					}
+					
+				}
+				
+			}
+			
+			private function updateAlarms():void{
+				if(facilityTable != null && facilityTable.selectedItem != null){
+					var facility:Facility = facilityTable.selectedItem as Facility;
+					if(alarms != null){
+						alarms.text = facility.alarms;
+					}
+				}
+			}
+			
+			public function parseDate(s:String):Date { 
+				var a:Array = s.split(",");
+				//Months: Begins at 0
+				var newDate:Date = new Date(a[0],a[1]-1,a[2],a[3],a[4]);
+				return newDate;
+			}
+			
+			public function round(num:Number, precision:Number):String {
+				var f:NumberFormatter = new NumberFormatter();
+				f.precision = precision;
+				return f.format(num);
+			}
+			
+			private function faultHandler(event:FaultEvent):void{
+				//Comment this in production
+				//Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail);
+			}
+		
+			
+			
+		]]>
+	</mx:Script>
+	
+	<mx:WebService id="facilityManagerService" fault="faultHandler(event)">
+		<mx:operation name="listAllPDUs" result="listAllPDUsListener(event)"/>
+		<mx:operation name="listAllFacilities" result="listAllFacilitiesListener(event)"/>
+		<mx:operation name="listAllPowerSources" result="listAllPowerSourcesListener(event)"/>
+	<!--	<mx:operation  name="getArchiveDataByRangDate" result="getArchiveDataByRangDateListener(event)"/> -->
+	</mx:WebService>
+	
+	<mx:Label text="Facilities" styleName="titleOne"/>
+	
+	<mx:DataGrid id="facilityTable" width="100%" dataProvider="{listFacility}" itemClick="facilityTableClick(event)" >
+		<mx:columns>	
+			<mx:DataGridColumn width="200" headerText="Name" dataField="resourceName" />
+			<mx:DataGridColumn width="100" headerText="State" dataField="resourceState"/>
+			<mx:DataGridColumn headerText="Location" dataField="location"/>
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:Spacer height="20"/>
+	
+	<mx:TabNavigator width="100%" borderStyle="solid" resizeToContent="true">
+		
+		<mx:Form label="Facility summary" width="100%">
+			<mx:FormHeading label="Facility information"/>
+			<mx:FormItem label="Facility name" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="facilityName"/>
+			</mx:FormItem>
+			<mx:FormItem label="Facility location" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="facilityLocation"/>
+			</mx:FormItem>
+			<mx:FormItem label="Facility State" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="facilityState"/>
+			</mx:FormItem>
+			<mx:FormItem label="Domain Green percentage" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="domainGreenPercentage"/>
+			</mx:FormItem>
+			<mx:FormItem label="On Grid" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="onGrid"/>
+			</mx:FormItem>
+			<mx:FormItem label="Power Source Type" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="powerSourceType"/>
+			</mx:FormItem>
+			<mx:FormItem label="Battery Charge Percentage" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="batteryChargePercentage"/>
+			</mx:FormItem>
+			<mx:FormItem label="Remaining operating hour under actual load" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="FacilityRemainingPower"/>
+			</mx:FormItem>
+			<mx:FormItem label="Remaining operating hour under maximum load" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="FacilityRemainingPower2"/>
+			</mx:FormItem>
+			<mx:FormItem label="Total power consumed" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="powerConsumed"/>
+			</mx:FormItem>
+			<mx:FormItem label="Total power produced" labelStyleName="formLabel">
+				<mx:TextInput text="---" width="300" id="powerProduced"/>
+			</mx:FormItem>
+		</mx:Form>
+		<mx:Form label="Climate" width="100%" creationComplete="initClimate()">
+			<mx:FormHeading label="Climate information"/>
+			<mx:FormItem label="Temperature" labelStyleName="formLabel">
+				<mx:TextInput id="facilityTemperature"/>
+			</mx:FormItem>
+			<mx:FormItem label="Humidity" labelStyleName="formLabel">
+				<mx:TextInput id="facilityHumidity"/>
+			</mx:FormItem>
+			<mx:Spacer height="10"/>
+			<mx:FormHeading label="Climate historical information"/>
+			<mx:HBox width="100%">
+				<mx:LineChart id="climateArchiveChart" width="50%" height="250" dataProvider="{climateArchiveData}" showDataTips="true">
+					<mx:horizontalAxis>
+						<mx:DateTimeAxis dataUnits="minutes" displayLocalTime="true" parseFunction="parseDate"/>
+					</mx:horizontalAxis>
+					
+					<mx:verticalAxis>
+						<mx:LinearAxis baseAtZero="false" />
+					</mx:verticalAxis>
+					
+					<mx:series>
+						<mx:LineSeries yField="temperature" xField="date" form="curve" displayName="Temperature" />
+						<mx:LineSeries yField="humidity" xField="date" form="curve" displayName="Humidity" />
+					</mx:series>
+				</mx:LineChart>
+				<mx:Legend dataProvider="{climateArchiveChart}"/>
+			</mx:HBox>
+		</mx:Form>
+		
+		<mx:Form label="Power Source" width="100%">
+			<mx:FormItem label="Select a power source:" labelStyleName="formLabel">
+				<mx:ComboBox  id="powerSourceBox" dataProvider="{this.selectedPowerSources}" creationComplete="updateFacilityPowerSources()" change="updatePowerSources()" labelField="resourceName"/>
+			</mx:FormItem>
+			<mx:Spacer height="10"/>
+			<mx:FormHeading label="Power source information"/>
+			<mx:FormItem label="Power source Name" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="psName"/>
+			</mx:FormItem>
+			<mx:FormItem label="Power source state" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="psState"/>
+			</mx:FormItem>
+			<mx:FormItem label="Charger current" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="chargerCurrent"/>
+			</mx:FormItem>
+			<mx:FormItem label="Charger photovoltaic current" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="chargerPVCurrent"/>
+			</mx:FormItem>
+			<mx:FormItem label="Charger photovoltaic voltage" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="chargerPVVoltage"/>
+			</mx:FormItem>
+			<mx:FormItem label="Inverter mode" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="invMode"/>
+			</mx:FormItem>
+			<mx:FormItem label="Inverter input voltage" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="invInputVoltage"/>
+			</mx:FormItem>
+			<mx:FormItem label="Inverter output voltage" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="invOutputVoltage"/>
+			</mx:FormItem>
+			<mx:FormItem label="Inverter battery voltage" labelStyleName="formLabel">
+				<mx:TextInput width="300" id="invBatteryVoltage"/>
+			</mx:FormItem>
+			<mx:Spacer height="10"/>
+			<mx:FormHeading label="Power source historical information"/>
+			<mx:HBox width="100%">
+				<mx:LineChart id="powerArchiveChart" width="50%" height="250" dataProvider="{powerArchiveData}" showDataTips="true">
+					<mx:horizontalAxis>
+						<mx:DateTimeAxis dataUnits="minutes" displayLocalTime="true" parseFunction="parseDate"/>
+					</mx:horizontalAxis>
+					
+					<mx:verticalAxis>
+						<mx:LinearAxis baseAtZero="false" />
+					</mx:verticalAxis>
+					
+					<mx:series>
+						<mx:LineSeries yField="chargerCurrent" xField="date" form="curve" displayName="Charger current" />
+						<mx:LineSeries yField="chargerPVCurrent" xField="date" form="curve" displayName="Charger photovoltaic current" />
+						<mx:LineSeries yField="InverterOutput" xField="date" form="curve" displayName="Inverter output" />
+					</mx:series>
+				</mx:LineChart>
+				<mx:Legend dataProvider="{powerArchiveChart}"/>
+			</mx:HBox>
+		</mx:Form>
+		
+		<mx:Form label="Power distribution" width="100%">
+			<mx:FormItem label="Select a PDU:" labelStyleName="formLabel">
+				<mx:ComboBox id="pduBox" dataProvider="{selectedPDUs}" creationComplete="updateFacilityPdus()" change="updatePdu()" labelField="name"/>
+			</mx:FormItem>
+			<mx:Spacer height="10"/>
+			<mx:FormHeading label="PDU current information"/>
+			<mx:DataGrid id="pduOutletsTable" width="90%">
+				<mx:columns>
+					<mx:DataGridColumn headerText="Outlet ID" minWidth="150" dataField="id"/>
+					<mx:DataGridColumn headerText="Outlet name" dataField="name"/>
+					<mx:DataGridColumn headerText="Status" dataField="status"/>
+					<mx:DataGridColumn headerText="Intensity (Amp.)" dataField="intensity"/>
+					<mx:DataGridColumn headerText="Power (Watt)" dataField="power"/>
+					<mx:DataGridColumn headerText="Consumer IP" dataField="consumer"/>
+				</mx:columns>
+			</mx:DataGrid>
+			<mx:Spacer height="10"/>
+			<mx:FormHeading label="PDU historical information"/>
+			<mx:HBox width="100%">
+				<mx:LineChart id="pduArchiveChart" width="50%" height="250" dataProvider="{pduArchiveData}" showDataTips="true">
+					
+					<mx:horizontalAxis>
+						<mx:DateTimeAxis dataUnits="minutes" displayLocalTime="true" parseFunction="parseDate"/>
+					</mx:horizontalAxis>
+					
+					<mx:verticalAxis>
+						<mx:LinearAxis baseAtZero="false" />
+					</mx:verticalAxis>
+					
+					<mx:series>
+						<mx:LineSeries yField="power" xField="date" form="curve" displayName="Power" />
+					</mx:series>
+				</mx:LineChart>
+				<mx:Legend dataProvider="{pduArchiveChart}"/>
+			</mx:HBox>
+		</mx:Form>
+		<mx:VBox label="Network Throughput" width="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="20">
+			<mx:FormHeading label="{'Network Throughput for ' + facilityTable.selectedItem.resourceName}"/>
+			<mx:Spacer height="10"/>
+			<mx:Repeater id="throughtputRp" dataProvider="{throughputProvider}">
+				<mx:Label text="{throughtputRp.currentItem.titre}"/>
+				<mx:Image source="{throughtputRp.currentItem.source}"/>
+				<mx:Spacer height="10"/>
+			</mx:Repeater>
+		</mx:VBox>
+		<mx:VBox label="Alarms" width="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="20">
+			<mx:FormHeading label="Facility Alarms List"/>
+			<mx:TextArea id="alarms" width="100%" height="300"  backgroundColor="#E7E5E5" borderColor="#D0D0D0" creationComplete="updateAlarms()"/>
+		</mx:VBox>
+			
+	</mx:TabNavigator>
+	
+</mx:VBox>

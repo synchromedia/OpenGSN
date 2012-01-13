@@ -1,0 +1,641 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Copyright 2009-2011 École de technologie supérieure, Communication Research Centre Canada, Inocybe Technologies Inc. and 6837247 CANADA Inc.
+//
+// 
+//
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
+//
+//http://www.apache.org/licenses/LICENSE-2.0
+//
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" creationComplete="init()"
+		 xmlns:components="components.*" >
+	
+	<mx:Script>
+		<![CDATA[
+			import actionscript.Host;
+			import actionscript.VM;
+			import actionscript.errors.*;
+			
+			import components.migratePopUp;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.events.ListEvent;
+			import mx.managers.PopUpManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			[Bindable]
+			public var listMachines:ArrayCollection = new ArrayCollection();
+			
+			[Bindable]
+			private var vmAddress:String;
+			
+			public var vmEngineID:String;
+			private var migratePopup:migratePopUp = new migratePopUp();
+			
+			[Bindable] 
+			public var vmData:ArrayCollection = new ArrayCollection([
+				{Component:"Memory (%)", Used:0, Free:0},
+				{Component:"CPU (%)", Used:0, Free:0},
+			]); 
+			
+			[Bindable] 
+			public var vmPowerData:ArrayCollection = new ArrayCollection([
+				{Component:"Green Power (%)", Green:0, nonGreen:0}
+			]); 
+			
+			public function init():void{
+				updateListMachines();
+				if( vmTable != null && vmTable.dataProvider.length > 0){
+					vmTable.selectedIndex = 0;
+					doUpdateView();
+				}
+			}
+			
+			public function initWS():void{
+				cloudManagerService.wsdl = this.parentApplication.cloudManagerWSDL;
+				cloudManagerService.loadWSDL();
+			}
+			
+			public function addVM(vm:VM):void{
+				this.listMachines.addItem(vm);
+				vmTable.dataProvider = listMachines;
+				vmTable.selectedIndex = 0;
+			}
+			
+			private function updateView(e:Event):void{
+				if( vmTable != null && vmTable.dataProvider.length > 0){
+					vmTable.selectedIndex = 0;
+					doUpdateView();
+				}
+			}
+			
+			private function updateMap():void{
+				if(locMap != null && vmTable.selectedItem != null){
+					locMap.location = vmTable.selectedItem.location;
+					locMap.updateMap();
+				}
+			}
+			
+			private function startVM():void{
+				if(vmTable.selectedItem != null){
+					var index:int = vmTable.selectedIndex;
+					var vmName:String = vmTable.selectedItem.name;
+
+					var stat:String = vmTable.selectedItem.status;
+					try {
+						DataValidator.validateVMstart(stat);
+						updateStatusVm(vmTable.selectedItem.name, "STARTING", 1);
+						cloudManagerService.startInstance(vmTable.selectedItem.resourceId, vmName);
+					}catch (error:FatalError){
+						showFatalError(error);
+					}catch(error:Error ){
+						Alert.show("Encountered an unknown error during the virtual machine creation!");
+					}
+
+				}else{
+					mx.controls.Alert.show("No Virtual Machine has been selected!");
+				}
+			}
+			
+			private function startInstanceListener(event:ResultEvent):void{
+				
+				try{
+				
+					var res:String = event.result as String;
+					var vmName:String;
+					
+					if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "started!"){
+						vmName = res.split(" ")[1];
+						updateStatusVm(vmName, "STARTED");
+					}
+					else if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "failed!"){
+						vmName = res.split(" ")[1];
+						updateStatusVm(vmName, "FAILED");
+						Alert.show("The start operation of the VM: "+vmName.split('_')[0]+" failed.");
+					}else{
+						Alert.show("An error occured during the virtual machine starting!");
+					}
+				}catch(e:Error){
+					Alert.show("An error occured during the virtual machine starting!");
+				}
+				
+				//Update the view
+				doUpdateView();
+				//Update Dashboard Power Chart
+				this.parentApplication.dashboardComp.updatePowerChart();
+				//Update Dashboard Google markers
+				this.parentApplication.dashboardComp.updateMap();
+			}
+			
+			private function stopVM():void{
+				if(vmTable.selectedItem != null){
+					
+					var index:int = vmTable.selectedIndex;
+					var vmName:String = vmTable.selectedItem.name;
+					var stat:String = vmTable.selectedItem.status;
+					
+					try {
+						DataValidator.validateVMstop(stat);
+						updateStatusVm(vmTable.selectedItem.name, "STOPPING", 1);
+						cloudManagerService.stopInstance(vmTable.selectedItem.resourceId, vmName);
+					}catch (error:FatalError)
+					{
+						showFatalError(error);
+					}catch(error:Error ){	
+						Alert.show("Encountered an unknown error during the virtual machine creation!");
+					}
+				
+				}else{
+					mx.controls.Alert.show("No Virtual Machine has been selected!");
+				}
+				
+			}
+			
+			
+			private function stopInstanceListener(event:ResultEvent):void{
+				
+				try{
+				
+					var res:String = event.result as String;
+					var vmName:String;
+					
+					if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "stopped!"){
+						vmName = res.split(" ")[1];
+						updateStatusVm(vmName, "STOPPED");
+					}
+					else if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "failed!"){
+						vmName = res.split(" ")[1];
+						updateStatusVm(vmName, "FAILED");
+						Alert.show("The stop operation of the VM: "+vmName.split('_')[0]+" failed.");
+					}else{
+						Alert.show("An error occured during the virtual machine stopping!");
+					}
+				}catch(e:Error){
+					Alert.show("An error occured during the virtual machine stopping!");
+				}
+				
+				//Update the view
+				doUpdateView();
+				//Update Dashboard Power Chart
+				this.parentApplication.dashboardComp.updatePowerChart();
+				//Update Dashboard Google markers
+				this.parentApplication.dashboardComp.updateMap();
+			}
+			
+			private function restartVM():void{
+				if(vmTable.selectedItem != null){
+					var vmName:String = vmTable.selectedItem.name;
+					updateStatusVm(vmTable.selectedItem.name, "RESTARTING", 1);
+					cloudManagerService.rebootInstance(vmTable.selectedItem.resourceId, vmName);
+				}else{
+					mx.controls.Alert.show("No Virtual Machine has been selected!");
+				}
+			}
+			
+			private function rebootInstanceListener(event:ResultEvent):void{
+				
+				try{
+					var res:String = event.result as String;
+					var vmName:String;
+					
+					if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "restarted!"){
+						vmName = res.split(" ")[1];
+						updateStatusVm(vmName, "STARTED");
+					}else if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "failed!"){
+						vmName = res.split(" ")[1];
+						updateStatusVm(vmName, "FAILED");
+						Alert.show("The restart operation of the VM: "+vmName.split('_')[0]+" failed.");
+					}else{
+						Alert.show("An error occured during the virtual machine restarting!");
+					}
+				}catch(e:Error){
+					Alert.show("An error occured during the virtual machine restarting!");
+				}
+				
+				//Update the view
+				doUpdateView();
+				//Update Dashboard Power Chart
+				this.parentApplication.dashboardComp.updatePowerChart();
+				
+			}
+			
+			private function migrateVM(evt:MouseEvent):void{
+				if(vmTable.selectedItem != null){
+					PopUpManager.addPopUp(migratePopup,this,true);
+					PopUpManager.centerPopUp(migratePopup);
+					migratePopup.init();
+				}else{
+					mx.controls.Alert.show("No Virtual Machine has been selected!");
+				}
+			}
+			
+			private function mapVM():void{
+			}
+			
+			private function removeMachine():void{
+				if(vmTable.selectedItem != null){
+					var vmName:String = vmTable.selectedItem.name;
+					var index:int = vmTable.selectedIndex;
+					updateStatusVm(vmTable.selectedItem.name,"REMOVING", 1);
+					cloudManagerService.destroyInstance(vmTable.selectedItem.resourceId, vmName);
+				}else{
+					mx.controls.Alert.show("No Virtual Machine has been selected!");
+				}
+			}
+			
+			private function destroyInstanceListener(event:ResultEvent):void{
+				
+				try{
+				
+					var res:String = event.result as String;
+					var vmName:String;
+					
+					if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "shutdown!"){
+						
+						vmName = res.split(" ")[1];
+						
+						for(var i:int=0; i<listMachines.length;i++){
+							if(vmName == listMachines.getItemAt(i).name){
+								listMachines.removeItemAt( i );
+							}
+						}
+						
+
+						this.parentApplication.removeVm(vmName);
+					
+						if( vmTable != null && vmTable.dataProvider.length > 0){
+							vmTable.selectedIndex = 0;
+							doUpdateView();
+						}
+						
+						//Update Dashboard Power Chart
+						this.parentApplication.dashboardComp.updatePowerChart();
+						
+						//Update Dashboard Google markers
+						this.parentApplication.dashboardComp.updateMap();
+						
+						//Update the VM table in the host view
+						this.parentApplication.hostComp.updateVM();
+						
+					}else if( res.split(" ")[0] == "VM:" && res.split(" ")[2] == "failed!"){
+						vmName = res.split(" ")[1];
+						updateStatusVm(vmName, "FAILED");
+						Alert.show("The deletion of the VM: "+vmName.split('_')[0]+" failed.");
+					}else{
+						Alert.show("An error occured during the virtual machine deletion!");
+					}
+				}catch(e:Error){
+					Alert.show("An error occured during the virtual machine deletion!");
+				}
+					
+			}
+			
+			private function vmTableClick(event:ListEvent):void{
+				doUpdateView();
+			}
+			
+			public function doUpdateView():void{
+				if(vmTable != null && vmTable.dataProvider.length > 0){
+					
+					if(vmTable.selectedItem == null){
+						vmTable.selectedIndex = 0;
+					}
+					
+					vmEngineID = vmTable.selectedItem.resourceId;
+					
+					//hostId.text = event.currentTarget.selectedItem.resourceId;
+					vmNameLabel.text = vmTable.selectedItem.displayedName;
+					vmPlatform.text = vmTable.selectedItem.os;
+					vmStatus .text= vmTable.selectedItem.status;
+					hostName.text = vmTable.selectedItem.hostName;
+					hostIp.text = vmTable.selectedItem.hostIp;
+					vmIp.text = vmTable.selectedItem.vmIp;
+					vmLocation.text = vmTable.selectedItem.location;
+					vmCpu.text = vmTable.selectedItem.vcpu;
+					vmMemory.text = vmTable.selectedItem.memory;
+					
+					//Update Google Marker
+					updateMap();
+					
+					//Update Chart Data
+					for(var i:int  =0;i<this.parentApplication.listHost.length;i++){
+						if(this.parentApplication.listHost.getItemAt(i).ip ==  vmTable.selectedItem.hostIp){
+							var host:Host = this.parentApplication.listHost.getItemAt(i);
+							
+							var cpuIdle:Number = Number(host.cpuIdleTime.substr(0,host.cpuIdleTime.length-1));
+							var freeMemory:Number = Number(host.freeMemory.substr(0,host.freeMemory.length-1));
+							var totalMemory:Number = Number(host.totalMemory.substr(0,host.totalMemory.length-3));
+							
+							vmData.getItemAt(0)['Used'] = ((totalMemory - freeMemory) / totalMemory) *100;
+							vmData.getItemAt(0)['Free'] = (freeMemory / totalMemory) * 100;
+							
+							if(vmTable.selectedItem.status != "STOPPED"){
+								vmData.getItemAt(1)['Used'] = 100 - cpuIdle;
+								vmData.getItemAt(1)['Free'] = cpuIdle;
+								
+								vmPowerData.getItemAt(0)['Green'] = host.percentGreen;
+								vmPowerData.getItemAt(0)['nonGreen'] = 100 - host.percentGreen;
+							}else{
+								vmData.getItemAt(1)['Used'] = 0;
+								vmData.getItemAt(1)['Free'] = 100;
+								
+								vmPowerData.getItemAt(0)['Green'] = 0;
+								vmPowerData.getItemAt(0)['nonGreen'] = 0;
+							}
+							
+							if(vmChart != null){
+								vmChart.dataProvider = vmData;
+							}
+							if(vmPowerChart != null){
+								vmPowerChart.dataProvider = vmPowerData;
+							}
+							break;
+						}
+					}
+				}
+			}
+			
+			
+			public function updateStatusVm(vmName:String, status:String, progressbarAlpha:int = 0):void{
+				var index:int;
+				if(vmTable.selectedIndex != -1){
+					index = vmTable.selectedIndex
+				}else{
+					index = 0;
+				}
+				
+				var machine:VM = this.parentApplication.getVM(vmName);
+				machine.progressbarAlpha = progressbarAlpha;
+				machine.status = status;
+				
+				for( var i:int=0;i<listMachines.length;i++ ){
+					if(listMachines.getItemAt(i).name == vmName){
+						listMachines.getItemAt(i).progressbarAlpha = progressbarAlpha;
+						listMachines.getItemAt(i).status = status;
+					}
+				}
+				
+				//updateListMachines();
+				
+				//force the refresh of vmTable
+				vmTable.dataProvider = listMachines;
+				vmTable.selectedIndex = index;
+				
+				//Update the VM table in the host view
+				if(this.parentApplication.hostComp != null){
+					this.parentApplication.hostComp.updateVM();
+				}
+			}
+			
+			private function faultHandler(event:FaultEvent):void{
+				//Comment in Produtcion
+				Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail);
+			}
+			
+			public function showFatalError(error:FatalError):void
+			{
+				var message:String = error.message + "\n\n";
+				var title:String = error.getTitle();
+		
+				
+				Alert.show(message + " " + title);
+			}
+			
+			public function updateListMachines():void{
+				if(listMachines != null && this.parentApplication.listHost != null ){
+					listMachines.removeAll();
+					for(var i:int=0; i<this.parentApplication.listHost.length;i++){
+						if(this.parentApplication.listHost.getItemAt(i).vmList != null){
+							for(var j:int=0; j<this.parentApplication.listHost.getItemAt(i).vmList.length;j++){
+								var vm:VM = this.parentApplication.listHost.getItemAt(i).vmList.getItemAt(j);
+								listMachines.addItem(vm);
+							}
+						}
+					}
+				}
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+	<mx:WebService id="cloudManagerService" fault="faultHandler(event)">
+		<mx:operation name="startInstance" resultFormat="object" result="startInstanceListener(event)" />
+		<mx:operation name="stopInstance" resultFormat="object" result="stopInstanceListener(event)" />
+		<mx:operation name="rebootInstance" resultFormat="object" result="rebootInstanceListener(event)" />
+<!--		<mx:operation name="shutdownInstance" resultFormat="object" result="shutdownInstanceListener(event)" /> -->
+		<mx:operation name="destroyInstance" resultFormat="object" result="destroyInstanceListener(event)" />
+	</mx:WebService>
+	
+	
+	<!-- Define custom colors for chart -->
+	<mx:SolidColor id="c1" color="#00ff00" />
+	<mx:SolidColor id="c2" color="#ff0000" />
+	
+	<mx:Label text="Virtual machines" styleName="titleOne" />
+	
+	<mx:DataGrid width="100%" dataProvider="{listMachines}" editable="false" id="vmTable" itemClick="vmTableClick(event)">
+		<mx:columns>
+			<mx:DataGridColumn headerText="VM Name" dataField="displayedName"/>
+			<mx:DataGridColumn headerText="Platform" dataField="os"/>
+			<mx:DataGridColumn minWidth="150" headerText="Status">
+				<mx:itemRenderer>
+					<mx:Component>
+							<mx:HBox verticalAlign="middle" horizontalAlign="left">
+								<mx:Label text="{data.status}" />
+								<mx:ProgressBar id="bar" width="50" height="10" alpha="{data.progressbarAlpha}" indeterminate="true" labelPlacement="center" label=""/>
+							</mx:HBox>
+					</mx:Component>
+				</mx:itemRenderer>
+			</mx:DataGridColumn>
+			<mx:DataGridColumn headerText="Host" dataField="hostName"/>
+			<mx:DataGridColumn headerText="VM ip" dataField="vmIp"/>
+			<mx:DataGridColumn headerText="Memory" dataField="memory"/>
+		</mx:columns>
+	</mx:DataGrid>
+	
+	<mx:HBox width="100%">
+		<mx:Button label="Start" icon="@Embed(source='Assets/images/check.png')" click="startVM()"/>
+		<mx:Button label="Stop" icon="@Embed(source='Assets/images/stop.png')" click="stopVM()"/>
+		<mx:Button label="Restart" icon="@Embed(source='../Assets/images/nav_up_right_green.png')"  click="restartVM()"/>
+		<mx:Button label="Migrate" icon="@Embed(source='Assets/images/client_network.png')" click="migrateVM(event)"/>
+		<mx:Button label="Remove" click="removeMachine()" icon="@Embed(source='Assets/images/delete.png')"/>
+	</mx:HBox>
+	
+	<mx:Spacer height="10"/>
+	
+	
+	<mx:TabNavigator width="100%" resizeToContent="true">
+		
+		<mx:Form width="100%" label="Summary">
+			<mx:FormHeading label="Virtual Machine description"/>
+			<mx:Spacer height="10"/>
+			<mx:FormItem label="VM name" labelStyleName="formLabel">
+				<mx:Label id="vmNameLabel" text="---"  width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Platform" labelStyleName="formLabel">
+				<mx:Label id="vmPlatform" text="---"  width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Status" labelStyleName="formLabel">
+				<mx:Label id="vmStatus" text="---" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Host" labelStyleName="formLabel">
+				<mx:Label id="hostName" text="---" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Host ip" labelStyleName="formLabel">
+				<mx:Label id="hostIp" text="---" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="VM ip" labelStyleName="formLabel">
+				<mx:Label id="vmIp" text="---" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Location" labelStyleName="formLabel">
+				<mx:Label id="vmLocation" text="---" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="CPU" labelStyleName="formLabel">
+				<mx:Label id="vmCpu" text="---" width="100%"/>
+			</mx:FormItem>
+			<mx:FormItem label="Memory" labelStyleName="formLabel">
+				<mx:Label id="vmMemory" text="---" width="100%"/>
+			</mx:FormItem>
+			<mx:Spacer height="10"/>
+		</mx:Form>
+		
+		<mx:Form label="Parameters" width="100%">
+			<mx:FormHeading label="Optimization parameters"/>
+			<mx:Spacer height="10"/>
+			<mx:FormItem label="Power Capping" labelStyleName="formLabel">
+				<mx:HBox verticalAlign="middle">
+					<mx:ComboBox dataProvider="Not yet implemented!"/>
+					<mx:Image source="@Embed(source='Assets/images/about.png')" click="{Alert.show('This parameter controls the peak of power that can be used by a VM. Reducing the VM power will have direct repercussions on VM performance as the processor max frequency will be reduced.');}"/>
+				</mx:HBox>
+			</mx:FormItem>
+			<mx:FormItem label="Power Tracking" labelStyleName="formLabel">
+				<mx:HBox verticalAlign="middle">
+					<mx:ComboBox dataProvider="Not yet implemented!"/>
+					<mx:Image source="@Embed(source='Assets/images/about.png')" click="{Alert.show('This parameter specifies how many a VM can wait for using Green Power or if it has real time applications that need to be alimented 24/7.');}"/>
+				</mx:HBox>
+			</mx:FormItem>
+			<mx:FormItem>
+				<mx:HBox>
+					<mx:Button label="Apply" click="{Alert.show('This feature has not been implemented yet.');}" icon="@Embed(source='Assets/images/check.png')"/>
+					<mx:Button label="Cancel" click="{Alert.show('This feature has not been implemented yet.');}" icon="@Embed(source='Assets/images/delete2.png')"/>
+				</mx:HBox>
+			</mx:FormItem>
+		</mx:Form>
+		
+		<mx:VBox label="Performance" width="100%">
+			<mx:FormHeading label="VM Performance Snapshot"/>
+			<mx:Spacer height="10"/>
+			<mx:HBox width="100%">
+				<mx:BarChart id="vmChart" dataProvider="{vmData}" height="200" showDataTips="true">
+					<mx:verticalAxis>
+						<mx:CategoryAxis 
+							dataProvider="{vmData}" 
+							categoryField="Component"
+							/>
+					</mx:verticalAxis>
+					<mx:series>
+						<mx:BarSeries 
+							yField="Component" 
+							xField="Used" 
+							displayName="Used"
+							fill="{c2}"
+							>
+							<mx:stroke>
+								<mx:Stroke 
+									color="0x808080"
+									weight="2" 
+									alpha=".8"
+									/>
+							</mx:stroke>
+						</mx:BarSeries>
+						<mx:BarSeries 
+							yField="Component" 
+							xField="Free" 
+							displayName="Free"
+							fill="{c1}"
+							>
+							<mx:stroke>
+								<mx:Stroke 
+									color="0xC0C0C0" 
+									weight="2" 
+									alpha=".8"
+									/>
+							</mx:stroke>
+						</mx:BarSeries>
+					</mx:series>
+				</mx:BarChart>
+				<mx:Legend dataProvider="{vmChart}"/>
+			</mx:HBox>
+		</mx:VBox>
+		
+		<mx:VBox label="Power" width="100%">
+			<mx:FormHeading label="VM Power Usage"/>
+			<mx:Spacer height="10"/>
+			<mx:HBox width="100%">
+				<mx:BarChart id="vmPowerChart" dataProvider="{vmPowerData}" height="200" showDataTips="true">
+					<mx:verticalAxis>
+						<mx:CategoryAxis 
+							dataProvider="{vmPowerData}" 
+							categoryField="Component"
+							/>
+					</mx:verticalAxis>
+					<mx:series>
+						<mx:BarSeries 
+							yField="Component" 
+							xField="nonGreen" 
+							displayName="Non Green Power"
+							fill="{c2}"
+							>
+							<mx:stroke>
+								<mx:Stroke 
+									color="0x808080" 
+									weight="2" 
+									alpha=".8"
+									/>
+							</mx:stroke>
+						</mx:BarSeries>
+						<mx:BarSeries 
+							yField="Component" 
+							xField="Green" 
+							displayName="Green Power"
+							fill="{c1}"
+							>
+							<mx:stroke>
+								<mx:Stroke 
+									color="0xC0C0C0" 
+									weight="2" 
+									alpha=".8"
+									/>
+							</mx:stroke>
+						</mx:BarSeries>
+					</mx:series>
+				</mx:BarChart>
+				<mx:Legend dataProvider="{vmPowerChart}"/>
+			</mx:HBox>
+		</mx:VBox>
+		
+		<mx:Form label="Map" width="100%">
+			<mx:FormHeading label="Virtual Machine on the Map"/>
+			<mx:Spacer height="10"/>
+			<components:localMap id="locMap" width="80%" height="250" horizontalCenter="0" initialize="updateMap()" />
+		</mx:Form>
+		
+	</mx:TabNavigator>
+		
+</mx:VBox>

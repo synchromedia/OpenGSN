@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Export-Package: com.greenstarnetwork.models.common;version="1.2.0"
+Private-Package: com.greenstarnetwork.models.common,
+Built-By: inocult
+Tool: Bnd-0.0.311
+Bundle-Name: GreenStar Network :: Models :: Common
+Created-By: Apache Maven Bundle Plugin
+DynamicImport-Package: org.hibernate.*,javassist.*
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.2.0
+Bnd-LastModified: 1326493270616
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: Common models
+Import-Package: com.greenstarnetwork.models.common;version="1.2",org.s
+ lf4j;version="1.5.6"
+Bundle-SymbolicName: com.greenstarnetwork.models.common
+

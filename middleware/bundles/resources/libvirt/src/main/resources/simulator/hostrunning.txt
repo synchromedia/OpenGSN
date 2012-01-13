@@ -1,0 +1,45 @@
+====
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+top -n 1
+
+top - 09:03:24 up 80 days,  7:37,  4 users,  load average: 0.83, 0.92, 0.89
+Tasks: 340 total,   3 running, 337 sleeping,   0 stopped,   0 zombie
+Cpu(s):  0.2%us,  0.8%sy,  0.0%ni, 99.0%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st
+Mem:  49553212k total,  1372388k used, 48180824k free,    10540k buffers
+Swap:  5862392k total,        0k used,  5862392k free,   313972k cached
+
+  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND            
+10673 root      20   0  709m  13m 3332 S    8  0.0 518:23.59 qemu               
+14235 root      20   0  710m  15m 3364 R    6  0.0 300:41.08 qemu               
+  150 root      25   5     0    0    0 S    2  0.0   5234:45 ksmd               
+16920 system    20   0 19348 1488  956 R    2  0.0   0:00.02 top                
+    1 root      20   0 23676 1912 1272 S    0  0.0   0:03.03 init               
+    2 root      20   0     0    0    0 S    0  0.0   0:00.04 kthreadd           
+    3 root      RT   0     0    0    0 S    0  0.0   0:00.01 migration/0        
+    4 root      20   0     0    0    0 S    0  0.0   1:28.17 ksoftirqd/0        
+    5 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/0         
+    6 root      RT   0     0    0    0 S    0  0.0   0:00.00 migration/1        
+    7 root      20   0     0    0    0 S    0  0.0  14:28.15 ksoftirqd/1        
+    8 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/1         
+    9 root      RT   0     0    0    0 S    0  0.0   0:00.00 migration/2        
+   10 root      20   0     0    0    0 S    0  0.0   8:53.42 ksoftirqd/2        
+   11 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/2         
+   12 root      RT   0     0    0    0 S    0  0.0   0:00.00 migration/3        
+   13 root      20   0     0    0    0 S    0  0.0   1:27.24 ksoftirqd/3        
+system@ets1:~$

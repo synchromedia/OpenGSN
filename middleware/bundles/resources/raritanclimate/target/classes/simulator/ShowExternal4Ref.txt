@@ -1,0 +1,26 @@
+clp:/-> show system1/externalsensor4
+/system1/externalsensor4
+ Properties:
+  SystemCreationClassName is CIM_ComputerSystem
+  SystemName is Management
+  CreationClassName is Raritan_CIMExternal
+  DeviceID is unknown
+  Name is CRC SPN Enclosure Temp Sensor(199.0.32)
+  SensorType is 2 (Temperature)
+  OtherSensorTypeDescription is 
+  CurrentState is OK
+  PossibleStates is [OK,Lower Non-Critical,Lower Critical,Lower Non-Recoverable,Upper Non-Critical,Upper Critical,Upper Non-Recoverable]
+  BaseUnits is 2 (Degrees C)
+  UnitModifier is -1
+  RateUnits is 0 (None)
+  CurrentReading is 18.000000
+  NominalReading is 2
+  Status is Sensor is available
+
+ Associations:
+  CIM_SystemDevice => /system1
+  CIM_ConcreteDependency => /system2
+
+ Verbs: cd help set show
+clp:/-> 
+

@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<artifactId>models</artifactId>
+		<groupId>com.greenstarnetwork</groupId>
+		<version>1.2.0</version>
+	</parent>
+
+	<groupId>com.greenstarnetwork.models</groupId>
+	<artifactId>com.greenstarnetwork.models.common</artifactId>
+	<version>1.2.0</version>
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>GreenStar Network :: Models :: Common </name>
+
+	<description>Common models</description>
+
+	<packaging>bundle</packaging>
+
+
+	<dependencies>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>${felix.plugin.version}</version>
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-Version>${pom.version}</Bundle-Version>
+						<Import-Package>!${bundle.namespace}.*,
+							org.slf4j;version="${slf4j.version}",
+							*</Import-Package>
+						<Export-Package>
+							com.greenstarnetwork.models.common*;version="${pom.version}" 
+					</Export-Package>
+						<DynamicImport-Package>org.hibernate.*,javassist.*</DynamicImport-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

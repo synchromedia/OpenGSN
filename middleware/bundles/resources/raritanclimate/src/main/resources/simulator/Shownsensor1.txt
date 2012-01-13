@@ -1,0 +1,42 @@
+====
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+====
+
+clp:/-> show /system1/nsensor1
+/system1/nsensor1
+ Properties:
+  SystemCreationClassName is CIM_ComputerSystem
+  SystemName is Management
+  CreationClassName is CIM_NumericSensor
+  DeviceID is 207.0.32
+  Name is Env Humidity 1(207.0.32)
+  SensorType is 1 (Other)
+  OtherSensorTypeDescription is Humidity
+  CurrentState is OK
+  PossibleStates is [OK,Lower Non-critical going low,Lower Non-critical going high,Lower Critical going low,Lower Critical going high,Lower Non-recoverable going low,Lower Non-recoverable going high,Upper Critical going low,Upper Critical going high,Upper Non-recoverable going low,Upper Non-recoverable going high]
+  BaseUnits is 1 (Other)
+  UnitModifier is 0
+  RateUnits is 0 (None)
+  CurrentReading is 0.000000
+  NominalReading is 45
+
+ Associations:
+  CIM_SystemDevice => /system1
+  CIM_ConcreteDependency => /system2
+
+ Verbs: cd help reseT set show
+clp:/-> 

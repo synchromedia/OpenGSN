@@ -1,0 +1,434 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions name="ResourceManagerSOAPEndpointService" targetNamespace="http://soapendpoint.manager.resources.core.iaasframework.com/" xmlns:ns1="http://cxf.apache.org/bindings/xformat" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://soapendpoint.manager.resources.core.iaasframework.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://soapendpoint.manager.resources.core.iaasframework.com/" xmlns:tns="http://soapendpoint.manager.resources.core.iaasframework.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="createResource" type="tns:createResource"/>
+  <xs:element name="createResourceResponse" type="tns:createResourceResponse"/>
+  <xs:element name="getResource" type="tns:getResource"/>
+  <xs:element name="getResourceResponse" type="tns:getResourceResponse"/>
+  <xs:element name="listReourcesByType" type="tns:listReourcesByType"/>
+  <xs:element name="listReourcesByTypeResponse" type="tns:listReourcesByTypeResponse"/>
+  <xs:element name="listResources" type="tns:listResources"/>
+
+  <xs:element name="listResourcesResponse" type="tns:listResourcesResponse"/>
+  <xs:element name="modifyResource" type="tns:modifyResource"/>
+  <xs:element name="modifyResourceResponse" type="tns:modifyResourceResponse"/>
+  <xs:element name="removeResource" type="tns:removeResource"/>
+  <xs:element name="removeResourceResponse" type="tns:removeResourceResponse"/>
+  <xs:element name="resourceData" type="tns:resourceData"/>
+  <xs:element name="resourceDescriptor" type="tns:resourceDescriptor"/>
+  <xs:element name="start" type="tns:start"/>
+  <xs:element name="startResponse" type="tns:startResponse"/>
+
+  <xs:element name="stop" type="tns:stop"/>
+  <xs:element name="stopResponse" type="tns:stopResponse"/>
+  <xs:complexType name="modifyResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:resourceDescriptor"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resourceDescriptor">
+    <xs:sequence>
+
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="capabilityDescriptors" type="tns:capabilityDescriptor"/>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="information" type="tns:information"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="capabilityDescriptor">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="capabilityInformation" type="tns:information"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="capabilityProperty" type="tns:capabilityProperty"/>
+
+      <xs:element minOccurs="0" name="enabled" type="xs:boolean"/>
+      <xs:element name="id" type="xs:long"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="information">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="type" type="xs:string"/>
+
+      <xs:element minOccurs="0" name="version" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="capabilityProperty">
+    <xs:sequence>
+      <xs:element name="id" type="xs:long"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="value" type="xs:string"/>
+
+  </xs:complexType>
+  <xs:complexType name="modifyResourceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resourceData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="resourceData">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="capabilitiesData" type="tns:capabilityData"/>
+
+      <xs:element minOccurs="0" name="description" type="xs:string"/>
+      <xs:element minOccurs="0" name="id" type="xs:string"/>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+      <xs:element minOccurs="0" name="state" type="tns:state"/>
+      <xs:element minOccurs="0" name="version" type="xs:string"/>
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string"/>
+  </xs:complexType>
+  <xs:complexType name="capabilityData">
+
+    <xs:sequence>
+      <xs:element minOccurs="0" name="capabilityDescriptor" type="tns:capabilityDescriptor"/>
+      <xs:element minOccurs="0" name="state" type="tns:state"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="listReourcesByType">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+    </xs:sequence>
+
+  </xs:complexType>
+  <xs:complexType name="listReourcesByTypeResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:resourceData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="start">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+
+      <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="startResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="removeResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+
+      <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="removeResourceResponse">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="getResource">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+
+      <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="getResourceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resourceData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createResource">
+
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:resourceDescriptor"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="createResourceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:resourceData"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="stop">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="xs:string"/>
+      <xs:element minOccurs="0" name="arg1" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="stopResponse">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="listResources">
+    <xs:sequence/>
+  </xs:complexType>
+  <xs:complexType name="listResourcesResponse">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="tns:resourceData"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:simpleType name="state">
+
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="INSTANTIATED"/>
+      <xs:enumeration value="INITIALIZED"/>
+      <xs:enumeration value="ACTIVE"/>
+      <xs:enumeration value="INACTIVE"/>
+      <xs:enumeration value="SHUTDOWN"/>
+      <xs:enumeration value="ERROR"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:element name="ResourceException" type="tns:ResourceException"/>
+  <xs:complexType name="ResourceException">
+    <xs:sequence>
+      <xs:element name="resourceInformation" nillable="true" type="tns:information"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getResourceResponse">
+
+    <wsdl:part element="tns:getResourceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResource">
+    <wsdl:part element="tns:getResource" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="ResourceException">
+    <wsdl:part element="tns:ResourceException" name="ResourceException">
+
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="start">
+    <wsdl:part element="tns:start" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyResourceResponse">
+    <wsdl:part element="tns:modifyResourceResponse" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+  <wsdl:message name="removeResourceResponse">
+    <wsdl:part element="tns:removeResourceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listReourcesByType">
+    <wsdl:part element="tns:listReourcesByType" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="listResourcesResponse">
+    <wsdl:part element="tns:listResourcesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listReourcesByTypeResponse">
+    <wsdl:part element="tns:listReourcesByTypeResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listResources">
+
+    <wsdl:part element="tns:listResources" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="startResponse">
+    <wsdl:part element="tns:startResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="createResourceResponse">
+    <wsdl:part element="tns:createResourceResponse" name="parameters">
+
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="modifyResource">
+    <wsdl:part element="tns:modifyResource" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="removeResource">
+    <wsdl:part element="tns:removeResource" name="parameters">
+    </wsdl:part>
+
+  </wsdl:message>
+  <wsdl:message name="createResource">
+    <wsdl:part element="tns:createResource" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="stopResponse">
+    <wsdl:part element="tns:stopResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+
+  <wsdl:message name="stop">
+    <wsdl:part element="tns:stop" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IResourceManagerSOAPEndpoint">
+    <wsdl:operation name="modifyResource">
+      <wsdl:input message="tns:modifyResource" name="modifyResource">
+    </wsdl:input>
+      <wsdl:output message="tns:modifyResourceResponse" name="modifyResourceResponse">
+
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceException" name="ResourceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listReourcesByType">
+      <wsdl:input message="tns:listReourcesByType" name="listReourcesByType">
+    </wsdl:input>
+      <wsdl:output message="tns:listReourcesByTypeResponse" name="listReourcesByTypeResponse">
+    </wsdl:output>
+
+    </wsdl:operation>
+    <wsdl:operation name="start">
+      <wsdl:input message="tns:start" name="start">
+    </wsdl:input>
+      <wsdl:output message="tns:startResponse" name="startResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceException" name="ResourceException">
+    </wsdl:fault>
+    </wsdl:operation>
+
+    <wsdl:operation name="removeResource">
+      <wsdl:input message="tns:removeResource" name="removeResource">
+    </wsdl:input>
+      <wsdl:output message="tns:removeResourceResponse" name="removeResourceResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceException" name="ResourceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getResource">
+
+      <wsdl:input message="tns:getResource" name="getResource">
+    </wsdl:input>
+      <wsdl:output message="tns:getResourceResponse" name="getResourceResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceException" name="ResourceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createResource">
+      <wsdl:input message="tns:createResource" name="createResource">
+
+    </wsdl:input>
+      <wsdl:output message="tns:createResourceResponse" name="createResourceResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceException" name="ResourceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="stop">
+      <wsdl:input message="tns:stop" name="stop">
+    </wsdl:input>
+
+      <wsdl:output message="tns:stopResponse" name="stopResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:ResourceException" name="ResourceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listResources">
+      <wsdl:input message="tns:listResources" name="listResources">
+    </wsdl:input>
+      <wsdl:output message="tns:listResourcesResponse" name="listResourcesResponse">
+
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ResourceManagerSOAPEndpointServiceSoapBinding" type="tns:IResourceManagerSOAPEndpoint">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="modifyResource">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="modifyResource">
+        <soap:body use="literal"/>
+
+      </wsdl:input>
+      <wsdl:output name="modifyResourceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceException">
+        <soap:fault name="ResourceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listReourcesByType">
+
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listReourcesByType">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listReourcesByTypeResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="start">
+
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="start">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="startResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceException">
+        <soap:fault name="ResourceException" use="literal"/>
+
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="removeResource">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="removeResource">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="removeResourceResponse">
+        <soap:body use="literal"/>
+
+      </wsdl:output>
+      <wsdl:fault name="ResourceException">
+        <soap:fault name="ResourceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getResource">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getResource">
+        <soap:body use="literal"/>
+
+      </wsdl:input>
+      <wsdl:output name="getResourceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceException">
+        <soap:fault name="ResourceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="createResource">
+
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="createResource">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="createResourceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="ResourceException">
+        <soap:fault name="ResourceException" use="literal"/>
+
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="stop">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="stop">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="stopResponse">
+        <soap:body use="literal"/>
+
+      </wsdl:output>
+      <wsdl:fault name="ResourceException">
+        <soap:fault name="ResourceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listResources">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listResources">
+        <soap:body use="literal"/>
+
+      </wsdl:input>
+      <wsdl:output name="listResourcesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ResourceManagerSOAPEndpointService">
+    <wsdl:port binding="tns:ResourceManagerSOAPEndpointServiceSoapBinding" name="ResourceManagerSOAPEndpointPort">
+      <soap:address location="http://127.0.0.1:8181/cxf/ResourceManagerSOAPEndpoint"/>
+
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,166 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Copyright 2009-2011 École de technologie supérieure, Communication Research Centre Canada, Inocybe Technologies Inc. and 6837247 CANADA Inc.
+//
+// 
+//
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
+//
+//http://www.apache.org/licenses/LICENSE-2.0
+//
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<mx:VBox xmlns:mx="http://www.adobe.com/2006/mxml" width="100%" xmlns:components="components.*" 
+		 borderStyle="solid" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="20" >
+	
+	<mx:Style source="../style/gsn.css"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import actionscript.VM;
+			
+			import mx.collections.ArrayCollection;
+			import mx.formatters.NumberFormatter;
+			
+			[Bindable]
+			public var powerPieChartProvider:ArrayCollection = new ArrayCollection([
+				{PowerSource:"Green power", Amount:0},
+				{PowerSource:"Non Green Power", Amount:0},
+				{PowerSource:"Not Used", Amount:100}
+			]);
+			
+			//Update Dashboard Google markers
+			public function updateMap():void{
+				if(map != null){
+					map.updateMap();
+				}
+			}
+			
+			//Update Dashboard Power Chart
+			public function updatePowerChart():void{
+			
+				var greenPercent:Number = 0;
+				if(this.parentApplication.listHost != null){
+					
+					var activeVMNumber:int = 0;
+					for(var i:int=0;i<this.parentApplication.listHost.length;i++){
+						for(var j:int=0;j<this.parentApplication.listHost.getItemAt(i).vmList.length;j++){
+							var vm:VM = this.parentApplication.listHost.getItemAt(i).vmList.getItemAt(j);
+							if(vm.status != "STOPPED"){
+								activeVMNumber++;
+								greenPercent += vm.greenPercent;
+							}
+						}
+					}
+					
+					if(activeVMNumber > 0){
+						
+						var amountGreenPower:Number = greenPercent / activeVMNumber;
+						var amountNonGreenPower:Number = 100 - amountGreenPower;
+						
+						powerPieChartProvider.getItemAt(0)['Amount'] = amountGreenPower;
+						powerPieChartProvider.getItemAt(1)['Amount'] = amountNonGreenPower;
+						powerPieChartProvider.getItemAt(2)['Amount'] = 0;
+						
+						if(powerPieChart!=null){
+							powerPieChart.dataProvider = powerPieChartProvider;
+						}
+						
+					}else{
+						
+						powerPieChartProvider.getItemAt(0)['Amount'] = 0;
+						powerPieChartProvider.getItemAt(1)['Amount'] = 0;
+						powerPieChartProvider.getItemAt(2)['Amount'] = 100;
+						
+						if(powerPieChart!=null){
+							powerPieChart.dataProvider = powerPieChartProvider;
+						}
+						
+					}
+				}
+			}
+			
+			
+			public function round(num:Number, precision:Number):Number {
+				var result:String;
+				var f:NumberFormatter = new NumberFormatter();
+				f.precision = precision;
+				result = f.format(num);
+				return Number(result);
+			}
+			
+			private function modifyLabel(data:Object, field:String, index:Number, percentValue:Number):String  {
+				var val:Number = round(percentValue,2);
+				return val.toString() + '%';
+			}
+
+			
+		]]>
+	</mx:Script>
+	
+	<!-- Define custom colors for use as pie wedge fills. -->
+	<mx:SolidColor id="c1" color="#00ff00" />
+	<mx:SolidColor id="c2" color="#ff0000" />
+	<mx:SolidColor id="c3" color="#0000ff" />
+	
+	<mx:Label text="GreenStar Network Dashboard" styleName="titleOne"/>
+	
+	<mx:Spacer height="20" />
+	<mx:FormHeading label="Virtual machines location"/>
+	
+	<mx:Canvas width="100%">
+		<components:map id="map" initialize="{updateMap()}" width="80%" height="250" horizontalCenter="0"/>
+	</mx:Canvas>
+	
+	<mx:Spacer height="30" />
+	<mx:FormHeading label="Summary"/>
+	
+	<mx:HBox horizontalAlign="center" verticalAlign="middle" width="100%">
+		<mx:HBox>
+			<mx:PieChart id="powerPieChart" width="200" height="200" dataProvider="{powerPieChartProvider}" showDataTips="true">
+				<mx:series>
+					<mx:PieSeries
+						field="Amount"
+						nameField="PowerSource"
+						labelPosition="callout"
+						labelFunction="modifyLabel"
+						fills="{[c1, c2, c3]}"
+					/>
+				</mx:series>
+			</mx:PieChart>
+			<mx:Legend dataProvider="{powerPieChart}"/>
+		</mx:HBox>
+		<mx:Spacer width="100%"/>
+		<mx:VRule/>
+		<mx:Spacer width="100%"/>
+		<mx:Form>
+			<mx:FormHeading label="Indicators"/>
+			<mx:FormItem label="Carbon credits" labelStyleName="formLabel">
+				<mx:TextInput editable="false" enabled="true" width="130" text="Not yet implemented"/>
+			</mx:FormItem>
+			<mx:FormItem label="Number of VM" labelStyleName="formLabel">
+				<mx:TextInput editable="false" enabled="true" width="130" text="{this.parentApplication.vmComp.listMachines.length}"/>
+			</mx:FormItem>
+		</mx:Form>
+	</mx:HBox>
+	
+	<mx:Spacer height="20" />
+	<mx:FormHeading label="Notification list"/>
+	<mx:Canvas width="100%">
+		<mx:DataGrid width="80%" horizontalCenter="0">
+			<mx:columns>
+				<mx:DataGridColumn headerText="Date" dataField="col1" width="100"/>
+				<mx:DataGridColumn headerText="Description" dataField="col2"/>
+			</mx:columns>
+		</mx:DataGrid>
+	</mx:Canvas>
+	
+</mx:VBox>

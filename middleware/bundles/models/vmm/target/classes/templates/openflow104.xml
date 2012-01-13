@@ -1,0 +1,41 @@
+<domain type='kvm'>
+  <name>OFVM1_system_system.ets</name>
+  <memory>1048576</memory>
+  <vcpu>1</vcpu>
+  <os>
+    <type arch='x86_64' machine='pc-0.12'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <features>
+    <acpi/>
+    <apic/>
+    <pae/>
+  </features>
+  <clock offset='utc'/>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>restart</on_crash>
+  <devices>
+    <emulator>/usr/bin/kvm</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='/storage/OFVM1_system_system.ets.qcow2'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <interface type='ethernet'>
+      <mac address='52:54:b0:16:a7:01'/>
+      <script path='/etc/qemu-ifup'/>
+    </interface>
+    <console type='pty'>
+      <target port='0'/>
+    </console>
+    <console type='pty'>
+      <target port='0'/>
+    </console>
+    <input type='mouse' bus='ps2'/>
+    <graphics type='vnc' port='-1' autoport='yes' keymap='fr-ca'/>
+    <video>
+      <model type='cirrus' vram='9216' heads='1'/>
+    </video>
+  </devices>
+</domain>

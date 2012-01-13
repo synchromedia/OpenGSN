@@ -1,0 +1,106 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	
+ 	<parent>
+		<artifactId>resources</artifactId>
+		<groupId>com.greenstarnetwork</groupId>
+		<version>1.2.0</version>
+	</parent>
+
+	<groupId>com.greenstarnetwork.resources</groupId>
+	<artifactId>com.greenstarnetwork.resources.libvirt</artifactId>
+	<version>1.2.0</version>
+	<modelVersion>4.0.0</modelVersion>
+
+	  <name>GreenStar Network :: Resources :: Libvirt</name>
+
+	  <description>libvirtEngine</description>
+
+	  <packaging>bundle</packaging>
+
+   
+	<dependencies>
+    	<dependency>
+      		<groupId>com.iaasframework.core</groupId>
+      		<artifactId>com.iaasframework.core.resourcecore</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.capabilities</groupId>
+      		<artifactId>com.iaasframework.capabilities.model</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.capabilities</groupId>
+      		<artifactId>com.iaasframework.capabilities.commandset</artifactId>
+   		</dependency>
+  		<dependency>
+  			<groupId>com.iaasframework.capabilities</groupId>
+  			<artifactId>com.iaasframework.capabilities.actionset</artifactId>
+  		</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.capabilities</groupId>
+      		<artifactId>com.iaasframework.capabilities.protocol</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.protocols</groupId>
+      		<artifactId>com.iaasframework.protocols.cli</artifactId>
+    	</dependency>
+    	<dependency>
+      		<groupId>com.iaasframework.transports</groupId>
+      		<artifactId>com.iaasframework.transports.virtual</artifactId>
+    	</dependency>
+		<dependency>
+			<groupId>com.greenstarnetwork.models</groupId>
+			<artifactId>com.greenstarnetwork.models.vmm</artifactId>
+      		<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.activemq</groupId>
+		  	<artifactId>activemq-all</artifactId>
+		  	<version>5.3.0</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+
+	<resources>
+		<resource>
+			<directory>src/main/resources</directory>
+		</resource>
+	</resources>
+
+	<plugins>
+		<plugin>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>maven-bundle-plugin</artifactId>
+			<version>${felix.plugin.version}</version>
+			<configuration>
+				<instructions>
+					<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+					<Bundle-Version>${pom.version}</Bundle-Version>
+					<Import-Package>!${bundle.namespace}.*,
+					org.slf4j;version="${slf4j.version}",
+					com.iaasframework.resources.core,
+					com.iaasframework.resources.core.capability,
+					com.iaasframework.resources.core.descriptor,
+					com.iaasframework.capabilities.commandset,
+					com.iaasframework.capabilities.actionset,
+					com.iaasframework.capabilities.protocol,
+					com.iaasframework.capabilities.model,
+					com.iaasframework.protocols.cli,
+					com.greenstarnetwork.models.vmm,
+					*</Import-Package>
+					<Export-Package>
+					com.greenstarnetwork.tests.resources.libvirt.core*;version="${pom.version}",
+					com.greenstarnetwork.resources.libvirt.actionset*;version="${pom.version}",,
+					com.greenstarnetwork.resources.libvirt.commandset*;version="${pom.version}"
+					</Export-Package>
+				</instructions>
+			</configuration>
+		</plugin>
+                        
+	</plugins>
+
+	</build>
+
+</project>

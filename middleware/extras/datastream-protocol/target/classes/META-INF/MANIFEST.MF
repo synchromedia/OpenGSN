@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Export-Package: com.greenstarnetwork.protocols.datastream.message,com.
+ greenstarnetwork.protocols.datastream;uses:="com.iaasframework.capabi
+ lities.protocol,com.greenstarnetwork.protocols.datastream.message,com
+ .iaasframework.core.transports,com.iaasframework.resources.core.descr
+ iptor,com.iaasframework.resources.core.capability,org.slf4j,com.iaasf
+ ramework.capabilities.protocol.api";version="1.2.0"
+Ignore-Package: com.greenstarnetwork.protocols.datastream,com.greensta
+ rnetwork.protocols.datastream.message
+Private-Package: com.greenstarnetwork.protocols.datastream,com.greenst
+ arnetwork.protocols.datastream.message,
+Built-By: inocult
+Tool: Bnd-0.0.311
+Bundle-Name: GreenStar Network :: Extras :: Data Stream Protocol
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.2.0
+Bnd-LastModified: 1326493288819
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Import-Package: com.iaasframework.capabilities.protocol;version="1.0.0
+ ",com.iaasframework.capabilities.protocol.api;version="1.0",com.iaasf
+ ramework.core.transports;version="1.0.0",com.iaasframework.resources.
+ core;version="1.0.0",com.iaasframework.resources.core.capability;vers
+ ion="1.0.0",com.iaasframework.resources.core.descriptor;version="1.0"
+ ,com.iaasframework.resources.core.message;version="1.0.0",org.slf4j;v
+ ersion="1.5.6"
+Bundle-SymbolicName: com.greenstarnetwork.protocols.datastream
+

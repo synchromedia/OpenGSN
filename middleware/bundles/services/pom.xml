@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+<parent>
+	<groupId>com.greenstarnetwork</groupId>
+	<artifactId>bundles</artifactId>
+	<version>1.2.0</version>
+</parent>
+	
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.greenstarnetwork</groupId>
+  <artifactId>services</artifactId>
+  <version>1.2.0</version>
+
+  <name>GreenStar Network :: Services</name>
+
+  <description>GSN Services</description>
+
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>cloudManager</module>
+    <module>cloudManager-soapendpoint</module>
+    <module>facilityManager</module>
+    <module>facilityManager-soapendpoint</module>
+    <module>networkManager</module>
+    <module>networkManager-soapendpoint</module>
+    <module>domainManager</module>
+    <module>controller</module>
+    <module>controller-soapendpoint</module>
+  </modules>
+
+</project>

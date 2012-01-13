@@ -1,0 +1,13 @@
+[user@server ~]$ virsh dominfo scm
+Id:             12
+Name:           scm
+UUID:           9ce73aff-caa9-0aed-81a0-eef876c1ebc9
+OS Type:        hvm
+State:          running
+CPU(s):         1
+CPU time:       456591.2s
+Max memory:     524288 kB
+Used memory:    524288 kB
+Autostart:      enable
+
+[user@server ~]$ 

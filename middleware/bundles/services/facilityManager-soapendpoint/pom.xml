@@ -1,0 +1,203 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>com.greenstarnetwork</groupId>
+		  <artifactId>services</artifactId>
+		  <version>1.2.0</version>
+	</parent>
+
+	<groupId>com.greenstarnetwork.services</groupId>
+	<artifactId>com.greenstarnetwork.services.facilityManager.soapendpoint</artifactId>
+	<version>1.2.0</version>
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>GreenStar Network :: Services :: Facility Manager SOAP Endpoint</name>
+
+	<description>GreenStar Network Facility Manager SOAP Endpoint</description>
+
+	<packaging>bundle</packaging>
+
+
+	<dependencies>
+		<dependency>
+     		<groupId>com.greenstarnetwork.services</groupId>
+			<artifactId>com.greenstarnetwork.services.facilityManager</artifactId>
+			<version>${project.version}</version>
+     		<scope>provided</scope>
+     	</dependency>
+		<dependency>
+     		<groupId>com.iaasframework.core</groupId>
+     		<artifactId>com.iaasframework.core.resources.manager.soapendpoint</artifactId>
+			<version>${iaas.version}</version>
+     	</dependency>
+     	<dependency>
+     		<groupId>com.iaasframework.capabilities</groupId>
+			<artifactId>com.iaasframework.capabilities.actionset.soapendpoint</artifactId>
+			<version>${iaas.version}</version>
+     	</dependency>
+     	<dependency>
+     		<groupId>com.iaasframework.capabilities</groupId>
+			<artifactId>com.iaasframework.capabilities.model.soapendpoint</artifactId>
+			<version>${iaas.version}</version>
+     	</dependency>
+     	<dependency>
+	     	  <groupId>com.iaasframework.core</groupId>
+		  <artifactId>com.iaasframework.core.resourcecore</artifactId>
+     	</dependency>
+     	<dependency>
+	     	  <groupId>com.iaasframework.capabilities</groupId>
+		  <artifactId>com.iaasframework.capabilities.actionset</artifactId>
+     	</dependency>
+     	<dependency>
+	     	  <groupId>com.iaasframework.capabilities</groupId>
+		  <artifactId>com.iaasframework.capabilities.model</artifactId>
+     	</dependency>
+		<dependency>
+	     		<groupId>org.apache.servicemix.specs</groupId>
+	     		<artifactId>org.apache.servicemix.specs.jaxb-api-2.1</artifactId>
+	     		<scope>provided</scope>
+	     	</dependency> 
+	     	<dependency>
+	     		<groupId>org.apache.geronimo.specs</groupId>
+	     		<artifactId>geronimo-jaxws_2.1_spec</artifactId>
+	     		<scope>provided</scope>
+	     	</dependency>
+	     	<dependency>
+	     		<groupId>org.apache.geronimo.specs</groupId>
+	     		<artifactId>geronimo-ws-metadata_2.0_spec</artifactId>
+	     		<scope>provided</scope>
+	     	</dependency>
+	     	<dependency>
+	     		<groupId>org.apache.servicemix.specs</groupId>
+	     		<artifactId>org.apache.servicemix.specs.jaxb-api-2.1</artifactId>
+	     		<scope>provided</scope>
+	     	</dependency> 
+	     	<dependency>
+	     		<groupId>org.springframework</groupId>
+	     		<artifactId>spring-context</artifactId>
+	     		<scope>provided</scope>
+	     	</dependency>
+		<dependency>
+	     		<groupId>org.apache.cxf</groupId>
+	     		<artifactId>cxf-rt-core</artifactId>
+	     		<version>${cxf.version}</version>
+	     		<scope>provided</scope>
+	     	</dependency>
+	     	<dependency>
+	     		<groupId>org.apache.cxf</groupId>
+	     		<artifactId>cxf-rt-frontend-jaxws</artifactId>
+	     		<version>${cxf.version}</version>
+	     		<scope>provided</scope>
+	     	</dependency>
+	     	<dependency>
+	     		<groupId>org.apache.cxf</groupId>
+	     		<artifactId>cxf-rt-transports-http</artifactId>
+	     		<version>${cxf.version}</version>
+	     		<scope>provided</scope>
+	     	</dependency>
+	     	<dependency>
+	     		<groupId>org.apache.cxf</groupId>
+	     		<artifactId>cxf-rt-transports-http-jetty</artifactId>
+	     		<version>${cxf.version}</version>
+	     		<scope>provided</scope>
+	     	</dependency>
+	     	<dependency>
+	     		<groupId>org.apache.cxf</groupId>
+	     		<artifactId>cxf-rt-databinding-aegis</artifactId>
+	    		<version>${cxf.version}</version>
+	    		<scope>provided</scope>
+	    	</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources</directory>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.ops4j</groupId>
+				<artifactId>maven-pax-plugin</artifactId>
+				<version>1.4</version>
+				<!--
+					| enable improved OSGi compilation support for the bundle
+					life-cycle. | to switch back to the standard bundle life-cycle,
+					move this setting | down to the maven-bundle-plugin section
+				-->
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.0.0</version>
+				<!--
+					| the following instructions build a simple set of public/private
+					classes into an OSGi bundle
+				-->
+				<configuration>
+					<instructions>
+						<Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+						<Bundle-Version>${pom.version}</Bundle-Version>
+						<!--
+							| assume public classes are in the top package, and private
+							classes are under ".internal"
+						-->
+						<Import-Package>
+							!${bundle.namespace}.*,
+							org.slf4j;version="1.5.6",
+    						org.osgi.service.event,
+    						org.hibernate.proxy,
+    						javassist.util.proxy,
+    						javax.jws;version="1.0",    
+        					javax.wsdl,
+        					META-INF.cxf,
+        					META-INF.cxf.osgi,
+        					org.apache.cxf,
+       						org.apache.cxf.binding,
+        					org.apache.cxf.binding.soap,
+       						org.apache.cxf.binding.soap.spring,
+        					org.apache.cxf.bus,
+        					org.apache.cxf.bus.spring,
+        					org.apache.cxf.bus.resource,
+        					org.apache.cxf.buslifecycle,
+        					org.apache.cxf.catalog, 
+        					org.apache.cxf.configuration.spring,
+        					org.apache.cxf.endpoint,
+  	     					org.apache.cxf.headers,
+        					org.apache.cxf.phase,
+        					org.apache.cxf.resource,
+       						org.apache.cxf.transport,
+        					org.apache.cxf.transport.http,
+        					org.apache.cxf.transport.http_osgi,
+        					org.apache.cxf.transport.http.policy,
+        					org.apache.cxf.workqueue,
+        					org.apache.cxf.wsdl11,
+        					org.springframework.beans.factory.config,
+							javax.jms,
+							org.apache.activemq,
+                            org.osgi.service.command,
+                            com.iaasframework.core.resources.manager.soapendpoint,
+                            com.iaasframework.capabilities.actionset.soapendpoint,
+                            com.iaasframework.capabilities.model.soapendpoint,
+                            com.greenstarnetwork.services.facilityManager,
+							*</Import-Package>
+						<Export-Package>
+							com.greenstarnetwork.services.facilityManager.soapendpoint*;version="${pom.version}"
+						</Export-Package>
+						<Require-Bundle>org.apache.cxf.bundle</Require-Bundle>
+   						<DynamicImport-Package>org.apache.cxf.*</DynamicImport-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+
+</project>

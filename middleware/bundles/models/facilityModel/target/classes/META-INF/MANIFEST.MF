@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Export-Package: com.greenstarnetwork.models.facilityModel;uses:="com.i
+ aasframework.capabilities.model,javax.xml.bind.annotation,com.greenst
+ arnetwork.models.climate,com.iaasframework.resources.core,javax.xml.b
+ ind,com.iaasframework.resources.core.descriptor";version="1.2.0",com.
+ greenstarnetwork.models.facilityModel.config;uses:="javax.xml.bind.an
+ notation,com.iaasframework.resources.core,javax.xml.bind";version="1.
+ 2.0"
+Private-Package: com.greenstarnetwork.models.facilityModel,com.greenst
+ arnetwork.models.facilityModel.config,
+Built-By: inocult
+Tool: Bnd-0.0.311
+Bundle-Name: GreenStar Network :: Models :: Facility Model
+Created-By: Apache Maven Bundle Plugin
+DynamicImport-Package: org.hibernate.*,javassist.*
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.2.0
+Bnd-LastModified: 1326493275799
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: Facility Model
+Import-Package: com.greenstarnetwork.models.climate;version="1.2",com.
+ greenstarnetwork.models.common;version="1.2",com.greenstarnetwork.mod
+ els.facilityModel;version="1.2",com.greenstarnetwork.models.facilityM
+ odel.config;version="1.2",com.iaasframework.capabilities.model;versio
+ n="1.0",com.iaasframework.resources.core;version="1.0",com.iaasframew
+ ork.resources.core.descriptor;version="1.0",javax.xml.bind,javax.xml.
+ bind.annotation,org.slf4j;version="1.5.6"
+Bundle-SymbolicName: com.greenstarnetwork.models.facilityModel
+

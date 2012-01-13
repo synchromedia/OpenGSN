@@ -1,0 +1,19 @@
+<conf>
+	<cloudManagerWSDL>http://10.20.100.14:8181/cxf/CloudManagerSOAPEndpoint?wsdl</cloudManagerWSDL>
+	<facilityManagerWSDL>http://10.20.100.14:8181/cxf/FacilityManagerSOAPEndpoint?wsdl</facilityManagerWSDL>
+	<ControllerWSDL>http://10.20.100.14:8181/cxf/ControllerSOAPEndpoint?wsdl</ControllerWSDL>
+	
+	<idpURL>http://10.20.100.10:8080/EcpProxy/RetreiveSPAuthnToken</idpURL>
+	<spURL>https://10.20.100.14/Shibboleth.sso/SAML2/ECP</spURL>
+	<logoutURL>https://10.20.100.14/Shibboleth.sso/Logout</logoutURL>
+	<domainToConnect>https://10.20.100.14/cxf/ResourceManagerSOAPEndpoint?wsdl</domainToConnect>
+	
+	<googleMapKey>ABQIAAAAdg0XAB2sZIYPmKO80Mm9rBTLasm_0cveFzyICXoP08bFKvKGCRT-ca7l2kRKIGFIVA_NRh3DFcWoUw</googleMapKey>
+	
+	<vmTemplates>
+		<templateName displayName='Ubuntu Server 32 bits'>server91032</templateName>
+		<templateName displayName='Ubuntu Server 64 bits'>server91064</templateName>
+		<templateName displayName='Ubuntu Desktop'>desktop91032</templateName>
+	</vmTemplates>
+	
+</conf>

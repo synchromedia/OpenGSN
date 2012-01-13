@@ -1,0 +1,6 @@
+On /system1/outlet1
+/system1/outlet1
+ Properties:
+  powerState is on
+
+clp:outlet1-> 

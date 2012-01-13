@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<features>
+    <feature name="gsn-resources" version="${project.version}">
+        <bundle>mvn:com.greenstarnetwork.models/com.greenstarnetwork.models.common/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.models/com.greenstarnetwork.models.vmm/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.models/com.greenstarnetwork.models.pdu/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.models/com.greenstarnetwork.models.powersource/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.models/com.greenstarnetwork.models.climate/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.models/com.greenstarnetwork.models.facilityModel/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.capabilities/com.greenstarnetwork.capabilities.archive/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.capabilities/com.greenstarnetwork.capabilities.poller/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.capabilities/com.greenstarnetwork.capabilities.archive.soapendpoint/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.protocols/com.greenstarnetwork.protocols.datastream/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.resources/com.greenstarnetwork.resources.libvirt/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.resources/com.greenstarnetwork.resources.raritanPCR8/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.resources/com.greenstarnetwork.resources.servertechCWG/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.resources/com.greenstarnetwork.resources.outbackMate/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.resources/com.greenstarnetwork.resources.raritanclimate/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.resources/com.greenstarnetwork.resources.facilityResource/${project.version}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.snmp4j/${snmp4j.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.transports/com.greenstarnetwork.transports.snmp/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.resources/com.greenstarnetwork.resources.eatonPW/${project.version}</bundle>
+   </feature>
+    <feature name="gsn-services" version="${project.version}">
+	<feature version="${project.version}">gsn-resources</feature>
+        <feature version="${project.version}">gsn-thirdparty</feature>
+	<bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.domainManager/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.networkManager/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.cloudManager/${project.version}</bundle>
+	<bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.cloudManager.soapendpoint/${project.version}</bundle>
+        <bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.facilityManager/${project.version}</bundle>
+ 	<bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.facilityManager.soapendpoint/${project.version}</bundle>
+ 	<bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.facilityManager.soapendpoint/${project.version}</bundle>
+	<bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.controller/${project.version}</bundle>
+	<bundle>mvn:com.greenstarnetwork.services/com.greenstarnetwork.services.controller.soapendpoint/${project.version}</bundle>
+    </feature>
+
+    <feature name="gsn-thirdparty" version="${project.version}">
+        <bundle>mvn:com.google.code.gson/gson/${gson.version}</bundle>
+    </feature>
+
+</features>

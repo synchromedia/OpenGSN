@@ -1,0 +1,5 @@
+virsh destroy vm1
+Connecting to uri: qemu:///system
+Domain vm1 destroyed
+
+[user@server ~]$ 

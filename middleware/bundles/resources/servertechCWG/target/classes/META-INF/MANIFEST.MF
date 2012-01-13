@@ -1,0 +1,46 @@
+Manifest-Version: 1.0
+Export-Package: com.greenstarnetwork.resources.servertechCWG.commandse
+ t;uses:="com.iaasframework.capabilities.protocol,com.iaasframework.re
+ sources.core.message,com.iaasframework.protocols.cli.message,com.iaas
+ framework.capabilities.model,com.greenstarnetwork.models.pdu,com.iaas
+ framework.capabilities.commandset,com.iaasframework.capabilities.prot
+ ocol.api,com.iaasframework.capabilities.commandset.api";version="1.2.
+ 0",com.greenstarnetwork.resources.servertechCWG.actionset;uses:="com.
+ iaasframework.capabilities.actionset,org.slf4j,com.iaasframework.reso
+ urces.core.capability";version="1.2.0",com.greenstarnetwork.resources
+ .servertechCWG.core;uses:="com.iaasframework.capabilities.actionset,c
+ om.greenstarnetwork.resources.servertechCWG.actionset,com.iaasframewo
+ rk.resources.core.descriptor,com.iaasframework.resources.core,com.gre
+ enstarnetwork.models.facilityModel.config,org.slf4j,com.greenstarnetw
+ ork.resources.servertechCWG.commandset,com.iaasframework.capabilities
+ .commandset,com.iaasframework.transports.virtual";version="1.2.0"
+Private-Package: simulator
+Built-By: inocult
+Tool: Bnd-0.0.311
+Bundle-Name: GreenStar Network :: Resources :: ServerTech CWG
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.2.0
+Bnd-LastModified: 1326493285543
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: ServerTech CWG PDU Resource
+Import-Package: com.greenstarnetwork.capabilities.archive;version="1.2
+ ",com.greenstarnetwork.models.facilityModel;version="1.2",com.greenst
+ arnetwork.models.facilityModel.config;version="1.2",com.greenstarnetw
+ ork.models.pdu;version="1.2",com.greenstarnetwork.resources.servertec
+ hCWG.actionset;version="1.2",com.greenstarnetwork.resources.servertec
+ hCWG.commandset;version="1.2",com.greenstarnetwork.resources.serverte
+ chCWG.core;version="1.2",com.iaasframework.capabilities.actionset;ver
+ sion="1.0",com.iaasframework.capabilities.commandset;version="1.0",co
+ m.iaasframework.capabilities.commandset.api;version="1.0",com.iaasfra
+ mework.capabilities.model;version="1.0",com.iaasframework.capabilitie
+ s.protocol;version="1.0",com.iaasframework.capabilities.protocol.api;
+ version="1.0",com.iaasframework.protocols.cli;version="1.0",com.iaasf
+ ramework.protocols.cli.message,com.iaasframework.resources.core;versi
+ on="1.0",com.iaasframework.resources.core.capability;version="1.0",co
+ m.iaasframework.resources.core.descriptor;version="1.0",com.iaasframe
+ work.resources.core.message;version="1.0",com.iaasframework.transport
+ s.virtual;version="1.0",org.slf4j;version="1.5.6"
+Bundle-SymbolicName: com.greenstarnetwork.resources.servertechCWG
+

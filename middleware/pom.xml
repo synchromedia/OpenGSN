@@ -1,0 +1,226 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<parent>
+		<groupId>com.iaasframework</groupId>
+		<artifactId>base-settings</artifactId>
+		<version>1.0.0</version>
+		<relativePath>poms/base/pom.xml</relativePath>
+	</parent>
+	<groupId>com.greenstarnetwork</groupId>
+	<artifactId>root</artifactId>
+	<version>1.2.0</version>
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>GreenStar Network</name>
+
+	<description>GreenStar Network</description>
+
+	<packaging>pom</packaging>
+
+	<properties>
+		<gson.version>1.6</gson.version>
+		<iaas.version>1.0.0</iaas.version>
+		<snmp4j.version>1.8.1_4</snmp4j.version>
+	</properties>
+
+	<dependencies>
+		<!-- IaaS Dependencies -->
+		<dependency>
+			<groupId>com.iaasframework.core</groupId>
+			<artifactId>com.iaasframework.core.resourcecore</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.iaasframework.core</groupId>
+			<artifactId>com.iaasframework.core.persistence</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.iaasframework.core</groupId>
+			<artifactId>com.iaasframework.core.hibernate</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.geronimo.specs</groupId>
+			<artifactId>geronimo-jpa_1.0_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- IaaS Framework and Tools -->
+			<dependency>
+				<groupId>org.apache.felix.karaf.shell</groupId>
+				<artifactId>org.apache.felix.karaf.shell.console</artifactId>
+				<version>${felix.karaf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.core</groupId>
+				<artifactId>com.iaasframework.core.resourcecore</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.core</groupId>
+				<artifactId>com.iaasframework.core.persistence</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.core</groupId>
+				<artifactId>com.iaasframework.core.hibernate</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.capabilities</groupId>
+				<artifactId>com.iaasframework.capabilities.protocol</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.capabilities</groupId>
+				<artifactId>com.iaasframework.capabilities.commandset</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.capabilities</groupId>
+				<artifactId>com.iaasframework.capabilities.actionset</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.capabilities</groupId>
+				<artifactId>com.iaasframework.capabilities.model</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.capabilities</groupId>
+				<artifactId>com.iaasframework.capabilities.eventset</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.capabilities</groupId>
+				<artifactId>com.iaasframework.capabilities.triggerset</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.protocols</groupId>
+				<artifactId>com.iaasframework.protocols.cli</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.core</groupId>
+				<artifactId>com.iaasframework.core.transports</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.transports</groupId>
+				<artifactId>com.iaasframework.transports.sockets</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.transports</groupId>
+				<artifactId>com.iaasframework.transports.telnet</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.transports</groupId>
+				<artifactId>com.iaasframework.transports.secureshell</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.iaasframework.transports</groupId>
+				<artifactId>com.iaasframework.transports.virtual</artifactId>
+				<version>${iaas.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>${gson.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>releases</id>
+			<name>IaaS Repository Group Proxy Releases</name>
+			<url>http://repository.inocybe.ca/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>snapshots</id>
+			<name>IaaS Repository Snapshot Proxy Releases</name>
+			<url>http://repository.inocybe.ca/content/groups/public-snapshots/</url>
+		</repository>
+	</repositories>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<docletArtifact>
+						<groupId>gr.spinellis</groupId>
+						<artifactId>UmlGraph</artifactId>
+						<version>4.8</version>
+					</docletArtifact>
+					<doclet>gr.spinellis.umlgraph.doclet.UmlGraphDoc</doclet>
+					<aggregate>true</aggregate>
+					<breakiterator>true</breakiterator>
+					<header>IaaS Framework</header>
+					<source>1.5</source>
+					<quiet>true</quiet>
+					<stylesheetfile>${basedir}/src/main/javadoc/javadoc.css</stylesheetfile>
+					<overview>${basedir}/src/main/javadoc/overview.html</overview>
+					<javadocDirectory>${basedir}/src/main/javadoc</javadocDirectory>
+					<excludePackageNames>com.iaasframework.examples</excludePackageNames>
+					<links>
+						<link>http://java.sun.com/javase/6/docs/api/</link>
+						<link>http://java.sun.com/javaee/5/docs/api/</link>
+						<link>http://java.sun.com/webservices/docs/2.0/api</link>
+						<link>http://java.sun.com/webservices/docs/2.0/xws-security/api/</link>
+						<link>http://static.springframework.org/spring/docs/2.5.x/api</link>
+						<link>http://jakarta.apache.org/commons/logging/apidocs/</link>
+						<link>http://xmlbeans.apache.org/docs/2.0.0/reference</link>
+						<link>http://jibx.sourceforge.net/api</link>
+						<link>http://ws.apache.org/commons/axiom/apidocs/</link>
+						<link>http://dom4j.org/apidocs/</link>
+						<link>http://jdom.org/docs/apidocs/</link>
+						<link>http://www.xom.nu/apidocs/</link>
+						<link>http://acegisecurity.org/acegi-security/apidocs/</link>
+						<link>http://www.extreme.indiana.edu/apis/wsdl4j/</link>
+						<link>http://jakarta.apache.org/commons/httpclient/apidocs/</link>
+						<link>http://ws.apache.org/wss4j/apidocs/</link>
+						<link>http://java.sun.com/javase/6/docs/jre/api/net/httpserver/spec/</link>
+						<link>http://ws.apache.org/commons/XmlSchema/apidocs/</link>
+					</links>
+					<additionalparam>-inferdep -hide "java.*" -collpackages
+						"java.util.*"
+						-windowtitle "${project.name} ${project.version} API Reference"
+						-doctitle "${project.name} ${project.version} API Reference"
+						-bottom "Copyright ${project.inceptionYear}-2010 Synchromedia.ca. All
+						Rights Reserved."
+						-link http://java.sun.com/javase/6/docs/api/</additionalparam>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+	<modules>
+		<module>bundles</module>
+		<module>examples</module>
+		<module>tests</module>
+		<module>extras</module>
+		<module>features</module>
+	</modules>
+
+	<distributionManagement>
+		<repository>
+			<id>gsn</id>
+			<url>http://repository.inocybe.ca/content/repositories/gsn</url>
+		</repository>
+		<snapshotRepository>
+			<id>gsn-snapshots</id>
+			<url>http://repository.inocybe.ca/content/repositories/gsn-snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+</project>

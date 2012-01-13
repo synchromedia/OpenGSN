@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Private-Package: com.greenstarnetwork.capabilities.archiveCapability.s
+ oapendpoint
+Built-By: inocult
+Tool: Bnd-0.0.311
+Bundle-Name: GreenStar Network :: Capability :: Archive SOAP Endpoint
+Created-By: Apache Maven Bundle Plugin
+Require-Bundle: org.apache.cxf.bundle
+DynamicImport-Package: org.apache.cxf.*
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.2.0
+Bnd-LastModified: 1326493280394
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: GreenStar Network archive  SOAP Endpoint
+Import-Package: META-INF.cxf,META-INF.cxf.osgi,com.greenstarnetwork.ca
+ pabilities.archive;version="1.2",com.greenstarnetwork.capabilities.ar
+ chive.api;version="1.2",com.iaasframework.capabilities.model.soapendp
+ oint;version="1.0",com.iaasframework.core.resources.manager.soapendpo
+ int;version="1.0",javassist.util.proxy,javax.jms;version="1.1",javax.
+ jws;version="1.0",javax.wsdl,org.apache.activemq;version="5.3",org.ap
+ ache.cxf,org.apache.cxf.binding,org.apache.cxf.binding.soap,org.apach
+ e.cxf.binding.soap.spring,org.apache.cxf.bus,org.apache.cxf.bus.resou
+ rce,org.apache.cxf.bus.spring,org.apache.cxf.buslifecycle,org.apache.
+ cxf.catalog,org.apache.cxf.configuration.spring,org.apache.cxf.endpoi
+ nt,org.apache.cxf.headers,org.apache.cxf.phase,org.apache.cxf.resourc
+ e,org.apache.cxf.transport,org.apache.cxf.transport.http,org.apache.c
+ xf.transport.http.policy,org.apache.cxf.transport.http_osgi,org.apach
+ e.cxf.workqueue,org.apache.cxf.wsdl11,org.hibernate.proxy,org.osgi.se
+ rvice.command,org.osgi.service.event;version="1.0",org.slf4j;version=
+ "1.5.6",org.springframework.beans.factory.config;version="2.5"
+Bundle-SymbolicName: com.greenstarnetwork.capabilities.archive.soapend
+ point
+

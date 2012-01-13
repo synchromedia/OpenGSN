@@ -1,0 +1,24 @@
+Status
+   Outlet   Outlet                    Outlet     Load      Power     Control
+   ID       Name                      Status     (Amps)    (Watts)   State
+
+   .A1      TowerA_Outlet1            On         0.00      0         Idle On   
+   .A2      TowerA_Outlet2            On         0.00      0         Idle On   
+   .A3      TowerA_Outlet3            On         0.00      0         Idle On   
+   .A4      TowerA_Outlet4            On         0.00      0         Idle On   
+   .A5      TowerA_Outlet5            On         0.00      0         Idle On   
+   .A6      TowerA_Outlet6            On         0.00      0         Idle On   
+   .A7      TowerA_Outlet7            On         0.00      0         Idle On   
+   .A8      TowerA_Outlet8            On         0.00      0         Idle On   
+   .A9      TowerA_Outlet9            On         0.00      0         Idle On   
+   .A10     TowerA_Outlet10           On         0.00      0         Idle On   
+   .A11     TowerA_Outlet11           On         0.66      121       Idle On   
+   .A12     TowerA_Outlet12           On         0.65      119       Idle On   
+   .A13     TowerA_Outlet13           On         0.41      51        Idle On   
+   .A14     TowerA_Outlet14           On         0.39      49        Idle On   
+   .A15     TowerA_Outlet15           On         0.53      78        Idle On   
+   .A16     TowerA_Outlet16           On         0.00      0         Idle On   
+
+   Command successful
+
+Switched CDU:

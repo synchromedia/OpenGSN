@@ -1,0 +1,45 @@
+Manifest-Version: 1.0
+Export-Package: com.greenstarnetwork.resources.raritanclimate.commands
+ et;uses:="com.iaasframework.capabilities.model,org.apache.log4j,com.i
+ aasframework.capabilities.actionset,com.greenstarnetwork.models.clima
+ te,com.iaasframework.capabilities.commandset,com.iaasframework.capabi
+ lities.commandset.api,com.iaasframework.capabilities.protocol,com.iaa
+ sframework.resources.core.message,com.iaasframework.protocols.cli.mes
+ sage,com.iaasframework.capabilities.protocol.api,com.greenstarnetwork
+ .models.common";version="1.2.0",com.greenstarnetwork.resources.rarita
+ nclimate.core;uses:="com.iaasframework.capabilities.actionset,com.iaa
+ sframework.capabilities.model,com.greenstarnetwork.models.climate,com
+ .iaasframework.resources.core,org.slf4j,com.greenstarnetwork.resource
+ s.raritanclimate.commandset,com.iaasframework.capabilities.commandset
+ ,com.iaasframework.transports.virtual";version="1.2.0"
+Private-Package: com.greenstarnetwork.resources.raritanclimate.actions
+ et,simulator
+Built-By: inocult
+Tool: Bnd-0.0.311
+Bundle-Name: GreenStar Network :: Resources :: Raritan Climate
+Created-By: Apache Maven Bundle Plugin
+Build-Jdk: 1.6.0_22
+Bundle-Version: 1.2.0
+Bnd-LastModified: 1326493287208
+Bundle-ManifestVersion: 2
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-Description: Climate Resource
+Import-Package: com.greenstarnetwork.capabilities.archive;version="1.2
+ ",com.greenstarnetwork.models.climate;version="1.2",com.greenstarnetw
+ ork.models.common;version="1.2",com.greenstarnetwork.resources.rarita
+ nclimate.commandset;version="1.2",com.greenstarnetwork.resources.rari
+ tanclimate.core;version="1.2",com.iaasframework.capabilities.actionse
+ t;version="1.0",com.iaasframework.capabilities.actionset.queue;versio
+ n="1.0",com.iaasframework.capabilities.commandset;version="1.0",com.i
+ aasframework.capabilities.commandset.api;version="1.0",com.iaasframew
+ ork.capabilities.model;version="1.0",com.iaasframework.capabilities.p
+ rotocol;version="1.0",com.iaasframework.capabilities.protocol.api;ver
+ sion="1.0",com.iaasframework.protocols.cli;version="1.0",com.iaasfram
+ ework.protocols.cli.message,com.iaasframework.resources.core;version=
+ "1.0",com.iaasframework.resources.core.capability;version="1.0",com.i
+ aasframework.resources.core.descriptor;version="1.0",com.iaasframewor
+ k.resources.core.message;version="1.0",com.iaasframework.transports.v
+ irtual;version="1.0",javax.xml.bind;version="2.2.0";resolution:=optio
+ nal,org.apache.log4j;version="1.2",org.slf4j;version="1.5.6"
+Bundle-SymbolicName: com.greenstarnetwork.resources.raritanclimate
+

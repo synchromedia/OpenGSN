@@ -1,0 +1,656 @@
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Copyright 2009-2011 École de technologie supérieure, Communication Research Centre Canada, Inocybe Technologies Inc. and 6837247 CANADA Inc.
+//
+// 
+//
+//Licensed under the Apache License, Version 2.0 (the "License");
+//you may not use this file except in compliance with the License.
+//You may obtain a copy of the License at
+//
+//http://www.apache.org/licenses/LICENSE-2.0
+//
+//Unless required by applicable law or agreed to in writing, software
+//distributed under the License is distributed on an "AS IS" BASIS,
+//WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//See the License for the specific language governing permissions and
+//limitations under the License.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="vertical" minWidth="955" minHeight="600"
+				creationComplete="initApp()" xmlns:components="components.*" pageTitle="GSN - Home Page" 
+				backgroundColor="#FFFFFF" horizontalScrollPolicy="off">
+	
+	<mx:Style source="../style/gsn.css"/>
+	
+	<mx:HTTPService id="configurationRequest" url="conf/conf.xml" resultFormat="e4x" result="confResult(event)" fault="confFault(event)"/>
+	<mx:HTTPService id="securityRequest" resultFormat="text" method="POST" result="securityResult(event)" fault="securityFault(event)"/>
+	<mx:HTTPService id="logoutRequest" result="logoutResult(event)" fault="faultHandler(event)"/>
+	
+	<mx:Script>
+		<![CDATA[
+			import actionscript.Host;
+			import actionscript.Pdu;
+			import actionscript.VM;
+			import actionscript.pduOutlet;
+			
+			import mx.collections.ArrayCollection;
+			import mx.controls.Alert;
+			import mx.events.FlexEvent;
+			import mx.events.ItemClickEvent;
+			import mx.managers.CursorManager;
+			import mx.rpc.events.FaultEvent;
+			import mx.rpc.events.ResultEvent;
+			
+			//Menus Provider
+			private var vmMenuProvider:Array = ['Dashboard','My virtual machines','Add a virtual machine'];
+			private var userMenuProvider:Array = ['Account information','Modify my password'];
+			private var hostsMenuProvider:Array =['Host List'];
+			private var facilityMenuProvider:Array =['Facility List'];
+			private var controllerMenuProvider:Array =['Controller Plans'];
+			
+			//Hosts List with their VMs
+			[Bindable]
+			public var listHost:ArrayCollection = new ArrayCollection();
+			
+			private var isAppReady:Boolean = false;
+			private var isAppReady2:Boolean = false;
+			private var refreshFlag:Boolean = false;
+			
+			//Value retrieved from configuration file
+			public var cloudManagerWSDL:String;
+			public var facilityManagerWSDL:String;
+			public var controllerWSDL:String;
+			public var idpURL:String;
+			public var spURL:String;
+			public var logoutURL:String;
+			public var domainToConnect:String;
+			public var zenossGraph:XMLList;
+			[Bindable]
+			public var googleMapKey:String;
+			
+			//Geographical sites green power percent
+			public var sites:ArrayCollection = new ArrayCollection();
+			//VM Templates
+			public var templates:ArrayCollection = new ArrayCollection();
+			
+			private function initApp():void{
+				this.currentState = 'notConnected';
+				CursorManager.setBusyCursor();
+				configurationRequest.send();
+			}
+			
+			private function confResult(e:ResultEvent):void{
+				var result:XML = XML(e.result);
+				
+				cloudManagerWSDL = result.cloudManagerWSDL;
+				facilityManagerWSDL = result.facilityManagerWSDL;
+				controllerWSDL = result.ControllerWSDL;
+				idpURL = result.idpURL;
+				spURL = result.spURL;
+				logoutURL = result.logoutURL;
+				domainToConnect = result.domainToConnect;
+				googleMapKey = result.googleMapKey;
+				zenossGraph = result.facilities;
+				CursorManager.removeBusyCursor();
+				
+				facilityManagerService.wsdl = facilityManagerWSDL;
+				facilityManagerService.loadWSDL();
+				facilityManagerService.listAllFacilities();
+				
+				controllerService.wsdl = controllerWSDL;
+				controllerService.loadWSDL();
+				
+				var listTemplate:XMLList = result.vmTemplates.templateName;
+				var item:XML;
+				for each(item in listTemplate) {
+					var obj:Object = new Object();
+					obj.name = String(item);
+					obj.displayName = String( item.@displayName );
+					templates.addItem(obj);
+				}
+
+				cloudManagerService.wsdl = cloudManagerWSDL;
+				cloudManagerService.loadWSDL();
+				
+				if(facilityComp != null){
+					facilityComp.loadWsdl();
+				}
+				
+				if(vmComp != null){
+					vmComp.initWS();
+				}
+				
+				if(addComp != null){
+					addComp.initWS();
+				}
+				
+				isAppReady = true;
+			}
+			
+			private function confFault(e:FaultEvent):void{
+				Alert.show("An error occured during the initialization of the application.");
+			}
+					
+			private function securityResult(e:ResultEvent):void{
+			
+				try{
+					var result:XML = XML(e.result);
+					
+					//Retrieve the user role
+					var res:XMLList = result.*.*.*.*::AttributeStatement.*::Attribute.(@FriendlyName == "title").*::AttributeValue;
+					var roleNode:XML = res[0];
+					var role:String = roleNode.valueOf();
+					
+					if(role == "System Administrator"){
+						if(this.userComp != null){
+							this.userComp.role = "System Administrator";
+							updateUserInformation(result);
+						}
+						login.text = "";
+						pass.text = "";
+						this.currentState = "";
+					}else if(role == "User"){
+						if(this.userComp != null){
+							this.userComp.role = "User";
+							updateUserInformation(result);
+						}
+						login.text = "";
+						pass.text = "";
+						this.currentState = "user";
+					}else{
+						login.text = "";
+						pass.text = "";
+						Alert.show("Your connection information is not valid. Please fill the connection form with a valid username and password.");
+						return;
+					}
+					
+				}catch(err:Error){
+					login.text = "";
+					pass.text = "";
+					Alert.show("Your connection information is not valid. Please fill the connection form with a valid username and password.");
+					return;
+				}
+				
+				//Init Connected View
+				mainViewStack.selectedIndex = 0;
+				menu.selectedIndex = 0;
+				
+				//Send the token to the Service Provider (SP)
+				var spRequest:URLRequest = new URLRequest(spURL);  
+				spRequest.data = e.result;
+				spRequest.method = URLRequestMethod.POST; 
+				spRequest.requestHeaders.push(new URLRequestHeader("Content-Type","application/vnd.paos+xml") ); 
+				spRequest.requestHeaders.push(new URLRequestHeader("Accept","text/html; application/vnd.paos+xml") ); 
+				
+				var loader:URLLoader = new URLLoader(); 
+				
+				loader.addEventListener(Event.COMPLETE, spHandler); 
+				loader.addEventListener(IOErrorEvent.IO_ERROR, spFault);
+				
+				loader.load(spRequest);    				
+				
+			}
+			
+			private function spHandler(e:Event):void{
+				//Get Hosts information from GSN Cloud Manager
+				cloudManagerService.describeHosts();
+			}
+			
+			private function spFault(e:IOErrorEvent):void{
+				Alert.show(e.text);
+			}
+			
+			private function securityFault(e:FaultEvent):void{
+				var faultstring:String = e.fault.faultString;
+				Alert.show(faultstring);
+			}
+			
+			private function updateUserInformation(result:XML):void{
+				//Update account information in User View
+				var res:XMLList = result.*.*.*.*::AttributeStatement.*::Attribute.(@FriendlyName == "givenName").*::AttributeValue;
+				var node:XML = res[0];
+				this.userComp.firstName = node.valueOf();
+				
+				res = result.*.*.*.*::AttributeStatement.*::Attribute.(@FriendlyName == "sn").*::AttributeValue;
+				node = res[0];
+				this.userComp.lastName = node.valueOf();
+				
+				res = result.*.*.*.*::AttributeStatement.*::Attribute.(@FriendlyName == "homePhone").*::AttributeValue;
+				node = res[0];
+				this.userComp.homePhone = node.valueOf();
+				
+				res = result.*.*.*.*::AttributeStatement.*::Attribute.(@FriendlyName == "mobile").*::AttributeValue;
+				node = res[0];
+				this.userComp.mobilePhone = node.valueOf();
+				
+				res = result.*.*.*.*::AttributeStatement.*::Attribute.(@FriendlyName == "mail").*::AttributeValue;
+				node = res[0];
+				this.userComp.email = node.valueOf();
+			}
+			
+			public function describeHostsListener(event:ResultEvent):void{
+				
+				listHost.removeAll();
+				
+				var tmpArray:ArrayCollection = null;
+				var tmpXML:XML = null;
+				try{
+					tmpArray = (ArrayCollection)(event.result);
+				}catch(e:Error){
+					tmpXML = (XML)(event.result);
+				}
+				
+				if(tmpArray != null){
+					for(var i:int=0;i<tmpArray.length;i++){
+						addHostModel( XML(tmpArray.getItemAt(i)));
+					}
+				}else if(tmpXML != null){
+					addHostModel(tmpXML)
+				}
+				
+				//Update Dashboard Power Chart
+				dashboardComp.updatePowerChart();
+				
+				//Update Dashboard Google markers
+				dashboardComp.updateMap();
+				
+				//Update the My VM view
+				if(vmComp != null){
+
+					this.vmComp.updateListMachines();
+					this.vmComp.doUpdateView();
+				}
+				
+				//Update Hosts view
+				if(hostComp != null){
+					this.hostComp.refresh();
+				}
+				
+				if(refreshFlag == true){
+					refreshFlag = false;
+					Alert.show("GSN Data has been refreshed.","Message");
+				}
+			}
+			
+			
+			private function addHostModel(model:XML):void{
+				
+				var	host:Host = new Host();
+				host.ip = model.address;
+				host.resourceId = model.resourceId;
+				host.name = model.resourceName;
+				host.state = model.resourceState;
+				host.cpu = model.cpu;
+				host.cpuHardwareTime = model.CPUHardwareTime;
+				host.cpuIdleTime = model.CPUIdleTime;
+				host.cpuIOTime = model.CPUIOTime;
+				host.cpuNiceTime = model.CPUNiceTime;
+				host.cpuSoftwareTime = model.CPUSoftwareTime;
+				host.cpuStealTime = model.CPUStealTime;
+				host.cpuSystemTime = model.CPUSystemTime;
+				host.cpuUserTime = model.CPUUserTime;
+				host.freeMemory = String(model.freeMemory).split('k')[0]+' kB';
+				host.location = model.location;
+				host.nbreCpu = model.nbrCPUs;
+				host.os = model.os;
+				host.speed = model.speed;
+				host.totalMemory = model.totalMemory;
+				
+				for(i=0;i<sites.length;i++){
+					if( sites.getItemAt(i).location == host.location){
+						host.percentGreen = int(sites.getItemAt(i).greenPower);
+					}
+				}
+				
+				host.vmList = new ArrayCollection();
+				
+				for each ( var element:XML in model.vm){
+					
+					var	vm:VM = new VM();
+					vm.memory = element.memory;
+					vm.name = element.name;
+					vm.displayedName = String(element.name).split('_')[0];
+					vm.storage = element.storage;
+					vm.status = element.status;
+					vm.uuid = element.uuid;
+					vm.hostName = element.parent().resourceName;
+					vm.hostIp = element.parent().address;
+					vm.vmIp = element.ip;
+					
+					var template:String = String(element.name).split('_')[1];
+					for(var i:int=0;i<templates.length;i++){
+						if(templates.getItemAt(i).name == template ){
+							vm.os = templates.getItemAt(i).displayName;
+						}
+					}
+					
+					vm.vcpu = element.vcpu;
+					vm.location = element.parent().location;
+					vm.resourceId = element.parent().resourceId;
+					vm.progressbarAlpha = 0;
+					
+					vm.greenPercent = 100;
+					for(i=0;i<sites.length;i++){
+						if( sites.getItemAt(i).location == vm.location){
+							vm.greenPercent = int(sites.getItemAt(i).greenPower);
+						}
+					}
+					
+					host.vmList.addItem(vm);
+					
+				}
+				
+				listHost.addItem(host);
+			
+			}
+			
+			private function listAllFacilitiesListener(event:ResultEvent):void{
+				sites.removeAll();
+				
+				var tmpArray:ArrayCollection = null;
+				var tmpXML:XML = null;
+				try{
+					tmpArray = (ArrayCollection)(event.result);
+				}catch(e:Error){
+					tmpXML = (XML)(event.result);
+				}
+				
+				if(tmpArray != null){
+					for(var i:int=0;i<tmpArray.length;i++){
+						addSite( XML(tmpArray.getItemAt(i)));
+					}
+				}else if(tmpXML != null){
+					addSite(tmpXML)
+				}
+				
+				isAppReady2 = true;
+			}
+			
+			public function addSite(model:XML):void{
+				
+				var obj:Object = new Object();
+				obj.id = model.resourceId.toString();
+				obj.name = model.resourceName.toString();
+				obj.location = model.location.address.toString();
+				obj.greenPower = model.operationalSpecs.domainGreenPercentage.toString();
+				obj.powerSourceType = model.operationalSpecs.powerSourceType.toString();
+				obj.onGrid = model.operationalSpecs.onGrid.toString();
+				sites.addItem(obj);
+				
+			}
+			
+			
+			public function getListVM(hostIp:String):ArrayCollection{
+				var listVM:ArrayCollection;
+				for( var i:int=0; i<listHost.length;i++){
+					if( Host(listHost.getItemAt(i)).ip == hostIp ){
+						return Host(listHost.getItemAt(i)).vmList;
+					}
+				}
+				return null;
+			}
+			
+			public function getVM(vmName:String):VM{
+				for(var i:int=0; i<listHost.length;i++){
+					var listVM:ArrayCollection = Host(listHost.getItemAt(i)).vmList;
+					for(var j:int=0; j<listVM.length;j++){
+						if(vmName == listVM.getItemAt(j).name){
+							return VM(listVM.getItemAt(j));
+						}
+					}
+				}
+				return null;
+			}
+		
+			
+			/**
+			 * Update a VM after a migration
+			 */
+			public function updateVm(vmName:String,newIp:String,newHostId:String):void{
+
+				for(var i:int=0; i<listHost.length;i++){
+					var listVM:ArrayCollection = Host(listHost.getItemAt(i)).vmList;
+					for(var j:int=0; j<listVM.length;j++){
+						if(vmName == listVM.getItemAt(j).name){
+							
+							var vm:VM = VM(listVM.getItemAt(j));
+							vm.resourceId = newHostId;
+							
+							var destHost:Host = getHost(newHostId);
+							vm.hostIp = destHost.ip;
+							vm.hostName = destHost.name;
+							vm.location = destHost.location;
+							
+							destHost.vmList.addItem(vm);
+							Host(listHost.getItemAt(i)).vmList.removeItemAt(j);
+	
+						}
+					}
+				}
+				
+				//Update the My VM view
+				this.vmComp.updateListMachines();
+				this.vmComp.doUpdateView();
+				
+				//Update the VM table in the Host view
+				hostComp.updateVM();
+				
+			}
+			
+			public function addVM(vm:VM):void{
+				for(var i:int=0; i<listHost.length;i++){
+					if(Host(listHost.getItemAt(i)).resourceId == vm.resourceId){
+						Host(listHost.getItemAt(i)).vmList.addItem(vm);
+						return;
+					}
+				}
+			}
+			
+			public function removeVm(vmName:String):void{
+				for(var i:int=0; i<listHost.length;i++){
+					var listVM:ArrayCollection = Host(listHost.getItemAt(i)).vmList;
+					for(var j:int=0; j<listVM.length;j++){
+						if(vmName == listVM.getItemAt(j).name){
+							Host(listHost.getItemAt(i)).vmList.removeItemAt(j);
+						}
+					}
+				}
+			}
+			
+			public function getHost(hostId:String):Host{
+				for(var i:int=0;i<this.listHost.length;i++){
+					if( Host(listHost.getItemAt(i)).resourceId == hostId ){
+						return Host(listHost.getItemAt(i));
+					}
+				}
+				return null;
+			}
+			
+			private function vmLinkbarClickHandler(event:ItemClickEvent):void{
+				mainViewStack.selectedIndex = event.index;
+				
+				if(event.index == 1){
+					this.vmComp.init();
+				}
+			}
+			
+			private function facilityLinkbarClickHandler(event:ItemClickEvent):void{
+				this.facilityComp.update();
+				mainViewStack.selectedIndex = event.index+3;
+			}
+			
+			private function controllerLinkbarClickHandler(event:ItemClickEvent):void{
+				controllerService.getMigrationPlan();
+				mainViewStack.selectedIndex = event.index+4;
+			}
+			
+			private function hostsLinkbarClickHandler(event:ItemClickEvent):void{
+				mainViewStack.selectedIndex = event.index+5;
+			}
+			
+			private function userLinkbarClickHandler(event:ItemClickEvent):void{
+				mainViewStack.selectedIndex = event.index+6;
+			}
+			
+			private function btnConnectClick():void{
+				if(this.currentState == 'notConnected' && isAppReady && isAppReady2 ){
+					
+					var params:Object = new Object();
+					params.endpoint = domainToConnect;
+					params.username = login.text;
+					params.password = pass.text;
+					
+					securityRequest.url = idpURL;
+					
+					securityRequest.send(params);
+					
+					/*
+					//Temporary code for avoiding Security Stuff during development
+					cloudManagerService.describeHosts();
+					login.text = "";
+					pass.text = "";
+					this.currentState = "";
+					*/
+					
+				}else if(this.currentState == 'notConnected' && (!isAppReady || !isAppReady2) ){
+					Alert.show("The application is initializing. Please refill the connection form to login.");
+				}else{
+					logoutRequest.url = logoutURL;
+					logoutRequest.send();
+					CursorManager.removeAllCursors();
+					this.currentState = 'notConnected';
+				}
+			}
+			
+			private function refresh():void{
+				if(this.currentState == ""){
+					refreshFlag = true;
+					cloudManagerService.describeHosts();
+					if(facilityComp != null && facilityComp.facilityTable != null){
+						facilityComp.update();
+					}
+				}else if(this.currentState == "user"){
+					refreshFlag = true;
+					cloudManagerService.describeHosts();
+				}
+				
+			}
+			
+			private function logoutResult(event:ResultEvent):void{
+			}
+			
+			private function getMigrationPlanListener(event:ResultEvent):void{
+				var res:String = event.result as String;
+				controller.text = res;
+			}
+			
+			private function faultHandler(event:FaultEvent):void{
+				//Comment this in production
+				Alert.show(event.fault.faultString + '\n' + event.fault.faultDetail);
+			}
+			
+		]]>
+	</mx:Script>
+	
+	
+	<mx:WebService id="cloudManagerService" fault="faultHandler(event)">
+		<mx:operation name="describeHosts" result="describeHostsListener(event)" />
+	</mx:WebService>
+	
+	<mx:WebService id="facilityManagerService" fault="faultHandler(event)">
+		<mx:operation name="listAllFacilities" result="listAllFacilitiesListener(event)"/>
+	</mx:WebService>
+	
+	<mx:WebService id="controllerService" fault="faultHandler(event)">
+		<mx:operation name="getMigrationPlan" result="getMigrationPlanListener(event)"/>
+	</mx:WebService>
+	
+	<mx:states>
+		<mx:State name="notConnected">
+			<mx:SetProperty target="{btnConnect}" name="label" value="Login"/>
+			<mx:SetStyle target="{btnConnect}" name="icon" value="@Embed(source='Assets/images/key1_add.png')"/>
+			<mx:RemoveChild target="{label1}"/>
+			<mx:AddChild relativeTo="{loginBtnBox}" position="before">
+				<mx:HBox width="100%">
+					<mx:Label text="Username" fontWeight="bold"/>
+					<mx:TextInput width="75" id="login" enter="btnConnectClick()"/>
+					<mx:Label text="Password" fontWeight="bold"/>
+					<mx:TextInput displayAsPassword="true" width="75" id="pass" enter="btnConnectClick()"/>
+				</mx:HBox>
+			</mx:AddChild>
+			<mx:RemoveChild target="{body}"/>
+			<mx:AddChild position="lastChild">
+				<mx:VBox height="100%" verticalGap="20" horizontalAlign="center">
+					<mx:Spacer height="5%" />
+					<mx:Image smoothBitmapContent="true" height="70%"  source="@Embed(source='Assets/images/home.png')" id="image1"/>
+					<mx:Text text="© 2010 GreenStar Network - Sponsored by Canarie"/>
+				</mx:VBox>				
+			</mx:AddChild>
+			<mx:RemoveChild target="{button1}"/>
+		</mx:State>
+		<mx:State name="user">
+			<mx:RemoveChild target="{canvas2}"/>
+			<mx:RemoveChild target="{canvas3}"/>
+		</mx:State>
+	</mx:states>
+	
+	<mx:Canvas width="955" height="55" horizontalScrollPolicy="off" verticalScrollPolicy="off">
+		<mx:Image left="0" top="0" height="50" smoothBitmapContent="true" source="@Embed(source='Assets/images/logo - GSN.png')"/>
+		<mx:VBox id="loginBox" top="0" right="0" horizontalAlign="right" paddingRight="0" paddingTop="0">
+			<mx:Label text="Welcome to the GreenStar Network." id="label1"/>
+			<mx:HBox id="loginBtnBox">
+				<mx:Button label="Refresh" click="refresh()" icon="@Embed(source='../Assets/images/recycle.png')" id="button1"/>
+				<mx:Button id="btnConnect" label="Logout" click="btnConnectClick()" icon="@Embed(source='Assets/images/key1_delete.png')" />			
+			</mx:HBox>
+		</mx:VBox>
+	</mx:Canvas>
+	
+	<mx:HRule width="955"/>
+	
+	<mx:HBox id="body" horizontalAlign="center" verticalAlign="top" horizontalGap="50" >
+		
+		<mx:VBox width="200" id="canvas1" horizontalAlign="center" paddingTop="20" verticalGap="20">
+			<mx:Accordion id="menu" width="100%" height="300">
+				<mx:Canvas label="Virtual Machines" width="100%" height="100%">
+					<mx:LinkBar dataProvider="{vmMenuProvider}" itemClick="vmLinkbarClickHandler(event)" direction="vertical" top="5" left="5"/>
+				</mx:Canvas>
+				<mx:Canvas label="Hosts" width="100%" height="100%" id="canvas2">
+					<mx:LinkBar dataProvider="{hostsMenuProvider}" itemClick="hostsLinkbarClickHandler(event)" direction="vertical" top="5" left="5"/>
+				</mx:Canvas>
+				<mx:Canvas label="Facilities" width="100%" height="100%" id="canvas3">
+					<mx:LinkBar dataProvider="{facilityMenuProvider}" itemClick="facilityLinkbarClickHandler(event)" direction="vertical" top="10" left="10"/>
+				</mx:Canvas>
+				<mx:Canvas label="Controller" width="100%" height="100%">
+					<mx:LinkBar dataProvider="{controllerMenuProvider}" itemClick="controllerLinkbarClickHandler(event)" direction="vertical" top="10" left="10"/>
+				</mx:Canvas>
+				<mx:Canvas label="User account" width="100%" height="100%">
+					<mx:LinkBar dataProvider="{userMenuProvider}" itemClick="userLinkbarClickHandler(event)" direction="vertical" top="5" left="5"/>
+				</mx:Canvas>
+			</mx:Accordion>
+			
+			<mx:Image source="@Embed(source='Assets/images/bandeLogo.png')" width="200"/>
+		</mx:VBox>
+		
+		<mx:VBox horizontalAlign="center"  verticalGap="10">			
+			<mx:ViewStack id="mainViewStack" width="700" resizeToContent="true" paddingTop="20">
+				<components:dashboard id="dashboardComp"/>
+				<components:myVM id="vmComp"/>
+				<components:addVM id="addComp"/>
+				<components:facility id="facilityComp"/>
+				<mx:VBox id="controllerComp" width="100%" paddingTop="10" paddingLeft="10" paddingRight="10" paddingBottom="20">
+					<mx:Label text="Controller Migration Plans" styleName="titleOne"/>
+					<mx:TextArea id="controller" width="100%" height="500"  backgroundColor="#E7E5E5" borderColor="#D0D0D0"/>
+				</mx:VBox>
+				<components:hosts id="hostComp"/>
+				<components:userAccountInformation id="userComp"/>
+				<components:userPassword/>
+			</mx:ViewStack>
+			
+			<mx:Label text="© 2010 GreenStar Network - Sponsored by Canarie"/>
+		</mx:VBox>
+		
+	</mx:HBox>
+	
+</mx:Application>
