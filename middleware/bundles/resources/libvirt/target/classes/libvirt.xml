@@ -1,8 +1,0 @@
-<libvirt>
-	<HostMonitor>
-		<monitoringInterval>5000</monitoringInterval>
-		<expiryToleranceTime>30000</expiryToleranceTime>
-		<brokerPort>61616</brokerPort>
-		<messageTopic>channel1</messageTopic>
-	</HostMonitor>
-</libvirt>

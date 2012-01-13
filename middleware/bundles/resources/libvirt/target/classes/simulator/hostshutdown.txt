@@ -1,9 +1,0 @@
-shutdown now
-
-Broadcast message from root@synchro-desktop
-	(/dev/pts/0) at 14:25 ...
-
-The system is going down for maintenance NOW!
-root@synchro-desktop:~# Connection to 10.20.100.101 closed by remote host.
-Connection to 10.20.100.101 closed.
-root@ets1:~# 

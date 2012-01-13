@@ -1,4 +1,0 @@
-virsh shutdown vm1748
-Domain vm1748 is being shutdown
-
-[user@server ~]$ 

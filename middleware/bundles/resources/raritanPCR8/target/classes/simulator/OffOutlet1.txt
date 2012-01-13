@@ -1,6 +1,0 @@
-Off /system1/outlet1
-/system1/outlet1
- Properties:
-  powerState is off
-
-clp:outlet1-> 

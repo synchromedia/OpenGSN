@@ -1,2 +1,0 @@
-virsh -c qemu:///system dumpxml vm1 | grep '<mac address='
-      <mac address='54:52:00:47:53:78'/>
