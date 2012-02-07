@@ -1,0 +1,25 @@
+{
+ "name": "ets-host2",
+ "typeId" : "libvirt",
+ "description": "CRC Poweredge R710 #2",
+ "settings": {
+    "reconnection_delay":"10",
+    "refresh_execution":"Refresh",
+    "polling_interval":"180"
+    },
+ "model" : {
+ "os" : "ubuntu",
+ "location": "1100, rue Notre-Dame Ouest, Montreal, Qc, Canada, H3C 1K3",
+ "rootStoragePath": "/storage"
+ },
+ "modules":[
+    {"name" : "remoteShell", "moduleId":"testId", "settings": {
+    "username" : "GsnM-ws-VmmEngine",
+    "password": "GSN-M8n8g3r!",
+    "host" : "10.20.100.3",
+    "port" : "22",
+    "transport" : "ssh",
+    "prompts" : "GsnM-ws-VmmEngine@ets2:~$"
+    }} 
+  ]
+}

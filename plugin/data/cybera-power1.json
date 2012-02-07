@@ -1,0 +1,23 @@
+{
+ "name": "cybera-power1",
+ "typeId" : "OutbackMate",
+ "description": "Cybera's Outback Mate SPS",
+ "settings": {
+   "reconnection_delay":"10",
+   "refresh_execution":"Refresh",
+   "polling_interval":"180"
+ },
+ "model" : {
+   "location": "3608 - 33 Street NW, Calgary, Alberta, Canada, T2L 2A6"
+ },
+ "modules":[
+   {"name" : "remoteShell", 
+    "moduleId":"testId", 
+    "settings": {
+      "host" : "10.20.98.44",
+      "transport" : "telnet",
+      "lines" : "10",
+      "port" : "10001"}
+   } 
+ ]
+}

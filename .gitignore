@@ -1,5 +1,6 @@
 .classpath
 .project
 .settings/
+_build/
 target/
 lib_managed/

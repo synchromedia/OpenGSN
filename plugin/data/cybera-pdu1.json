@@ -1,0 +1,24 @@
+{
+ "name": "cybera-pdu1",
+ "typeId" : "RaritanPCR8",
+ "description": "Cybera's RaritanPCR8 PDU",
+ "settings": {
+    "reconnection_delay":"10",
+    "refresh_execution":"Refresh",
+    "polling_interval":"180"
+    },
+ "model" : {
+ "location": "3608 - 33 Street NW, Calgary, Alberta, Canada, T2L 2A6"
+ },
+ "modules":[
+    {"name" : "remoteShell", "moduleId":"testId", "settings": {
+    "username" : "system",
+    "password":"GSN-M8n8g3r!",
+    "host" : "10.20.98.43",
+    "port" : "23",
+    "eol" : "true", 
+    "transport" : "telnet", 
+    "prompts" : "Login:, Password:, clp:/->"
+    }} 
+  ]
+}
