@@ -74,14 +74,15 @@ public class DefaultCloudManagerProvider implements ICloudManagerProvider {
 	 * Cloud Manager Constructor, a messaging template for the networkManager,
 	 * and for iaasPlatform must be provided.
 	 */
-	public DefaultCloudManagerProvider(AmqpTemplate networkManager, AmqpTemplate iaas, String url) {
+	public DefaultCloudManagerProvider(AmqpTemplate networkManager, AmqpTemplate iaas, String dburl, String dbName) {
 		networkManagerTemplate = networkManager;
 		iaasTemplate = iaas;
-		dbUrl = url; try{
+		dbUrl = dburl; 
+		try{
 		HttpClient httpClient = new StdHttpClient.Builder().url(dbUrl).build();
 
 		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-		 db = new StdCouchDbConnector("domain_greenstarnetwork_com", dbInstance);
+		 db = new StdCouchDbConnector(dbName, dbInstance);
 		}
 		catch(Exception e){e.printStackTrace();}
 	}
