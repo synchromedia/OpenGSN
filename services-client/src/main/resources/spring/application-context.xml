@@ -32,7 +32,7 @@
 		file -->
 	<jaxws:client id="cloudManagerClient"
 		serviceClass="com.greenstarnetwork.services.cloudmanager.ICloudManager"
-		address="http://${service.location}:${service.port}/CloudManager">
+		address="${service.location}/CloudManager">
 
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
@@ -46,7 +46,7 @@
 
 	<jaxws:client id="facilityManagerClient"
 		serviceClass="com.greenstarnetwork.services.facilitymanager.IFacilityManager"
-		address="http://${service.location}:${service.port}/FacilityManager">
+		address="${service.location}/FacilityManager">
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
 		</jaxws:inInterceptors>
@@ -59,7 +59,7 @@
 
 	<jaxws:client id="networkManagerClient"
 		serviceClass="com.greenstarnetwork.services.networkmanager.INetworkManager"
-		address="http://${service.location}:${service.port}/NetworkManager">
+		address="${service.location}/NetworkManager">
 
 		<jaxws:inInterceptors>
 			<bean class="org.apache.cxf.interceptor.LoggingInInterceptor" />
