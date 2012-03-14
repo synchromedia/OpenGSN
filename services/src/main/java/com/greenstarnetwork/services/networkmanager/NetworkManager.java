@@ -62,6 +62,10 @@ public class NetworkManager implements INetworkManager {
 	{
 		this(fileLocation, MAC_PROVIDER_PREFIX, IP_PREFIX);		
 	}
+	public NetworkManager(String fileLocation, String ip)
+	{
+		this(fileLocation, MAC_PROVIDER_PREFIX, ip);		
+	}
 	public NetworkManager(String fileLocation, String macPrefix, String ipPrefix)
 	{
 		xmlFile = fileLocation;
@@ -71,7 +75,7 @@ public class NetworkManager implements INetworkManager {
 			this.loadIPTable(xmlFile);
 		} catch (NetworkManagerException e) {
 			//If the file does not exist, create a new one
-			this.createIPTable(DEFAULT_DOMAIN,macPrefix,ipPrefix);
+			this.createIPTable(DEFAULT_DOMAIN,ipPrefix,macPrefix);
 			try {
 				this.saveIPTable(xmlFile);
 			} catch (IOException e1) {

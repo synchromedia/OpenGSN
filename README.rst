@@ -1,3 +1,4 @@
+.. include:: <isonum.txt>
 OpenGSN Version 2.0.0 
 =====================
 
@@ -12,12 +13,51 @@ Licensing
 -------------------
 The software is released under Apache Software License version 2.0 see LICENSE file for the license.
 
-Requirements
+Documentation
 -------------------
+Project Documentaion is available as the following guides 
 
-A functional version of libvirt and kvm must be installed at each nodes. Moreover, Maven2 tool and Java are needed on the middleware machine.
+ * Inocybe Platform``|trade|`` Installation Guide
+ * OpenGSN Installation Guide
+ * OpenGSN User Guide
 
-Compiling
-------------------
-The middleware subfolder has the middleware and can be compiled by executing mvn install.
+In addition to these guides the Javadoc API is available at http://xxx
+
+Prerequisites
+-------------------
+OpenJDK must be installed to build the project.
+
+To install OpenJDK for Ubuntu::
+
+    apt-get install openjdk-6-jdk
+
+`Apache Maven <http://maven.apache.org/>`_ must be installed to build the
+documentation.
+
+To install Maven for Ubuntu::
+
+    apt-get install maven3
+
+
+Building
+-----------
+To build the OpenGSN java artifacts you simply need to issue the following command::
+
+    mvn clean install
+
+You will also need to build and install the Platform Plugin by issuing the following commands in the plugins folder::
+ 
+    $INOCYBE_PLATFORM_LOCATION/bin/devkit package 
+
+    $INOCYBE_PLATFORM_LOCATION/bin/devkit deploy 
+
+Contributing
+---------------
+Our community welcomes all people interested in open source environmentally friendly cloud computing,
+and there are no formal membership requirements. The best way to join the
+community is to talk with others online using our Google Groups or Google Hangouts sessions.
+
+We welcome all types of contributions, from blueprint designs to documentation to testing to deployment scripts.
+
+
 

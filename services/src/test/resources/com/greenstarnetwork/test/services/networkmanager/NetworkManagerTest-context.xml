@@ -47,6 +47,8 @@
 	<bean name="networkManagerService"
 		class="com.greenstarnetwork.services.networkmanager.NetworkManager">
 		<constructor-arg value="${netman.iptable}"/>
+		<constructor-arg value="10.20.101."/>
+
 	</bean>
 
 

@@ -17,18 +17,13 @@
  */
 package com.greenstarnetwork.services.cloudmanager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.ektorp.CouchDbConnector;
-import org.ektorp.CouchDbInstance;
-import org.ektorp.ViewQuery;
-import org.ektorp.http.HttpClient;
-import org.ektorp.http.StdHttpClient;
-import org.ektorp.impl.StdCouchDbConnector;
-import org.ektorp.impl.StdCouchDbInstance;
+import org.lightcouch.CouchDbClient;
 import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 
@@ -67,24 +62,21 @@ public class DefaultCloudManagerProvider implements ICloudManagerProvider {
 	/**
 	 * URL to database root
 	 */
-	private String dbUrl;
-	CouchDbConnector db ;
-	
+
+	CouchDbClient dbClient;
+
 	/**
 	 * Cloud Manager Constructor, a messaging template for the networkManager,
 	 * and for iaasPlatform must be provided.
 	 */
-	public DefaultCloudManagerProvider(AmqpTemplate networkManager, AmqpTemplate iaas, String dburl, String dbName) {
+	public DefaultCloudManagerProvider(AmqpTemplate networkManager, AmqpTemplate iaas) {
 		networkManagerTemplate = networkManager;
 		iaasTemplate = iaas;
-		dbUrl = dburl; 
-		try{
-		HttpClient httpClient = new StdHttpClient.Builder().url(dbUrl).build();
-
-		CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-		 db = new StdCouchDbConnector(dbName, dbInstance);
+		try {
+			dbClient = new CouchDbClient();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		catch(Exception e){e.printStackTrace();}
 	}
 
 	public VMNetAddress getNetworkAddress(String vmName) {
@@ -105,16 +97,14 @@ public class DefaultCloudManagerProvider implements ICloudManagerProvider {
 	@Override
 	public List<Host> listAllHosts() {
 		try {
-			HttpClient httpClient = new StdHttpClient.Builder().url(dbUrl).build();
-
-			CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
-			CouchDbConnector db = new StdCouchDbConnector("domain_greenstarnetwork_com", dbInstance);
-
-			db.createDatabaseIfNotExists();
-
-			ViewQuery query = new ViewQuery().designDocId("_design/resource_instances").viewName("by_type").key("Host");
-
-			List<Host> hosts = db.queryView(query, Host.class);
+			List<HostEngine> hostEngines = dbClient.view("engine_instances/by_type")
+					.key("libvirt")
+					.includeDocs(true)
+					.query(HostEngine.class);
+			List<Host> hosts = new ArrayList<Host>();
+			/**for(int i=0; i<hostEngines.size(); i++){
+				hosts.add(i,getHostInformation(hostEngines.get(i).get_id()));
+			}**/
 			return hosts;
 		} catch (Exception e) {
 			return null;
@@ -153,12 +143,7 @@ public class DefaultCloudManagerProvider implements ICloudManagerProvider {
 
 	@Override
 	public List<Host> hostQuery(String ip, String location, String freeMemory, String availableCPU, String vmUUID) {
-		ViewQuery query = new ViewQuery().designDocId("_design/resource_instances").viewName("by_type").key("ip");
-
-		db.createDatabaseIfNotExists();
-
-		List<Host> hosts = db.queryView(query, Host.class);
-		return hosts;
+		return null;//hosts;
 	}
 
 }
