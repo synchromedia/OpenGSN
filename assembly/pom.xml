@@ -28,6 +28,28 @@ under the License.
   <packaging>pom</packaging>
   <name>OpenGSN :: Distribution Assembly</name>
   <dependencies>
+<dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>jetty</artifactId>
+      <version>6.1.26</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mortbay.jetty</groupId>
+      <artifactId>start</artifactId>
+    <version>6.1.26</version>
+  </dependency>
+    <dependency>
+      <groupId>com.greenstarnetwork</groupId>
+      <artifactId>services</artifactId>
+      <type>war</type>
+       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.greenstarnetwork</groupId>
+      <artifactId>controller</artifactId>
+      <type>war</type>
+       <version>${project.version}</version>
+    </dependency>
     <!-- Runtime dependencies that need to be included in the generated binaries -->
   </dependencies>
   <build>
@@ -157,6 +179,8 @@ under the License.
                   <fileset dir="src/main/conf" />                  
                 </copy>
                 <mkdir dir="target/generated-resources/appassembler/jsw/opengsn/logs" />      
+                <copy file="../documentation/target/latex-files/gsn.pdf" tofile="target/generated-resources/appassembler/jsw/opengsn/OpenGSN User Manual.pdf">
+                </copy>
               </tasks>
             </configuration>
             <goals>

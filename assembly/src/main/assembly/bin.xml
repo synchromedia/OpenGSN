@@ -54,7 +54,7 @@
       <fileMode>0755</fileMode>
       <lineEnding>unix</lineEnding>
     </fileSet>
-    <fileSet>
+<fileSet>
       <directory>target/generated-resources/appassembler/jsw/opengsn/bin</directory>
       <outputDirectory>bin</outputDirectory>
       <includes>   
@@ -85,6 +85,13 @@
       <fileMode>0755</fileMode>
     </fileSet>
     <fileSet>
+      <directory>target/generated-resources/appassembler/jsw/opengsn</directory>
+      <outputDirectory>/</outputDirectory>
+      <includes>   
+        <include>**.pdf</include>
+      </includes>
+</fileSet>    
+<fileSet>
       <directory>target/maven-shared-archive-resources/META-INF/</directory>
       <outputDirectory>/</outputDirectory>
       <includes>
@@ -106,9 +113,16 @@
   <dependencySets>
     <dependencySet>
       <unpack>true</unpack>
-      <outputDirectory>apps/opengsn</outputDirectory>
+      <outputDirectory>apps/services</outputDirectory>
       <includes>
-        <include>org.apache.opengsn:opengsn-webapp</include>
+        <include>com.greenstarnetwork:services</include>
+      </includes>
+    </dependencySet>
+    <dependencySet>
+      <unpack>true</unpack>
+      <outputDirectory>apps/controller</outputDirectory>
+      <includes>
+        <include>com.greenstarnetwork:controller</include>
       </includes>
     </dependencySet>
   </dependencySets>
