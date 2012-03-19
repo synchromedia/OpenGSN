@@ -12,7 +12,7 @@
 	<groupId>com.greenstarnetwork</groupId>
 	<artifactId>services</artifactId>
 	<packaging>war</packaging>
-	<name>GreenStar Network :: Services</name>
+	<name>OpenGSN :: Services Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<spring.framework.version>3.0.5.RELEASE</spring.framework.version>

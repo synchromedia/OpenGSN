@@ -5,7 +5,7 @@
 	<artifactId>root-gsn</artifactId>
 	<version>2.0.0.BUILD-SNAPSHOT</version>
 	<modelVersion>4.0.0</modelVersion>
-	<name>GreenStar Network</name>
+	<name>OpenGSN</name>
 	<description>GreenStar Network</description>
 	<packaging>pom</packaging>
 	<repositories>
@@ -80,5 +80,7 @@
 		<module>services-client</module>
 		<module>controller</module>
 		<module>controller-client</module>
+		<module>documentation</module>
+		<module>assembly</module>
 	</modules>
 </project>

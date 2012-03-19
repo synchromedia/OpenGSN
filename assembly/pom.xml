@@ -26,7 +26,7 @@ under the License.
   </parent>
   <artifactId>OpenGSN-jetty</artifactId>
   <packaging>pom</packaging>
-  <name>OpenGSN Assembly</name>
+  <name>OpenGSN :: Distribution Assembly</name>
   <dependencies>
     <!-- Runtime dependencies that need to be included in the generated binaries -->
   </dependencies>
@@ -38,7 +38,7 @@ under the License.
         <configuration>
           <daemons>
             <daemon>
-              <id>continuum</id>
+              <id>opengsn</id>
               <mainClass>org.mortbay.start.Main</mainClass>
               <commandLineArguments>
                 <commandLineArgument>conf/jetty.xml</commandLineArgument>
@@ -64,7 +64,7 @@ under the License.
                     </property>
                     <property>
                       <name>wrapper.logfile</name>
-                      <value>%CONTINUUM_BASE%/logs/wrapper.YYYYMMDD.log</value>
+                      <value>%OPENGSN_BASE%/logs/wrapper.YYYYMMDD.log</value>
                     </property>
                     <property>
                       <name>wrapper.logfile.rollmode</name>
@@ -72,11 +72,11 @@ under the License.
                     </property>
                     <property>
                       <name>wrapper.app.parameter.2</name>
-                      <value>%CONTINUUM_BASE%/conf/jetty.xml</value>
+                      <value>%OPENGSN_BASE%/conf/jetty.xml</value>
                     </property>
                     <property>
                       <name>app.base.envvar</name>
-                      <value>CONTINUUM_BASE</value>
+                      <value>OPENGSN_BASE</value>
                     </property>
                     <property>
                       <name>wrapper.on_exit.default</name>
@@ -109,19 +109,16 @@ under the License.
               <jvmSettings>
                 <systemProperties>
                   <systemProperty>appserver.home=.</systemProperty>
-                  <systemProperty>appserver.base=%CONTINUUM_BASE%</systemProperty>
-                  <!-- can't set this at present, it moves the database if CONTINUUM_BASE is not set
-                  <systemProperty>derby.system.home=%CONTINUUM_BASE%/logs</systemProperty>
-                  -->
-                  <systemProperty>jetty.logs=%CONTINUUM_BASE%/logs</systemProperty>
-                  <systemProperty>java.io.tmpdir=%CONTINUUM_BASE%/tmp</systemProperty>
+                  <systemProperty>appserver.base=%OPENGSN_BASE%</systemProperty>
+                  <systemProperty>jetty.logs=%OPENGSN_BASE%/logs</systemProperty>
+                  <systemProperty>java.io.tmpdir=%OPENGSN_BASE%/tmp</systemProperty>
                 </systemProperties>
               </jvmSettings> 
             </daemon>
           </daemons>          
           <repoPath>lib</repoPath>
           <repositoryLayout>flat</repositoryLayout>
-          <assembleDirectory>target/generated-resources/appassembler/jsw/continuum</assembleDirectory>
+          <assembleDirectory>target/generated-resources/appassembler/jsw/opengsn</assembleDirectory>
         </configuration>
         <executions>
           <execution>
@@ -145,7 +142,7 @@ under the License.
         </executions>
         <configuration>
           <descriptor>src/main/assembly/bin.xml</descriptor>
-          <finalName>apache-continuum-${version}</finalName>
+          <finalName>opengsn-${version}</finalName>
         </configuration>
       </plugin>
       <plugin>
@@ -156,10 +153,10 @@ under the License.
             <phase>process-resources</phase>
             <configuration>
               <tasks>
-                <copy todir="target/generated-resources/appassembler/jsw/continuum/conf">
+                <copy todir="target/generated-resources/appassembler/jsw/opengsn/conf">
                   <fileset dir="src/main/conf" />                  
                 </copy>
-                <mkdir dir="target/generated-resources/appassembler/jsw/continuum/logs" />      
+                <mkdir dir="target/generated-resources/appassembler/jsw/opengsn/logs" />      
               </tasks>
             </configuration>
             <goals>

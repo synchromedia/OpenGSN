@@ -12,7 +12,7 @@
 	<groupId>com.greenstarnetwork</groupId>
 	<artifactId>documentation</artifactId>
 	<packaging>pom</packaging>
-	<name>GreenStar Network :: Documentation</name>
+	<name>OpenGSN :: Documentation</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<junit.version>4.7</junit.version>
