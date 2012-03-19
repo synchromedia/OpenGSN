@@ -30,6 +30,11 @@
 			<name>IaaS Repository Group Proxy Releases</name>
 			<url>http://repository.inocybe.ca/content/groups/public/</url>
 		</pluginRepository>
+    <pluginRepository>
+      <id>oss-sonatype-snapshots</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+    </pluginRepository>
+
 		<pluginRepository>
 			<id>com.springsource.repository.bundles.release</id>
 			<name>SpringSource Enterprise Bundle Repository</name>
@@ -66,13 +71,64 @@
         <artifactId>maven-release-plugin</artifactId>
 <version>2.2.2</version> 
      </plugin>
+ <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <version>0.5</version>
+        <configuration>
+         <repositoryOwner>synchromedia</repositoryOwner>
+         <repositoryName>OpenGSN</repositoryName>
+          <message>Building site for ${project.version}</message>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>site</goal>
+            </goals>
+            <phase>site</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>3.0</version>
+        <configuration>
+          <reportPlugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-project-info-reports-plugin</artifactId>
+              <version>2.2</version>
+              <configuration>
+                <dependencyDetailsEnabled>true</dependencyDetailsEnabled>
+                <dependencyLocationsEnabled>true</dependencyLocationsEnabled>
+              </configuration>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-javadoc-plugin</artifactId>
+              <version>2.7</version>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-report-plugin</artifactId>
+              <version>2.6</version>
+            </plugin>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-checkstyle-plugin</artifactId>
+              <version>2.6</version>
+            </plugin>
+          </reportPlugins>
+        </configuration>
+      </plugin>
 		</plugins>
 
    	</build>
  <scm>
 	<connection>scm:git:git@github.com:synchromedia/OpenGSN.git</connection>
 	<url>scm:git:git@github.com:synchromedia/OpenGSN.git</url>
-	<developerConnection>scm:git:git@github.com:synchromedia/OpenGSN.git</developerConnection>
+	<developerConnection>scm:git:ssh://git@github.com:synchromedia/OpenGSN.git</developerConnection>
   </scm>
 	<modules>
 		<module>models</module>

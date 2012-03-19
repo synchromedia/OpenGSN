@@ -52,6 +52,12 @@ under the License.
     </dependency>
     <!-- Runtime dependencies that need to be included in the generated binaries -->
   </dependencies>
+<pluginRepositories>
+  <pluginRepository>
+    <id>oss-sonatype-snapshots</id>
+    <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+  </pluginRepository>
+</pluginRepositories>
   <build>
     <plugins>
        <plugin>
@@ -164,7 +170,7 @@ under the License.
         </executions>
         <configuration>
           <descriptor>src/main/assembly/bin.xml</descriptor>
-          <finalName>opengsn-${version}</finalName>
+          <finalName>OpenGSN-${version}</finalName>
         </configuration>
       </plugin>
       <plugin>
@@ -189,6 +195,22 @@ under the License.
           </execution>
         </executions>
       </plugin>
-    </plugins>
-  </build>
+    <plugin>
+      <groupId>com.github.github</groupId>
+      <artifactId>downloads-maven-plugin</artifactId>
+      <version>0.4</version>
+      <configuration>
+<userName>${gituser}</userName>         
+<repositoryOwner>synchromedia</repositoryOwner>
+         <repositoryName>OpenGSN</repositoryName>    
+    <description>${project.version} release of ${project.name}</description>
+        <override>true</override>
+    <includes>   
+<include>OpenGSN-*-bin.*</include>
+</includes>
+    
+ </configuration>
+    </plugin>
+</plugins>
+</build>
 </project>
