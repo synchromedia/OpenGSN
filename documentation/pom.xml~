@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+	<parent>
+		<groupId>com.greenstarnetwork</groupId>
+		<artifactId>root-gsn</artifactId>
+		<version>2.0.0.BUILD-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.greenstarnetwork</groupId>
+	<artifactId>documentation</artifactId>
+	<version>2.0.0.BUILD-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>GreenStar Network :: Documentation</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<junit.version>4.7</junit.version>
+	</properties>
+  <build>
+  <plugins>
+    <plugin>
+      <groupId>org.tomdz.maven</groupId>
+      <artifactId>sphinx-maven-plugin</artifactId>
+      <version>1.0.2</version>
+      <configuration>
+        <outputDirectory>${project.build.directory}/latex-files</outputDirectory>
+        <builder>latex</builder>
+      </configuration>
+      <executions>
+        <execution>
+          <phase>generate-sources</phase>
+          <goals>
+            <goal>generate</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+ <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>build-native</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <tasks>
+                <exec dir="${project.build.directory}/latex-files" executable="make" failonerror="true"/>
+              </tasks>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+  </plugins>
+</build>
+</project>

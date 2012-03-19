@@ -17,9 +17,9 @@ Documentation
 -------------------
 Project Documentaion is available as the following guides 
 
- * Inocybe Platform``|trade|`` Installation Guide
- * OpenGSN Installation Guide
- * OpenGSN User Guide
+  * Inocybe Platform``|trade|`` Installation Guide
+  * OpenGSN Installation Guide
+  * OpenGSN User Guide
 
 In addition to these guides the Javadoc API is available at http://xxx
 
