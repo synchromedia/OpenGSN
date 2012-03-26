@@ -36,11 +36,11 @@
 
 	<!-- Controller Service -->
 
-	<!-- <bean id="controllerProvider" class="com.greenstarnetwork.controller.ControllerProvider"/>--> 
-	<bean id="mockControllerProvider" class="com.greenstarnetwork.controller.MockControllerProvider"/> 
+	<!-- <bean id="controllerProvider" class="com.opengsn.controller.ControllerProvider"/>--> 
+	<bean id="mockControllerProvider" class="com.opengsn.controller.MockControllerProvider"/> 
 	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
 	<bean name="controllerService"
-		class="com.greenstarnetwork.controller.Controller">
+		class="com.opengsn.controller.Controller">
 		<constructor-arg>
 			<ref bean="mockControllerProvider" />
 		</constructor-arg>
@@ -48,12 +48,12 @@
 
 	<!-- Define the JAX-WS Endpoint from the previous bean -->
 	<jaxws:endpoint id="ControllerEndpoint"
-		implementorClass="com.greenstarnetwork.controller.Controller"
+		implementorClass="com.opengsn.controller.Controller"
 		implementor="#controllerService" address="/Controller" />
 
 	<!--  Configure the Cloud Manager Client -->
 	<jaxws:client id="cloudManagerClient"
-		serviceClass="com.greenstarnetwork.services.cloudmanager.ICloudManager"
+		serviceClass="com.opengsn.services.cloudmanager.ICloudManager"
 		address="http://${service.location}:${service.port}/services/CloudManager">
 
 		<jaxws:inInterceptors>
@@ -68,7 +68,7 @@
 
 	<!--  Configure the Facility Manager Client -->
 	<jaxws:client id="facilityManagerClient"
-		serviceClass="com.greenstarnetwork.services.facilitymanager.IFacilityManager"
+		serviceClass="com.opengsn.services.facilitymanager.IFacilityManager"
 		address="http://${service.location}:${service.port}/services/FacilityManager">
 		
 		<jaxws:inInterceptors>

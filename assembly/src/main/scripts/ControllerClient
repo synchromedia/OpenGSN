@@ -1,0 +1,85 @@
+#! /bin/sh
+
+#
+# Copyright (c) 2012 Inocybe Technologies
+#
+#
+
+#-----------------------------------------------------------------------------
+# These settings can be modified to fit the needs of your application
+
+if [ "X$OPENGSN_BASE" = "X" ]; then
+  OPENGSN_BASE=..
+fi
+
+
+# Get the fully qualified path to the script
+case $0 in
+    /*)
+        SCRIPT="$0"
+        ;;
+    *)
+        PWD=`pwd`
+        SCRIPT="$PWD/$0"
+        ;;
+esac
+
+# Resolve the true real path without any sym links.
+CHANGED=true
+while [ "X$CHANGED" != "X" ]
+do
+    # Change spaces to ":" so the tokens can be parsed.
+    SAFESCRIPT=`echo $SCRIPT | sed -e 's; ;:;g'`
+    # Get the real path to this script, resolving any symbolic links
+    TOKENS=`echo $SAFESCRIPT | sed -e 's;/; ;g'`
+    REALPATH=
+    for C in $TOKENS; do
+        # Change any ":" in the token back to a space.
+        C=`echo $C | sed -e 's;:; ;g'`
+        REALPATH="$REALPATH/$C"
+        # If REALPATH is a sym link, resolve it.  Loop for nested links.
+        while [ -h "$REALPATH" ] ; do
+            LS="`ls -ld "$REALPATH"`"
+            LINK="`expr "$LS" : '.*-> \(.*\)$'`"
+            if expr "$LINK" : '/.*' > /dev/null; then
+                # LINK is absolute.
+                REALPATH="$LINK"
+            else
+                # LINK is relative.
+                REALPATH="`dirname "$REALPATH"`""/$LINK"
+            fi
+        done
+    done
+
+    if [ "$REALPATH" = "$SCRIPT" ]
+    then
+        CHANGED=""
+    else
+        SCRIPT="$REALPATH"
+    fi
+done
+
+# Change the current directory to the location of the script
+cd "`dirname "$REALPATH"`"
+REALDIR=`pwd`
+
+# If the PIDDIR is relative, set its value relative to the full REALPATH to avoid problems if
+#  the working directory is later changed.
+FIRST_CHAR=`echo $PIDDIR | cut -c1,1`
+if [ "$FIRST_CHAR" != "/" ]
+then
+    PIDDIR=$REALDIR/$PIDDIR
+fi
+# Same test for WRAPPER_CMD
+FIRST_CHAR=`echo $WRAPPER_CMD | cut -c1,1`
+if [ "$FIRST_CHAR" != "/" ]
+then
+    WRAPPER_CMD=$REALDIR/$WRAPPER_CMD
+fi
+# Same test for WRAPPER_CONF
+FIRST_CHAR=`echo $WRAPPER_CONF | cut -c1,1`
+if [ "$FIRST_CHAR" != "/" ]
+then
+    WRAPPER_CONF=$REALDIR/$WRAPPER_CONF
+fi
+java -classpath $REALDIR/../lib/*:$REALDIR/../conf -jar $REALDIR/../lib/controller-client-2.0.0.BUILD-SNAPSHOT.jar "$@"

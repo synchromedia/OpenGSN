@@ -38,16 +38,16 @@
 	<bean id="networkManagerTemplate" class="org.springframework.amqp.core.AmqpTemplate"/>
 	<bean id="iaasTemplate" class="org.springframework.amqp.core.AmqpTemplate"/>
 	<bean id="defaultCloudManager"
-		class="com.greenstarnetwork.services.cloudmanager.DefaultCloudManagerProvider">
+		class="com.opengsn.services.cloudmanager.DefaultCloudManagerProvider">
  		<constructor-arg ref="networkManagerTemplate"/>
 		<constructor-arg ref="iaasTemplate"/>
 		<constructor-arg type="java.lang.String" value="${db.url}"/>
 	</bean>
-	<bean id="mockCloudManagerProvider" class="com.greenstarnetwork.services.cloudmanager.MockCloudManagerProvider"/>
+	<bean id="mockCloudManagerProvider" class="com.opengsn.services.cloudmanager.MockCloudManagerProvider"/>
 	
 	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
 	<bean name="cloudManagerService"
-		class="com.greenstarnetwork.services.cloudmanager.CloudManager">
+		class="com.opengsn.services.cloudmanager.CloudManager">
 		<constructor-arg>
 			<ref bean="mockCloudManagerProvider" />
 		</constructor-arg>
@@ -55,7 +55,7 @@
 
 	<!-- Define the JAX-WS Endpoint from the previous bean -->
 	<jaxws:endpoint id="CloudManagerEndpoint"
-		implementorClass="com.greenstarnetwork.services.cloudmanager.CloudManager"
+		implementorClass="com.opengsn.services.cloudmanager.CloudManager"
 		implementor="#cloudManagerService" address="/CloudManager" />
 
 
@@ -63,20 +63,20 @@
 
 	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
 	<bean name="networkManagerService"
-		class="com.greenstarnetwork.services.networkmanager.NetworkManager">
+		class="com.opengsn.services.networkmanager.NetworkManager">
 		<constructor-arg value="${netman.iptable}"/>
 	</bean>
 
 	<!-- Define the JAX-WS Endpoint from the previous bean -->
 	<jaxws:endpoint id="NetworkManagerEndpoint"
-		implementorClass="com.greenstarnetwork.services.networkmanager.NetworkManager"
+		implementorClass="com.opengsn.services.networkmanager.NetworkManager"
 		implementor="#networkManagerService" address="/NetworkManager" />
 
 	<!-- Facility Manager -->
-	<bean id="mockFacilityManagerProvider" class="com.greenstarnetwork.services.facilitymanager.MockFacilityManagerProvider"/>
+	<bean id="mockFacilityManagerProvider" class="com.opengsn.services.facilitymanager.MockFacilityManagerProvider"/>
 	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
 	<bean name="facilityManagerService"
-		class="com.greenstarnetwork.services.facilitymanager.FacilityManager">
+		class="com.opengsn.services.facilitymanager.FacilityManager">
 		<constructor-arg>
 			<ref bean="mockFacilityManagerProvider" />
 		</constructor-arg>
@@ -84,7 +84,7 @@
 
 	<!-- Define the JAX-WS Endpoint from the previous bean -->
 	<jaxws:endpoint id="FacilityManagerEndpoint"
-		implementorClass="com.greenstarnetwork.services.facilitymanager.FacilityManager"
+		implementorClass="com.opengsn.services.facilitymanager.FacilityManager"
 		implementor="#facilityManagerService" address="/FacilityManager" />
 
 	<!-- RabbitMQ Configuration -->
@@ -111,10 +111,10 @@
 	</rabbit:listener-container>
 	
 	<bean id="cloudManagerListener"
-		class="com.greenstarnetwork.services.cloudmanager.messages.CloudManagerListener" />
+		class="com.opengsn.services.cloudmanager.messages.CloudManagerListener" />
 	<bean id="networkManagerListener"
-		class="com.greenstarnetwork.services.networkmanager.messages.NetworkManagerListener" />
+		class="com.opengsn.services.networkmanager.messages.NetworkManagerListener" />
 	<bean id="facilityManagerListener"
-		class="com.greenstarnetwork.services.facilitymanager.messages.FacilityManagerListener" />
+		class="com.opengsn.services.facilitymanager.messages.FacilityManagerListener" />
 	
 </beans>

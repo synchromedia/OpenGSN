@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="IFacilityManagerService" targetNamespace="http://facilitymanager.services.greenstarnetwork.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://facilitymanager.services.greenstarnetwork.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://facilitymanager.services.greenstarnetwork.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://facilitymanager.services.greenstarnetwork.com/">
+<xs:element name="calculateOpHour" type="tns:calculateOpHour"/>
+<xs:element name="calculateOpHourResponse" type="tns:calculateOpHourResponse"/>
+<xs:element name="executeAction" type="tns:executeAction"/>
+<xs:element name="executeActionResponse" type="tns:executeActionResponse"/>
+<xs:element name="getArchiveDataByRangDate" type="tns:getArchiveDataByRangDate"/>
+<xs:element name="getArchiveDataByRangDateResponse" type="tns:getArchiveDataByRangDateResponse"/>
+<xs:element name="getResourceModel" type="tns:getResourceModel"/>
+<xs:element name="getResourceModelResponse" type="tns:getResourceModelResponse"/>
+<xs:element name="listAllClimates" type="tns:listAllClimates"/>
+<xs:element name="listAllClimatesResponse" type="tns:listAllClimatesResponse"/>
+<xs:element name="listAllFacilities" type="tns:listAllFacilities"/>
+<xs:element name="listAllFacilitiesResponse" type="tns:listAllFacilitiesResponse"/>
+<xs:element name="listAllPDUs" type="tns:listAllPDUs"/>
+<xs:element name="listAllPDUsResponse" type="tns:listAllPDUsResponse"/>
+<xs:element name="listAllPowerSources" type="tns:listAllPowerSources"/>
+<xs:element name="listAllPowerSourcesResponse" type="tns:listAllPowerSourcesResponse"/>
+<xs:element name="refreshResource" type="tns:refreshResource"/>
+<xs:element name="refreshResourceResponse" type="tns:refreshResourceResponse"/>
+<xs:element name="registerController" type="tns:registerController"/>
+<xs:element name="registerControllerResponse" type="tns:registerControllerResponse"/>
+<xs:element name="turnOffResource" type="tns:turnOffResource"/>
+<xs:element name="turnOffResourceResponse" type="tns:turnOffResourceResponse"/>
+<xs:element name="turnOnResource" type="tns:turnOnResource"/>
+<xs:element name="turnOnResourceResponse" type="tns:turnOnResourceResponse"/>
+<xs:complexType name="turnOnResource">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="turnOnResourceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="listAllClimates">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="listAllClimatesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="refreshResource">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="refreshResourceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getArchiveDataByRangDate">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getArchiveDataByRangDateResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getResourceModel">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="getResourceModelResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="listAllPowerSources">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="listAllPowerSourcesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="listAllPDUs">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="listAllPDUsResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="executeAction">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+<xs:element minOccurs="0" name="arg1" type="xs:string"/>
+<xs:element minOccurs="0" name="arg2" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="executeActionResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="listAllFacilities">
+<xs:sequence/>
+</xs:complexType>
+<xs:complexType name="listAllFacilitiesResponse">
+<xs:sequence>
+<xs:element maxOccurs="unbounded" minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="registerController">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="registerControllerResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:boolean"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="calculateOpHour">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="calculateOpHourResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="turnOffResource">
+<xs:sequence>
+<xs:element minOccurs="0" name="arg0" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="turnOffResourceResponse">
+<xs:sequence>
+<xs:element minOccurs="0" name="return" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+<xs:complexType name="FacilityManagerException">
+<xs:sequence/>
+</xs:complexType>
+<xs:element name="FacilityManagerException" type="tns:FacilityManagerException"/>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getArchiveDataByRangDateResponse">
+    <wsdl:part name="parameters" element="tns:getArchiveDataByRangDateResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getArchiveDataByRangDate">
+    <wsdl:part name="parameters" element="tns:getArchiveDataByRangDate">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourceModel">
+    <wsdl:part name="parameters" element="tns:getResourceModel">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculateOpHourResponse">
+    <wsdl:part name="parameters" element="tns:calculateOpHourResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executeAction">
+    <wsdl:part name="parameters" element="tns:executeAction">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllClimatesResponse">
+    <wsdl:part name="parameters" element="tns:listAllClimatesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="calculateOpHour">
+    <wsdl:part name="parameters" element="tns:calculateOpHour">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllClimates">
+    <wsdl:part name="parameters" element="tns:listAllClimates">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="refreshResource">
+    <wsdl:part name="parameters" element="tns:refreshResource">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="turnOffResource">
+    <wsdl:part name="parameters" element="tns:turnOffResource">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="refreshResourceResponse">
+    <wsdl:part name="parameters" element="tns:refreshResourceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllPDUs">
+    <wsdl:part name="parameters" element="tns:listAllPDUs">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllFacilities">
+    <wsdl:part name="parameters" element="tns:listAllFacilities">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="executeActionResponse">
+    <wsdl:part name="parameters" element="tns:executeActionResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllPowerSources">
+    <wsdl:part name="parameters" element="tns:listAllPowerSources">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="turnOffResourceResponse">
+    <wsdl:part name="parameters" element="tns:turnOffResourceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerControllerResponse">
+    <wsdl:part name="parameters" element="tns:registerControllerResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getResourceModelResponse">
+    <wsdl:part name="parameters" element="tns:getResourceModelResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllPowerSourcesResponse">
+    <wsdl:part name="parameters" element="tns:listAllPowerSourcesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="registerController">
+    <wsdl:part name="parameters" element="tns:registerController">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="turnOnResource">
+    <wsdl:part name="parameters" element="tns:turnOnResource">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="FacilityManagerException">
+    <wsdl:part name="FacilityManagerException" element="tns:FacilityManagerException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllPDUsResponse">
+    <wsdl:part name="parameters" element="tns:listAllPDUsResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="listAllFacilitiesResponse">
+    <wsdl:part name="parameters" element="tns:listAllFacilitiesResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="turnOnResourceResponse">
+    <wsdl:part name="parameters" element="tns:turnOnResourceResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IFacilityManager">
+    <wsdl:operation name="turnOnResource">
+      <wsdl:input name="turnOnResource" message="tns:turnOnResource">
+    </wsdl:input>
+      <wsdl:output name="turnOnResourceResponse" message="tns:turnOnResourceResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listAllClimates">
+      <wsdl:input name="listAllClimates" message="tns:listAllClimates">
+    </wsdl:input>
+      <wsdl:output name="listAllClimatesResponse" message="tns:listAllClimatesResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="refreshResource">
+      <wsdl:input name="refreshResource" message="tns:refreshResource">
+    </wsdl:input>
+      <wsdl:output name="refreshResourceResponse" message="tns:refreshResourceResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getArchiveDataByRangDate">
+      <wsdl:input name="getArchiveDataByRangDate" message="tns:getArchiveDataByRangDate">
+    </wsdl:input>
+      <wsdl:output name="getArchiveDataByRangDateResponse" message="tns:getArchiveDataByRangDateResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getResourceModel">
+      <wsdl:input name="getResourceModel" message="tns:getResourceModel">
+    </wsdl:input>
+      <wsdl:output name="getResourceModelResponse" message="tns:getResourceModelResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listAllPowerSources">
+      <wsdl:input name="listAllPowerSources" message="tns:listAllPowerSources">
+    </wsdl:input>
+      <wsdl:output name="listAllPowerSourcesResponse" message="tns:listAllPowerSourcesResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listAllPDUs">
+      <wsdl:input name="listAllPDUs" message="tns:listAllPDUs">
+    </wsdl:input>
+      <wsdl:output name="listAllPDUsResponse" message="tns:listAllPDUsResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="executeAction">
+      <wsdl:input name="executeAction" message="tns:executeAction">
+    </wsdl:input>
+      <wsdl:output name="executeActionResponse" message="tns:executeActionResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listAllFacilities">
+      <wsdl:input name="listAllFacilities" message="tns:listAllFacilities">
+    </wsdl:input>
+      <wsdl:output name="listAllFacilitiesResponse" message="tns:listAllFacilitiesResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="registerController">
+      <wsdl:input name="registerController" message="tns:registerController">
+    </wsdl:input>
+      <wsdl:output name="registerControllerResponse" message="tns:registerControllerResponse">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="calculateOpHour">
+      <wsdl:input name="calculateOpHour" message="tns:calculateOpHour">
+    </wsdl:input>
+      <wsdl:output name="calculateOpHourResponse" message="tns:calculateOpHourResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="turnOffResource">
+      <wsdl:input name="turnOffResource" message="tns:turnOffResource">
+    </wsdl:input>
+      <wsdl:output name="turnOffResourceResponse" message="tns:turnOffResourceResponse">
+    </wsdl:output>
+      <wsdl:fault name="FacilityManagerException" message="tns:FacilityManagerException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IFacilityManagerServiceSoapBinding" type="tns:IFacilityManager">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="turnOnResource">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="turnOnResource">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="turnOnResourceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listAllClimates">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listAllClimates">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listAllClimatesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getArchiveDataByRangDate">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getArchiveDataByRangDate">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getArchiveDataByRangDateResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="refreshResource">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="refreshResource">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="refreshResourceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getResourceModel">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getResourceModel">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getResourceModelResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="listAllPowerSources">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listAllPowerSources">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listAllPowerSourcesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listAllPDUs">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listAllPDUs">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listAllPDUsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="executeAction">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="executeAction">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="executeActionResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="listAllFacilities">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="listAllFacilities">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="listAllFacilitiesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="registerController">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="registerController">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="registerControllerResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="calculateOpHour">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="calculateOpHour">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="calculateOpHourResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="turnOffResource">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="turnOffResource">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="turnOffResourceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="FacilityManagerException">
+        <soap:fault name="FacilityManagerException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IFacilityManagerService">
+    <wsdl:port name="IFacilityManagerPort" binding="tns:IFacilityManagerServiceSoapBinding">
+      <soap:address location="http://localhost:9090/IFacilityManagerPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

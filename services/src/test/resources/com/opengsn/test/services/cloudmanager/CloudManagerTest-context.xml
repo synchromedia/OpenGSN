@@ -1,0 +1,63 @@
+<!--
+
+    Copyright 2009-2011 École de technologie supérieure,
+    Communication Research Centre Canada,
+    Inocybe Technologies Inc. and 6837247 CANADA Inc.
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit-1.0.xsd
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <!--  Load the service.properties file  -->
+	<context:property-placeholder location="classpath:WEB-INF/service.properties" />
+
+	<bean id="mockCloudManagerProvider" class="com.opengsn.services.cloudmanager.MockCloudManagerProvider"/>
+	
+	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
+	<bean name="cloudManagerService"
+		class="com.opengsn.services.cloudmanager.CloudManager">
+		<constructor-arg>
+			<ref bean="mockCloudManagerProvider" />
+		</constructor-arg>
+	</bean>
+
+	<!-- Network Manager -->
+
+	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
+	<bean name="networkManagerService"
+		class="com.opengsn.services.networkmanager.NetworkManager">
+		<constructor-arg value="${netman.iptable}"/>
+	</bean>
+
+
+	<!-- Facility Manager -->
+	<bean id="mockFacilityManagerProvider" class="com.opengsn.services.facilitymanager.MockFacilityManagerProvider"/>
+	<!-- Instantiate the Service Class while injecting the Manager in the constructor -->
+	<bean name="facilityManagerService"
+		class="com.opengsn.services.facilitymanager.FacilityManager">
+		<constructor-arg>
+			<ref bean="mockFacilityManagerProvider" />
+		</constructor-arg>
+	</bean>
+
+</beans>

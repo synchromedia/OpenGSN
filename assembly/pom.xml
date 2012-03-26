@@ -21,7 +21,7 @@ under the License.
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <artifactId>root-gsn</artifactId>
-    <groupId>com.greenstarnetwork</groupId>
+    <groupId>com.opengsn</groupId>
     <version>2.0.0.BUILD-SNAPSHOT</version>
   </parent>
   <artifactId>OpenGSN-jetty</artifactId>
@@ -39,15 +39,33 @@ under the License.
     <version>6.1.26</version>
   </dependency>
     <dependency>
-      <groupId>com.greenstarnetwork</groupId>
+      <groupId>com.opengsn</groupId>
       <artifactId>services</artifactId>
       <type>war</type>
        <version>${project.version}</version>
     </dependency>
     <dependency>
-      <groupId>com.greenstarnetwork</groupId>
+      <groupId>com.opengsn</groupId>
       <artifactId>controller</artifactId>
       <type>war</type>
+       <version>${project.version}</version>
+    </dependency>
+        <dependency>
+      <groupId>com.opengsn</groupId>
+      <artifactId>services-client</artifactId>
+      <type>jar</type>
+       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.opengsn</groupId>
+      <artifactId>controller-client</artifactId>
+      <type>jar</type>
+       <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.opengsn</groupId>
+      <artifactId>admin-client</artifactId>
+      <type>jar</type>
        <version>${project.version}</version>
     </dependency>
     <!-- Runtime dependencies that need to be included in the generated binaries -->
@@ -117,6 +135,10 @@ under the License.
                     <property>
                       <name>wrapper.restart.delay</name>
                       <value>30</value>
+                    </property>
+                    <property>
+                      <name>app.name</name>
+                      <value>OpenGSN</value>
                     </property>
                     <property>
                       <name>wrapper.java.maxmemory</name>

@@ -4,11 +4,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 <parent>
-		<groupId>com.greenstarnetwork</groupId>
+		<groupId>com.opengsn</groupId>
 		<artifactId>root-gsn</artifactId>
 		<version>2.0.0.BUILD-SNAPSHOT</version>
 	</parent>
-	<groupId>com.greenstarnetwork</groupId>
+	<groupId>com.opengsn</groupId>
 	<artifactId>controller</artifactId>
 	<packaging>war</packaging>
 	<name>OpenGSN :: Controller Webapp</name>
@@ -53,7 +53,7 @@
 						<id>process-networkmanager</id>
 						<phase>process-classes</phase>
 						<configuration>
-							<className>com.greenstarnetwork.controller.IController</className>
+							<className>com.opengsn.controller.IController</className>
 							<genWsdl>true</genWsdl>
 							<verbose>true</verbose>
 						</configuration>
@@ -179,7 +179,7 @@
 			<version>1.9.2</version>
 		</dependency>
 		<dependency>
-			<groupId>com.greenstarnetwork</groupId>
+			<groupId>com.opengsn</groupId>
 			<artifactId>models</artifactId>
 			<version>${project.version}</version>
 		</dependency>

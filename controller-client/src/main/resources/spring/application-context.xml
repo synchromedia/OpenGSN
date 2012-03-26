@@ -26,12 +26,12 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
 	<!-- Load the properties file -->
-	<context:property-placeholder location="file:client.properties" />
+	<context:property-placeholder location="classpath:client.properties" />
 
 	<!-- The SOAP client bean. Gets the address property from the client.properties 
 		file -->
 	<jaxws:client id="client"
-		serviceClass="com.greenstarnetwork.controller.IController"
+		serviceClass="com.s.controller.IController"
 		address="http://${service.location}:${service.port}/controller/Controller">
 
 		<jaxws:inInterceptors>
