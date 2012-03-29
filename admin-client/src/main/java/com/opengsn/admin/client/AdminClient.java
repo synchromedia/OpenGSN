@@ -37,15 +37,9 @@ public class AdminClient {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		AdminClient client = new AdminClient();
-
-		String arguments = new String();
-		for (int i = 0; i < args.length; i++) {
-			arguments = args[i] + " ";
-		}
-		System.out.println("Arguments: " + arguments);
-
-		if (args.length < 1) {
+		AdminClient client = new AdminClient();		
+		
+		if (args.length < 2) {
 			client.printUsage();
 			System.exit(1);
 		}
@@ -62,13 +56,9 @@ public class AdminClient {
 	private void process(String[] args) {
 		Map<String,AdminTool> tools = new HashMap<String,AdminTool>();
 		tools.put("host", new HostTools());
-		if (args[0] == "create") {
-		//	tools.create();
-		} else if (args[0] == "create-pdu") {
-
-		} else if (args[0] == "create-power") {
-
-		} else
+		if (args[0].equalsIgnoreCase("create")) {
+			tools.get("host").create();
+		}  else
 			printUsage();
 
 	}
