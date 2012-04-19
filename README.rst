@@ -5,9 +5,7 @@ OpenGSN Version 2.0.0
 Description
 --------------------
 
-The OpenGSN Middleware is the middleware used for the GreenStar Network project. This middleware is a cloud computing management middleware that is
-used to create green clouds. These green clouds are energy aware and also can manage and optimize this energy to lower GHG emissions. For additional 
-information about the project visit : www.greenstarnetwork.com.
+The OpenGSN Middleware is the middleware used for the GreenStar Network project funded by Canarie . This middleware is a cloud computing management middleware that is used to create green clouds. These green clouds are energy aware and also can manage and optimize this energy to lower GHG emissions. For additional information about the project visit the `GreenStar Network Website <www.greenstarnetwork.com>`_.
 
 Licensing
 -------------------
@@ -17,11 +15,9 @@ Documentation
 -------------------
 Project Documentaion is available as the following guides 
 
-  * Inocybe Platform``|trade|`` Installation Guide
-  * OpenGSN Installation Guide
-  * OpenGSN User Guide
+   * `OpenGSN User Guide <http://www.github.com/synchromedia/OpenGSN/`_
 
-In addition to these guides the Javadoc API is available at http://xxx
+In addition to these guides the Javadoc API is available 
 
 Prerequisites
 -------------------
